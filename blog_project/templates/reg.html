@@ -1,0 +1,71 @@
+{% load static %}
+<html>
+<head>
+	<title>Мой блог</title>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+	<link rel="shortcut icon" href="css/images/favicon.ico" />
+	<link rel="stylesheet" href="{% static 'style.css' %}" type="text/css" media="all" />
+
+</head>
+<body>
+<div class="shell">
+	<div class="border">
+
+		<div id="navigation">
+			<ul>
+			    <li><a href="/" class="active">Главная</a></li>
+			    <li><a href="/admin">Админ панель</a></li>
+				<li><a href="/login">Войти</a></li>
+			    
+			</ul>
+		</div>
+
+		<div id="main">
+			<div id="content" class="left">
+				
+				<div class="projects">
+					<h3 style="text-align: center; font-size:300%;">Регистрация</h3>
+					<p style="text-align: center;"><img src= "https://www.vladtime.ru/uploads/posts/2018-05/1527186902_df958bc1d296d0bce3981c9798d6c689.jpg"alt="изображение" width="300px" height="200px"/></p>
+					<div class="item">
+						<div class="image left">
+							
+						</div>
+						<br>
+						<br>
+						<div class="text left">
+							<form name="register_form">
+								<p><label>Имя</label></p>
+								<p><input type="text" name="username"></p>
+								<p><label>email</label></p>
+								<p><input type="email" name="email"></p>
+								<p><label>Пароль</label></p>
+								<p><input type="password" name="password"></p>
+								<br>
+								<p><input type="submit" name="Зарегистрироваться"></p>
+							</form>
+							
+							
+							
+						</div>
+						<div class="cl">&nbsp;</div>
+						<br>
+						
+						
+					</div>
+				
+					
+				</div>
+			</div>
+			
+			<div class="cl">&nbsp;</div>
+		</div>
+		
+
+	</div>
+	
+	<div id="footer">
+		<p class="copy right">Copyright &copy;  2022 </p>
+	</div>
+</div>
+</body>
+</html>
