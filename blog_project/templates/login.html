@@ -33,13 +33,14 @@
 							
 						</div>
 						<div class="text left">
-							<form name="login_form">
-								<p><label>Имя</label></p>
-								<p><input type="text" name="username"></p>
-								<p><label>Пароль</label></p>
-								<p><input type="password" name="password"></p>
+							<form name="login_form" action="login">
+								{% csrf_token %}
+								<p ><label>Имя</label></p>
+								<p><input type="text" name="username"style="border-radius: 15px; padding: 15px; height: 50px; width: 250px;"></p>
+								<p ><label>Пароль</label></p>
+								<p ><input type="password" name="password"style="border-radius: 15px; padding: 15px; height: 50px; width: 250px;"></p>
 								<br>
-								<p><input type="submit" name="Bойти"></p>
+								<p ><input type="submit" value="Bойти"style="border-radius: 15px; padding: 15px; height: 50px; width: 250px;"></p>
 							</form>
 							
 								
