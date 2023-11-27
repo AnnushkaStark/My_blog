@@ -13,11 +13,14 @@
 
 		<div id="navigation">
 			<ul>
-			    <li><a href="/" class="active">Главная</a></li>
-			    <li><a href="/admin">Админ панель</a></li>
+				<li><a href="#">Новости</a></li>
+				<li><a href="#">Добавить новость</a></li>
+				<li><a href="#">Натсройки аккаунта</a></li>
+				<form action="{% url 'logout' %}" method="post">
+					{% csrf_token %}
+				<li><a href="/">Выxoд</a></li>
 				
-				<li><a href="/reg">Регитрация</a></li>
-				<li><a href="/login">Войти</a></li>
+			</from>
 			    
 			</ul>
 		</div>
