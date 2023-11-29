@@ -3,7 +3,7 @@ from django.views.generic.base import View
 from django.views.generic.edit import FormView
 from .models import User
 from django.contrib import messages
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.hashers import make_password
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
@@ -97,10 +97,28 @@ class ChangeEamail(FormView):
         except Exception:
             return render(request,'user.html')
       
-      
-class ChangePassword(FormView):
-    pass
 
+class ChangePassword(FormView):
+    '''Обработка формы смены пароля'''
+    
+    @method_decorator(login_required)
+    def post(self,request):
+        try:
+            user = request.user
+            old_password = request.POST.get('old_password')
+            new_password = request.POST.get('new_password')
+            new_password_2 = request.POST.get('new_password_two')
+            user= User.objects.get(id= user.id)
+            user_password = User.objects.get(password = user.password)
+            if user_password == old_password  and  new_password == new_password_2:
+                user= User.objects.get(id= user.id)
+                user.set_password(new_password)
+                user.save()
+                update_session_auth_hash(request,user)
+                return redirect('settings')
+            return redirect('user')
+        except Exception:
+            return render(request,'user.html')
  
 
 

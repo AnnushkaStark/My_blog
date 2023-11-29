@@ -42,14 +42,18 @@
                             </form>
                             <br>
                             <p><label>Изменить пароль</label></p>
-                            <form>
+                            <form name = 'change_passowrd' action="{% url 'change_password' %}" method="post">
                                 {% csrf_token %}
-                                {{ form2.as_p }}
+                                <p><label>старый пароль</label></p>
+                                <p><input type="password" name="old_password"style="border-radius: 15px; padding: 15px; height: 50px; width: 250px;"></p>
                            
                                 <p><label>новый пароль</label></p>
                                 <p><input type="password" name="new_password"style="border-radius: 15px; padding: 15px; height: 50px; width: 250px;"></p>
+								<p><label>новый пароль eще раз</label></p>
+                                <p><input type="password" name="new_password_two"style="border-radius: 15px; padding: 15px; height: 50px; width: 250px;"></p>
                                 <br> 
                                 <p><input type="submit" value="Применить"style="border-radius: 15px; padding: 15px; height: 50px; width: 250px;"></p>
+								
 							
 							
 							
