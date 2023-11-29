@@ -15,7 +15,8 @@
 			<ul>
 				<li><a href="#">Новости</a></li>
 				<li><a href="#">Добавить новость</a></li>
-				<li><a href="#">Натсройки аккаунта</a></li>
+				<li><a href="{% url 'settings' %}">Натсройки аккаунта</a></li>
+
 				<form action="{% url 'logout' %}" method="post">
 					{% csrf_token %}
 				<li><a href="/">Выxoд</a></li>

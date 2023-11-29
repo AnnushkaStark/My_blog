@@ -1,11 +1,14 @@
 from django.shortcuts import render, redirect
 from django.views.generic.base import View
+from django.views.generic.edit import FormView
 from .models import User
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.hashers import make_password 
+from django.contrib.auth.hashers import make_password
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
+from .forms import ChanceMailForm ,ChangePasswordForm
+
 
 
 # Create your views here.
@@ -49,7 +52,7 @@ class LoginView(View):
             username = request.POST.get('username')
             password = request.POST.get('password')
             user = authenticate(request,username = username,password = password)
-            if user and user.is_active:
+            if user:
                 login(request,user)
                 return render(request,'user.html')
             return render(request,'login.html')
@@ -58,7 +61,7 @@ class LoginView(View):
         except Exception:
             return render(request, 'login.html')
 
-#------------------------------------------------------------Выход из системы------------------------------------------------
+#------------------------------------------------------------Выход из системы--------------------------------------------------------
 class LogoutView(View):
     '''Выход пользователя из системы'''
     @method_decorator(login_required)
@@ -66,7 +69,37 @@ class LogoutView(View):
         logout(request)
         return redirect('index.html')
 
+#---------------------------------------------------------Настройки аккаунта-----------------------------------------------------------
+
+class AccountSettingView(View):
+    '''Страница настроек аккаунта'''
     
+    @method_decorator(login_required)
+    def get(self,request):
+
+        return render(request,'account_settings.html')
+   
+class ChangeEamail(FormView):
+
+    '''Обработчик формы изменения почты пользвоателя''' 
+
+    @method_decorator(login_required)
+    def post(self,request):
+        try:
+            user = request.user
+            new_mail = request.POST.get('new_mail')
+            user= User.objects.get(id= user.id)
+            user.email = new_mail
+            user.save()
+                
+            return redirect('settings')
+    
+        except Exception:
+            return render(request,'user.html')
+      
+      
+class ChangePassword(FormView):
+    pass
 
  
 
