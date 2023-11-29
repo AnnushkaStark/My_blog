@@ -34,6 +34,8 @@
                             <p><label>Изменить emali</label>
                             <form name="change_mail", action="{% url 'change_mail' %}" method="post">
                                 {% csrf_token %}
+								<p><label>email</label></p>
+								<p><input type="email" name="old_mail"style="border-radius: 15px; padding: 15px; height: 50px; width: 250px;"></p>
                                             <p><label>новый email</label></p>
                                                 <p><input type="email" name="new_mail"style="border-radius: 15px; padding: 15px; height: 50px; width: 250px;"></p>
                                                 <br>

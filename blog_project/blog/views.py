@@ -87,12 +87,17 @@ class ChangeEamail(FormView):
     def post(self,request):
         try:
             user = request.user
+            old_mail = request.POST.get('old_mail')
             new_mail = request.POST.get('new_mail')
-            user= User.objects.get(id= user.id)
-            user.email = new_mail
-            user.save()
+            user_mail = user= User.objects.get(id= user.id)
+            if old_mail == user.email:
+                user= User.objects.get(id= user.id)
+                user.email = new_mail
+                user.save()
                 
-            return redirect('settings')
+                return redirect('settings')
+            else:
+                return redirect('settings') 
     
         except Exception:
             return render(request,'user.html')
@@ -109,8 +114,7 @@ class ChangePassword(FormView):
             new_password = request.POST.get('new_password')
             new_password_2 = request.POST.get('new_password_two')
             user= User.objects.get(id= user.id)
-            user_password = User.objects.get(password = user.password)
-            if user_password == old_password  and  new_password == new_password_2:
+            if  new_password == new_password_2 and  user.check_password(old_password):
                 user= User.objects.get(id= user.id)
                 user.set_password(new_password)
                 user.save()
