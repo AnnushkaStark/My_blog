@@ -7,7 +7,7 @@ from django.contrib.auth import authenticate, login, logout, update_session_auth
 from django.contrib.auth.hashers import make_password
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
-from .forms import ChanceMailForm ,ChangePasswordForm
+from .forms import BiographyForm
 
 
 
@@ -123,6 +123,25 @@ class ChangePassword(FormView):
             return redirect('user')
         except Exception:
             return render(request,'user.html')
+
+
+class AddBio(FormView):
+    '''Обработка формы добавления биографии'''
+
+    @method_decorator(login_required)
+    def post(self,request):
+        try:
+            user = request.user
+            biography = request.POST.get('biography')
+            usr = User.objects.get(id = user.id)
+            usr.biography = biography
+            usr.save()
+            return redirect('settings')
+            
+        except Exception:
+    
+            return redirect('user')
+
  
 
 
