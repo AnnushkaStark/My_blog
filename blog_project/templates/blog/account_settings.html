@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div id="main">
+        <div id="content" class="left">
+
+            <div class="projects">
+                <h3 style="text-align: center; font-size:300%;">Настройки аккауна</h3>
+                <p style="text-align: center;"><img
+                        src="https://www.vladtime.ru/uploads/posts/2018-05/1527186902_df958bc1d296d0bce3981c9798d6c689.jpg"
+                        alt="изображение" width="300px" height="200px"/></p>
+                <div class="item">
+                    <div class="image left">
+
+                    </div>
+
+                    <div class="text left">
+                        <p><label>Изменить email</label>
+                        <form name="change_mail" action="{% url 'change_mail' %}" method="post">
+                            {% csrf_token %}
+                            <p><label>email</label></p>
+                            <p><input type="email" name="old_mail"
+                                      style="border-radius: 15px; padding: 5px; height: 50px; width: 250px;"></p>
+                            <p><label>новый email</label></p>
+                            <p><input type="email" name="new_mail"
+                                      style="border-radius: 15px; padding: 5px; height: 50px; width: 250px;"></p>
+                            <br>
+                            <p><input type="submit" value="Применить"
+                                      style="border-radius: 15px; padding: 15px; height: 50px; width: 250px;"></p>
+
+                        </form>
+                        <br>
+                        <p><label>Изменить пароль</label></p>
+                        <form name='change_passowrd' action="{% url 'change_password' %}" method="post">
+                            {% csrf_token %}
+                            <p><label>старый пароль</label></p>
+                            <p><input type="password" name="old_password"
+                                      style="border-radius: 15px; padding: 5px; height: 50px; width: 250px;"></p>
+
+                            <p><label>новый пароль</label></p>
+                            <p><input type="password" name="new_password"
+                                      style="border-radius: 15px; padding: 5px; height: 50px; width: 250px;"></p>
+                            <p><label>новый пароль eще раз</label></p>
+                            <p><input type="password" name="new_password_two"
+                                      style="border-radius: 15px; padding: 5px; height: 50px; width: 250px;"></p>
+                            <br>
+                            <p><input type="submit" value="Применить"
+                                      style="border-radius: 15px; padding: 5px; height: 50px; width: 250px;"></p>
+
+                            <div>
+                                <br>
+                                <br>
+                                <h2>Настройки профиля</h2>
+                                <br>
+                                <form>
+                                    {% csrf_token %}
+                                    <p><label>Загрузить фото</label></p>
+                                    <p><input type="file" name="avatar"
+                                              style="border-radius: 15px; padding: 5px; height: 50px; width: 250px;">
+                                    </p>
+                                    <br>
+                                    <p><input type="submit" value="Загрузить"
+                                              style="border-radius: 15px; padding: 5px; height: 50px; width: 250px;">
+                                    </p>
+                                    <br>
+                                </form>
+                                <br>
+                                <form name="add_bio" action="{% url 'add_bio' %}" method="post">
+                                    {% csrf_token %}
+                                    <p><label for="biography">О себе</label></p>
+                                    <p>
+                                            <textarea
+                                                    style="border-radius: 15px; padding: 5px; height: 200px; width: 200px;"
+                                                    name='biography' id="biography"></textarea>
+                                    </p>
+                                    <br>
+                                    <br>
+                                    <p><input type="submit" value="Применить"
+                                              style="border-radius: 15px; padding: 5px; height: 50px; width: 250px;">
+                                    </p>
+
+                                </form>
+                            </div>
+
+
+                    </div>
+
+                    <div class="cl">&nbsp;</div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
