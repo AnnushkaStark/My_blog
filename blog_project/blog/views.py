@@ -1,147 +1,155 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect
-from django.views.generic.base import View
-from django.views.generic.edit import FormView
+from django.views import generic, View
 from .models import User
-from django.contrib import messages
-from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
+from django.contrib.auth import authenticate, login, update_session_auth_hash
 from django.contrib.auth.hashers import make_password
-from django.utils.decorators import method_decorator
-from django.contrib.auth.decorators import login_required
-from .forms import BiographyForm
 
 
+# -----Главная страница-----
+class IndexPageView(generic.TemplateView):
+    """
+    Главная страница проекта
 
-# Create your views here.
-class IndexPageView(View):
-    '''Главная страница проекта'''
-    def get(self,request):
-      
-        return render(request, 'index.html')
+    Заменил View на TemplateView
+    """
+    template_name = 'blog/index.html'
 
-#----------------------------------------------------Страница регистрации---------------------------------------------------
 
-class RegisterView(View):
-    '''Страница регистрации пользователя'''
-    def get(self,request):
-        return  render(request, 'reg.html')
+# -----Страница регистрации-----
+class RegisterView(generic.TemplateView):
+    """
+    Страница регистрации пользователя
 
-    def post(self,request):
-        '''Обработка формы регистрации пользовтеля'''
+    Заменил View на TemplateView
+    Добавил метод dispatch срабатывающий перед инициализацией вьюхи
+    Если юзер уже авторизован, то его перебрасывает на главную.
+    """
+    template_name = 'blog/reg.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return redirect('index')
+        return super().dispatch(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        """Обработка формы регистрации пользователя"""
         username = request.POST.get('username')
         email = request.POST.get('email')
-        password = request.POST.get('password')
-        password = make_password(password)
-        if User.objects.filter(username = username).exists():
-            return render(request,'reg.html')
-        if User.objects.filter(email=email).exists():
-            return render(request,'reg.html')
-        user= User.objects.create(username= username, email= email, password= password)
+        password = make_password(request.POST.get('password'))
+        if User.objects.filter(username=username).exists() or User.objects.filter(email=email).exists():
+            return render(request, self.template_name)
+        user = User.objects.create(username=username, email=email, password=password)
         user.save()
-        return render(request,'login.html')
-        
- #-------------------------------------------------------Вход в личный кабинет---------------------------------------------
+        return redirect('login')
 
-class LoginView(View):
-    '''Страница входа пользователя'''
-    def get(self,request):
 
-        return render(request, 'login.html')
-    def post(self,request):
-        '''Авторизация пользователя'''
+# -----Вход в личный кабинет-----
+class LoginView(generic.TemplateView):
+    """
+    Страница входа пользователя
+
+    Заменил View на TemplateView
+    Добавил метод dispatch срабатывающий перед инициализацией вьюхи
+    Если юзер уже авторизован, то его перебрасывает на главную.
+    """
+    template_name = 'blog/login.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return redirect('index')
+        return super().dispatch(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        """Авторизация пользователя"""
         try:
             username = request.POST.get('username')
             password = request.POST.get('password')
-            user = authenticate(request,username = username,password = password)
+            user = authenticate(request, username=username, password=password)
             if user:
-                login(request,user)
-                return render(request,'user.html')
-            return render(request,'login.html')
+                login(request, user)
+                return redirect('index')
+            return self.get(request, *args, **kwargs)
         except ValueError:
-            return render(request, 'login.html')
+            return self.get(request, *args, **kwargs)
         except Exception:
-            return render(request, 'login.html')
+            return self.get(request, *args, **kwargs)
 
-#------------------------------------------------------------Выход из системы--------------------------------------------------------
-class LogoutView(View):
-    '''Выход пользователя из системы'''
-    @method_decorator(login_required)
-    def post(self,request):
-        logout(request)
-        return redirect('index.html')
 
-#---------------------------------------------------------Настройки аккаунта-----------------------------------------------------------
+# -----Выход из системы-----
+# Снёс к чертям
 
-class AccountSettingView(View):
-    '''Страница настроек аккаунта'''
-    
-    @method_decorator(login_required)
-    def get(self,request):
+# -----Настройки аккаунта-----
+class AccountSettingView(LoginRequiredMixin, generic.TemplateView):
+    """
+    Страница настроек аккаунта
 
-        return render(request,'account_settings.html')
-   
-class ChangeEamail(FormView):
+    Заменил View на TemplateView
+    Добавил миксин проверяющий залогинен юзер или нет
+    """
+    template_name = 'blog/account_settings.html'
 
-    '''Обработчик формы изменения почты пользвоателя''' 
 
-    @method_decorator(login_required)
-    def post(self,request):
+class ChangeEmail(LoginRequiredMixin, generic.View):
+    """
+    Обработчик формы изменения почты пользователя
+
+    Добавил миксин проверяющий залогинен юзер или нет
+    """
+
+    def post(self, request, *args, **kwargs):
         try:
             user = request.user
             old_mail = request.POST.get('old_mail')
             new_mail = request.POST.get('new_mail')
-            user_mail = user= User.objects.get(id= user.id)
             if old_mail == user.email:
-                user= User.objects.get(id= user.id)
                 user.email = new_mail
                 user.save()
-                
                 return redirect('settings')
             else:
-                return redirect('settings') 
-    
-        except Exception:
-            return render(request,'user.html')
-      
+                return redirect('settings')
 
-class ChangePassword(FormView):
-    '''Обработка формы смены пароля'''
-    
-    @method_decorator(login_required)
-    def post(self,request):
+        except Exception:
+            return redirect('index')
+
+
+class ChangePassword(LoginRequiredMixin, generic.View):
+    """
+    Обработка формы смены пароля
+
+    Добавил миксин проверяющий залогинен юзер или нет
+    """
+
+    def post(self, request, *args, **kwargs):
         try:
             user = request.user
             old_password = request.POST.get('old_password')
             new_password = request.POST.get('new_password')
             new_password_2 = request.POST.get('new_password_two')
-            user= User.objects.get(id= user.id)
-            if  new_password == new_password_2 and  user.check_password(old_password):
-                user= User.objects.get(id= user.id)
+            if new_password == new_password_2 and user.check_password(old_password):
                 user.set_password(new_password)
                 user.save()
-                update_session_auth_hash(request,user)
+                update_session_auth_hash(request, user)
                 return redirect('settings')
-            return redirect('user')
+            return redirect('index')
         except Exception:
-            return render(request,'user.html')
+            return redirect('index')
 
 
-class AddBio(FormView):
-    '''Обработка формы добавления биографии'''
+class AddBio(LoginRequiredMixin, generic.View):
+    """
+    Обработка формы добавления биографии
 
-    @method_decorator(login_required)
-    def post(self,request):
+    Добавил миксин проверяющий залогинен юзер или нет
+    """
+
+    def post(self, request, *args, **kwargs):
         try:
             user = request.user
             biography = request.POST.get('biography')
-            usr = User.objects.get(id = user.id)
-            usr.biography = biography
-            usr.save()
+            user.biography = biography
+            user.save()
             return redirect('settings')
-            
+
         except Exception:
-    
-            return redirect('user')
-
- 
-
-
+            return redirect('index')
