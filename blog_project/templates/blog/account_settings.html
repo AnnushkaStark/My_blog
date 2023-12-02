@@ -48,19 +48,23 @@
                                       style="border-radius: 15px; padding: 5px; height: 50px; width: 250px;"></p>
 
                             <div>
+                            </form>
+                                
                                 <br>
                                 <br>
                                 <h2>Настройки профиля</h2>
                                 <br>
-                                <form>
+                                <form name="add_avatar" action="{% url 'add_avatar' %}" method="post" enctype="multipart/form-data">
                                     {% csrf_token %}
                                     <p><label>Загрузить фото</label></p>
-                                    <p><input type="file" name="avatar"
-                                              style="border-radius: 15px; padding: 5px; height: 50px; width: 250px;">
+                                    <p><input type="file" name="avatar"  style ="border-radius: 15px; padding: 5px; height: 50px; width: 250px;">
+                                    
+                                    
+                                              
                                     </p>
                                     <br>
-                                    <p><input type="submit" value="Загрузить"
-                                              style="border-radius: 15px; padding: 5px; height: 50px; width: 250px;">
+                                    <p><input type="submit"  value="Загрузить"style="border-radius: 15px; padding: 5px; height: 50px; width: 250px;">
+                                              
                                     </p>
                                     <br>
                                 </form>

@@ -4,7 +4,7 @@ from django.views import generic, View
 from .models import User
 from django.contrib.auth import authenticate, login, update_session_auth_hash
 from django.contrib.auth.hashers import make_password
-
+from .forms import BiographyForm, AvatarForm
 
 # -----Главная страница-----
 class IndexPageView(generic.TemplateView):
@@ -145,11 +145,29 @@ class AddBio(LoginRequiredMixin, generic.View):
 
     def post(self, request, *args, **kwargs):
         try:
+            form = BiographyForm(request.POST,instance=request.user)
             user = request.user
-            biography = request.POST.get('biography')
-            user.biography = biography
-            user.save()
-            return redirect('settings')
+            if form.is_valid:
+                form.save()
+                return redirect('settings')
+            return redirect('user')
+            
 
         except Exception:
             return redirect('index')
+
+class AddAvatar(LoginRequiredMixin, generic.View): 
+    """
+    Обработка формы добавления аватарки пользователя
+    """
+    def post(self, request, *args, **kwargs):
+        try:
+            form = AvatarForm(request.POST, request.FILES, instance=request.user)
+            user = request.user
+            if form.is_valid:
+                form.save()
+                return redirect('settings')
+            return redirect('user')
+        except Exception:
+            return redirect('index')
+            
