@@ -68,7 +68,7 @@ class LoginView(generic.TemplateView):
             user = authenticate(request, username=username, password=password)
             if user:
                 login(request, user)
-                return redirect('index')
+                return redirect('user')
             return self.get(request, *args, **kwargs)
         except ValueError:
             return self.get(request, *args, **kwargs)
@@ -170,4 +170,17 @@ class AddAvatar(LoginRequiredMixin, generic.View):
             return redirect('user')
         except Exception:
             return redirect('index')
-            
+        
+class UserPageView(LoginRequiredMixin, generic.View):
+    """
+    Представление страницы пользователя
+
+    """
+    def get(self,request, *args, **kwargs):
+        try:
+            user = request.user
+            user = User.objects.get(id= user.id)
+            return render(request,'blog/user.html',{'user' : user})
+        except Exception:
+            return redirect('index')
+   

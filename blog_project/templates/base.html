@@ -15,7 +15,7 @@
         <div id="navigation">
             <ul>
                 <li>
-                    <a href="{% url 'index' %}" class="active">Главная</a>
+                <a href="{% url 'index' %}" class="active">Главная</a>   
                 </li>
                 {% if user.is_authenticated %}
                     <li>
@@ -28,9 +28,13 @@
                         <a href="{% url 'settings' %}">Настройки аккаунта</a>
                     </li>
                     <li>
+                        <a href="{% url 'user' %}">Moй аккаунт</a>
+                    </li>
+                    <li>
                         <a href="{% url 'logout' %}">Выход</a>
                     </li>
                 {% else %}
+                
                     {% if user.is_superuser %}
                         <li>
                             <a href="/admin">Админ панель</a>
