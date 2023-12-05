@@ -184,3 +184,9 @@ class UserPageView(LoginRequiredMixin, generic.View):
         except Exception:
             return redirect('index')
    
+
+class AddNewsView(LoginRequiredMixin, generic.TemplateView):
+    """
+    Страница добавления поста
+    """
+    template_name = 'blog/add_news.html'
