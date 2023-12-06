@@ -1,5 +1,5 @@
 from django import forms
-from .models import User
+from .models import User, Articles
 
 
 class BiographyForm(forms.ModelForm):
@@ -19,3 +19,11 @@ class AvatarForm(forms.ModelForm):
         model = User
         fields = 'avatar',
 
+class PostForm(forms.ModelForm):
+    """
+    Форма загрузки постов пользовтеля
+    """
+    class Meta:
+
+        model = Articles
+        fields = ('title', 'image', 'content')

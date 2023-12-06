@@ -4,7 +4,7 @@ from django.views import generic, View
 from .models import User
 from django.contrib.auth import authenticate, login, update_session_auth_hash
 from django.contrib.auth.hashers import make_password
-from .forms import BiographyForm, AvatarForm
+from .forms import BiographyForm, AvatarForm, PostForm
 
 # -----Главная страница-----
 class IndexPageView(generic.TemplateView):
@@ -190,3 +190,18 @@ class AddNewsView(LoginRequiredMixin, generic.TemplateView):
     Страница добавления поста
     """
     template_name = 'blog/add_news.html'
+
+
+class ArticlesView(LoginRequiredMixin, generic.View):
+    """
+    Обработка формы добавления статей пользователя
+    """
+    def post(self, request, *args, **kwargs):
+        try:
+            form = PostForm(request.POST, request.FILES, instance=request.user)
+            if form.is_valid():
+                form.save()
+                return redirect('add_news')
+            return  redirect('add_news')
+        except Exception:
+            return  redirect('user')

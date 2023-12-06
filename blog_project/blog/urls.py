@@ -14,5 +14,6 @@ urlpatterns = [
     path('change_password/', views.ChangePassword.as_view(), name='change_password'),
     path('add_bio/', views.AddBio.as_view(), name='add_bio'),
     path('add_avatar/', views.AddAvatar.as_view(), name='add_avatar'),
-    path('add_news/', views.AddNewsView.as_view(), name = 'add_news')
+    path('add_news/', views.AddNewsView.as_view(), name = 'add_news'),
+    path('new_post/', views.ArticlesView.as_view(),name='new_post')
 ]
