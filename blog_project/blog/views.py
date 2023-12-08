@@ -1,7 +1,7 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect
 from django.views import generic, View
-from .models import User
+from .models import User, Articles
 from django.contrib.auth import authenticate, login, update_session_auth_hash
 from django.contrib.auth.hashers import make_password
 from .forms import BiographyForm, AvatarForm, PostForm
@@ -147,7 +147,7 @@ class AddBio(LoginRequiredMixin, generic.View):
         try:
             form = BiographyForm(request.POST,instance=request.user)
             user = request.user
-            if form.is_valid:
+            if form.is_valid():
                 form.save()
                 return redirect('settings')
             return redirect('user')
@@ -164,7 +164,7 @@ class AddAvatar(LoginRequiredMixin, generic.View):
         try:
             form = AvatarForm(request.POST, request.FILES, instance=request.user)
             user = request.user
-            if form.is_valid:
+            if form.is_valid():
                 form.save()
                 return redirect('settings')
             return redirect('user')
@@ -192,16 +192,27 @@ class AddNewsView(LoginRequiredMixin, generic.TemplateView):
     template_name = 'blog/add_news.html'
 
 
-class ArticlesView(LoginRequiredMixin, generic.View):
+class ArticlesView(LoginRequiredMixin, generic.FormView):
     """
     Обработка формы добавления статей пользователя
     """
     def post(self, request, *args, **kwargs):
         try:
+            #user = request.user
+            #title = request.POST.get('title')
+            #image = request.POST.get('image')
+            #content = request.POST.get('content')
+            #author = User.objects.get(id = user.id)
+            #article = Articles.objects.create(title = title, image = image, content = content,author_id= author.id)
+            #article.save()
             form = PostForm(request.POST, request.FILES, instance=request.user)
             if form.is_valid():
+                form = form.save(commit=False)
+                form.author_id =  request.user.id
+               
                 form.save()
                 return redirect('add_news')
-            return  redirect('add_news')
-        except Exception:
+            print(form.errors)
+            return  redirect('user')
+        except FileNotFoundError:
             return  redirect('user')

@@ -30,5 +30,5 @@ class Articles(models.Model):
 
 
     def __str__(self):
-        return (self.create_date, self.title, self.content, self.image, self.deleted, self.author)
+        return f'{self.create_date}, {self.title}, {self.image}, {self.content}, {self.deleted}, {self.author}'
 
