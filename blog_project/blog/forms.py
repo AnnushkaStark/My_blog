@@ -27,3 +27,5 @@ class PostForm(forms.ModelForm):
 
         model = Articles
         fields = ('title', 'image', 'content')
+        
+       

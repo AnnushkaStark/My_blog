@@ -13,6 +13,7 @@
 							<br>
 							<form action="{% url  'new_post' %}" method="post" enctype="multipart/form-data" name="new_post">
 								{% csrf_token %}
+								
 								<p><label>Название статьи</label></p>
 								<p><input type="text" name="title" style ="border-radius: 15px; padding: 5px; height: 50px; width: 250px;"></p>
 								<p><label>Изображение</label></p>

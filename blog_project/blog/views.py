@@ -196,22 +196,23 @@ class ArticlesView(LoginRequiredMixin, generic.FormView):
     """
     Обработка формы добавления статей пользователя
     """
-    def post(self, request, *args, **kwargs):
+    def post(self, request, *args,**kwargs):
         try:
-            #user = request.user
-            #title = request.POST.get('title')
-            #image = request.POST.get('image')
-            #content = request.POST.get('content')
-            #author = User.objects.get(id = user.id)
-            #article = Articles.objects.create(title = title, image = image, content = content,author_id= author.id)
-            #article.save()
-            form = PostForm(request.POST, request.FILES, instance=request.user)
-            if form.is_valid():
-                form = form.save(commit=False)
-                form.author_id =  request.user.id
-               
-                form.save()
-                return redirect('add_news')
+            user = request.user
+            title = request.POST.get('title')
+            image = request.POST.get('image')
+            content = request.POST.get('content')
+            author = User.objects.get(id = user.id)
+            article = Articles.objects.create(title = title, image = image, content = content, author = author) 
+
+            article.save()
+            #form = PostForm(request.POST, request.FILES, instance=request.user)
+            #user =request.user
+            #if form.is_valid():
+                #form.save(commit=False)
+                #form.author_id = pk
+                #form.save()
+            return redirect('add_news')
             print(form.errors)
             return  redirect('user')
         except FileNotFoundError:
