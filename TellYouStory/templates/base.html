@@ -1,0 +1,194 @@
+{% load static %}
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>TellYouStory</title>
+<link href="{% static 'css/style.css' %}" rel='stylesheet' type='text/css' />
+<link href="{% static 'css/style.css' %}" rel="stylesheet" type="text/css" media="all" />
+<link href='http://fonts.googleapis.com/css?family=Lato:100,300,400,700,900,100italic,300italic,400italic,700italic' rel='stylesheet' type='text/css'>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+</script>
+<script src="web/js/jquery.min.js"></script>
+<!---strat-slider---->
+<link rel="stylesheet" type="text/css" href="{% static 'style.css' %}" />
+<script type="text/javascript" src="{% static 'bootstrap.bundle.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'bootstrap.bundle.min.js' %}"></script>
+			<script type="text/javascript">
+				$(function() {
+				
+					$('#da-slider').cslider({
+						autoplay	: true,
+						bgincrement	: 450
+					});
+				
+				});
+			</script>
+		<!---//strat-slider---->
+		 <!--- Hover Efeect --------------->
+		 <script type="text/javascript" src="{% static 'bootstrap.bundle.min.js' %}"></script>
+     	 <link href="{% static 'images/p1.jpg'%}" rel="stylesheet" type="text/css"/>
+        <script src="{% static 'bootstrap.bundle.min.js' %}" type="text/javascript"></script>
+          <script type="text/javascript">
+            
+            $(function(){
+                 $('.row2').adipoli({
+                    'startEffect' : 'overlay',
+                    'hoverEffect' : 'sliceDown'
+                });
+                $('.row6').adipoli({
+                    'startEffect' : 'grayscale',
+                    'hoverEffect' : 'normal'
+                });
+            });
+            
+        </script>
+        <!--- End Hover Efeect --------------->
+</head>
+<body>
+<div class="header">
+ 	<div class="container">
+	  <div class="header-top">
+	        <div class="logo">
+				<a href="#"><img src="{% static 'images/logo.png' %}" alt=""/></a>
+			 </div>
+		     <div class="h_menu4"><!-- start h_menu4 -->
+				<a class="toggleMenu" href="#">Menu</a>
+				<ul class="nav">
+					<li class="active"><a href="#">Home</a></li>
+					<li><a href="#">About Us</a></li>
+					<li><a href="#">Services</a>
+						<ul>
+							<li><a href="#">Web Design</a></li>
+							<li><a href="#">Wordpress Design</a></li>
+							<li><a href="#">Mobile App Development</a></li>
+							<li><a href="#">Internet Marketing</a></li>
+							<li><a href="#">Social Media Management</a></li>
+						</ul>
+					</li>
+					<li><a href="#">Portfolio</a>
+						<ul>
+							<li><a href="#">Dropdown</a></li>
+							<li><a href="#">Structure</a></li>
+							<li><a href="#">People</a></li>
+						</ul>
+					</li>
+					<li><a href="#">Blog</a></li>
+					<li><a href="#">Contact</a></li>
+				</ul>
+				<script type="text/javascript" src="{% static  'bootstrap.bundle.min.js'%}"></script>
+			</div><!-- end h_menu4 -->
+			<div class="clearfix"> </div>
+		  </div><!-- end header_main4 -->
+	</div>
+</div>
+<div class="main">
+	<div class="container">
+        <div class="slider">
+				<!---start-da-slider----->
+			  <div id="da-slider" class="da-slider">
+				  <div class="da-slide">
+					<h1>We design <br>clean, crisp&<br> memorarable  <br>icons</h1>
+				  </div>
+				  <div class="da-slide">
+					<h1>We design <br>clean, crisp&<br> memorarable <br> icons</h1>
+				  </div>
+				  <div class="da-slide">
+					<h1>We design <br>clean, crisp&<br> memorarable <br> icons</h1>
+				  </div>
+				  <div class="da-slide">
+					<h1>We design <br>clean, crisp&<br> memorarable  <br>icons</h1>
+				  </div>		
+			   </div>
+			   <div class="clear"> </div>
+ 		       <!---//End-da-slider----->
+        </div>
+   </div>
+ </div>
+ {% block content %}
+	<div class="Themes">
+		<div class="container">
+					<div class="feature-grids">
+						<div class="col-md-3 feature-grid">
+							<h3><span class="fea-icon1"> </span> Clean Theme</h3>
+							<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam sit amet commodo ligula. Nunc adipiscing. imperdiet est a dignissim.</p>
+							<a href="#" class="arrow_btn">Read More</a>
+						</div>
+						<div class="col-md-3 feature-grid">
+							<h3><span class="fea-icon2"> </span> Responsive Design</h3>
+							<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam sit amet commodo ligula. Nunc adipiscing. imperdiet est a dignissim.</p>
+							<a href="#" class="arrow_btn">Read More</a>
+						</div>
+						<div class="col-md-3 feature-grid">
+							<h3><span class="fea-icon3"> </span>Fully Layeard Psd</h3>
+							<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam sit amet commodo ligula. Nunc adipiscing. imperdiet est a dignissim.</p>
+							<a href="#" class="arrow_btn">Read More</a>
+						</div>
+						<div class="col-md-3 feature-grid">
+							<h3><span class="fea-icon4"> </span>Ready for coding</h3>
+							<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam sit amet commodo ligula. Nunc adipiscing. imperdiet est a dignissim.</p>
+							<a href="#" class="arrow_btn">Read More</a>
+						</div>
+				  </div>
+		    </div>
+	  </div>
+      {% endblock %}
+	  <!---//End-da-features----->	
+		<!----/start-footer---->
+	    <div class="footer">
+			<div class="container">
+				<div class="footer-grid">
+					<h3>About Us</h3>
+					<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s</p>
+				</div>
+				<div class="footer-grid">
+					<h3>Explore</h3>
+				    <ul class="list1">
+						  <li><a href="#">Home</a></li>
+						  <li><a href="#">About us</a></li>
+						  <li><a href="#">Services</a></li>
+						  <li><a href="#">Portfolio</a></li>
+						  <li><a href="#">Blog</a></li>
+						  <li><a href="#">Contact</a></li>
+				    </ul>
+				</div>
+				<div class="footer-grid">
+					<h3>Browse</h3>
+					<ul class="list1">
+						  <li><a href="#">Careers</a></li>
+						  <li><a href="#">Press& Media</a></li>
+						  <li><a href="#">Contact</a></li>
+						  <li><a href="#">Terms of Services</a></li>
+						  <li><a href="#">Privacy Policy</a></li>
+					</ul>
+				  </div>
+				  <div class="footer-grid">
+					  <h3>Contact Us</h3>
+					  <p> 2321 Street name,<br> City name,Country</p>
+					  <p class="f_text">Fax:00-250-2131</p>
+				      <p>Phone:00-250-2258</p>
+				 </div>
+				 <div class="footer-grid footer-grid_last">
+					<h3>contact  with  us</h3>
+					 <ul class="social">	
+					 	 <li><a href="#"><span class="fb-icon"> </span></a></li>
+					 	  <li><a href="#"> <span class="Db-icon"> </span></a></li>	
+					 	  <li><a href="#">  <span class="pin-icon"> </span></a></li><br>
+					 	  <li><a href="#"><span class="in-icon"> </span></a></li>
+					 	  <li><a href="#"><span class="sky-icon"> </span></a></li>	
+					 	  <li><a href="#"><span class="share-icon"> </span></a></li>
+				     </ul>
+			     </div>
+				 <div class="clearfix"> </div>
+				<div class="footer-bottom">
+	     	  	<div class="copy">
+				   <p>&copy; 2014 Template by <a href="#" target="_blank"> w3layouts</a></p>
+			    </div>
+			    <div class="footer-logo">
+			    </div>
+			    <div class="clearfix"> </div>
+			  </div>
+			</div>
+		</div>	
+</body>
+</html>		

@@ -1,0 +1,260 @@
+<!--A Design by W3layouts
+Author: W3layout
+Author URL: http://w3layouts.com
+License: Creative Commons Attribution 3.0 Unported
+License URL: http://creativecommons.org/licenses/by/3.0/
+-->
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>The Bislite for Iphone, Android & Smartphone Mobile Website Template | Portfolio :: w3layouts</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="keywords" content="Bislite Iphone web template, Andriod web template, Smartphone web template, free webdesigns for Nokia, Samsung, LG, SonyErricsson, Motorola web design" />
+<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(
+hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+<link href="smartphone/css/style.css" rel="stylesheet" type="text/css" media="all" />
+<link href='http://fonts.googleapis.com/css?family=Lato:100,300,400,700,900,100italic,300italic,400italic,700italic' rel='stylesheet' type='text/css'>
+<script src="smartphone/js/jquery.min.js"></script>
+<!---strat-nav---->
+<script src="smartphone/js/mobile.js"></script>
+</script><script type="text/javascript">window.onload = function() { w3Init(); };</script>
+<!--hover-effect-->
+<script src="smartphone/js/hover_pack.js"></script>
+<!--end hover-effect-->
+<script type="text/javascript" src="smartphone/js/modernizr.custom.28468.js"></script>
+<script type="text/javascript" src="smartphone/js/jquery.min.js"></script>
+<script type="text/javascript" src="smartphone/js/jquery.mixitup.min.js"></script>
+	<script type="text/javascript">
+	$(function () {
+		
+		var filterList = {
+		
+			init: function () {
+			
+				// MixItUp plugin
+				// http://mixitup.io
+				$('#portfoliolist').mixitup({
+					targetSelector: '.portfolio',
+					filterSelector: '.filter',
+					effects: ['fade'],
+					easing: 'snap',
+					// call the hover effect
+					onMixEnd: filterList.hoverEffect()
+				});				
+			
+			},
+			
+			hoverEffect: function () {
+			
+				// Simple parallax effect
+				$('#portfoliolist .portfolio').hover(
+					function () {
+						$(this).find('.label').stop().animate({bottom: 0}, 200, 'easeOutQuad');
+						$(this).find('img').stop().animate({top: -30}, 500, 'easeOutQuad');				
+					},
+					function () {
+						$(this).find('.label').stop().animate({bottom: -40}, 200, 'easeInQuad');
+						$(this).find('img').stop().animate({top: 0}, 300, 'easeOutQuad');								
+					}		
+				);				
+			
+			}
+
+		};
+		
+		// Run the show!
+		filterList.init();
+		
+		
+	});	
+	</script>
+</head>
+<body>
+<div class="header">
+    <div id="w3-masthead">
+      <div id="w3-universal-nav">
+    	<ul id="header-top">
+    	  <a href="index.html"><img src="smartphone/images/logo.png" alt=""/></a>
+    	</ul>
+    	<div id="w3-mobile-options">
+    		<li id="w3-menu-trigger">
+    			<a href="">Menu</a></li>
+    			<li id="w3-search-trigger">
+    				<a href="#">Search</a>
+    			</li>
+    	</div>
+    	<ul id="w3-menu-links" style="display: none;">
+            <li><a href="index.html">Home</a></li>
+			<li><a href="about.html">About Us</a></li>
+			<li><a href="services.html">Services</a></li>
+			<li><a href="portfolio.html">Portfolio</a></li>
+			<li><a href="blog.html">Blog</a></li>
+			<li><a href="contact.html">Contact</a></li>
+		</ul>
+     </div>
+     </div>
+</div>
+	<div class="portfolio_box">
+		<div class="container">
+		  <section class="title-section">
+			<h1 class="title-header">
+			Portfolio </h1>
+ 			<ul class="breadcrumb breadcrumb__t"><li><a href="index.html">Home</a></li><li class="active"> &nbsp;&nbsp;&nbsp;/ &nbsp;&nbsp;&nbsp;portfolio</li></ul>  
+		  </section>	
+		     <ul id="filters" class="clearfix">
+				<li><span class="filter active" data-filter="app card icon logo web">All</span></li>
+				<li><span class="filter" data-filter="app">Websites</span></li>
+				<li><span class="filter" data-filter="card">Wordpress</span></li>
+				<li><span class="filter" data-filter="icon">Mobile Apps</span></li>
+			 </ul>
+	          <div class="clear"></div>
+	          <div id="portfoliolist">
+					<div class="portfolio app mix_all" data-cat="app" style="display: inline-block; opacity: 1;">
+						<div class="portfolio-wrapper">		
+							<a href="single.html" class="b-link-stripe b-animate-go  thickbox">
+						     <img src="smartphone/images/p1.jpg" /><div class="b-wrapper"><h2 class="b-animate b-from-left    b-delay03 "><img src="smartphone/images/prew.png"  class="img-responsive" alt=""/><img src="smartphone/images/link.png"  class="img-responsive" alt=""/></h2>
+						  	</div></a>
+						</div>
+					</div>				
+					<div class="portfolio app mix_all" data-cat="app" style="display: inline-block; opacity: 1;">
+						<div class="portfolio-wrapper">		
+							<a href="single.html" class="b-link-stripe b-animate-go  thickbox">
+						     <img src="smartphone/images/p2.jpg" /><div class="b-wrapper"><h2 class="b-animate b-from-left    b-delay03 "><img src="smartphone/images/prew.png"  class="img-responsive" alt=""/><img src="smartphone/images/link.png"  class="img-responsive" alt=""/></h2>
+						     </div></a>
+		                </div>
+					</div>		
+					<div class="portfolio card mix_all" data-cat="card" style="display: inline-block; opacity: 1;">
+						<div class="portfolio-wrapper">		
+							<a href="single.html" class="b-link-stripe b-animate-go  thickbox">
+						     <img src="smartphone/images/p3.jpg" /><div class="b-wrapper"><h2 class="b-animate b-from-left    b-delay03 "><img src="smartphone/images/prew.png"  class="img-responsive" alt=""/><img src="smartphone/images/link.png"  class="img-responsive" alt=""/></h2>
+						  </div></a>
+		                </div>
+					</div>				
+					<div class="portfolio card mix_all" data-cat="card" style="display: inline-block; opacity: 1;">
+						<div class="portfolio-wrapper">		
+							<a href="single.html" class="b-link-stripe b-animate-go  thickbox">
+						     <img src="smartphone/images/p4.jpg" /><div class="b-wrapper"><h2 class="b-animate b-from-left    b-delay03 "><img src="smartphone/images/prew.png"  class="img-responsive" alt=""/><img src="smartphone/images/link.png"  class="img-responsive" alt=""/></h2>
+						  	 </div></a>
+		                </div>
+					</div>	
+					<div class="portfolio icon mix_all" data-cat="icon" style="display: inline-block; opacity: 1;">
+						<div class="portfolio-wrapper">		
+							<a href="single.html" class="b-link-stripe b-animate-go  thickbox">
+						     <img src="smartphone/images/p5.jpg" /><div class="b-wrapper"><h2 class="b-animate b-from-left    b-delay03 "><img src="smartphone/images/prew.png"  class="img-responsive" alt=""/><img src="smartphone/images/link.png"  class="img-responsive" alt=""/></h2>
+						  	 </div></a>
+		                </div>
+					</div>			
+					<div class="portfolio icon mix_all" data-cat="icon" style="display: inline-block; opacity: 1;">
+						<div class="portfolio-wrapper">		
+							<a href="single.html" class="b-link-stripe b-animate-go  thickbox">
+						     <img src="smartphone/images/p6.jpg" /><div class="b-wrapper"><h2 class="b-animate b-from-left    b-delay03 "><img src="smartphone/images/prew.png"  class="img-responsive" alt=""/><img src="smartphone/images/link.png"  class="img-responsive" alt=""/></h2>
+						  	 </div></a>
+		                </div>
+					</div>	
+					<div class="portfolio logo mix_all" data-cat="logo" style="display: inline-block; opacity: 1;">
+						<div class="portfolio-wrapper">		
+							<a href="single.html" class="b-link-stripe b-animate-go  thickbox">
+						     <img src="smartphone/images/p7.jpg" /><div class="b-wrapper"><h2 class="b-animate b-from-left    b-delay03 "><img src="smartphone/images/prew.png"  class="img-responsive" alt=""/><img src="smartphone/images/link.png"  class="img-responsive" alt=""/></h2>
+						  	 </div></a>
+		                </div>
+					</div>	
+					<div class="portfolio logo mix_all" data-cat="logo" style="display: inline-block; opacity: 1;">
+						<div class="portfolio-wrapper">		
+							<a href="single.html" class="b-link-stripe b-animate-go  thickbox">
+						     <img src="smartphone/images/p8.jpg" /><div class="b-wrapper"><h2 class="b-animate b-from-left    b-delay03 "><img src="smartphone/images/prew.png"  class="img-responsive" alt=""/><img src="smartphone/images/link.png"  class="img-responsive" alt=""/></h2>
+						  	 </div></a>
+		                </div>
+					</div>	
+					<div class="portfolio card1 mix_all" data-cat="card1" style="display: inline-block; opacity: 1;">
+						<div class="portfolio-wrapper">		
+							<a href="single.html" class="b-link-stripe b-animate-go  thickbox">
+						     <img src="smartphone/images/p13.jpg" /><div class="b-wrapper"><h2 class="b-animate b-from-left    b-delay03 "><img src="smartphone/images/prew.png"  class="img-responsive" alt=""/><img src="smartphone/images/link.png"  class="img-responsive" alt=""/></h2>
+						  	 </div></a>
+		                </div>
+					</div>		
+					<div class="portfolio card1 mix_all" data-cat="card1" style="display: inline-block; opacity: 1;">
+						<div class="portfolio-wrapper">		
+							<a href="single.html" class="b-link-stripe b-animate-go  thickbox">
+						     <img src="smartphone/images/p14.jpg" /><div class="b-wrapper"><h2 class="b-animate b-from-left    b-delay03 "><img src="smartphone/images/prew.png"  class="img-responsive" alt=""/><img src="smartphone/images/link.png"  class="img-responsive" alt=""/></h2>
+						  	 </div></a>
+		                </div>
+					</div>		
+					<div class="portfolio app mix_all" data-cat="app" style="display: inline-block; opacity: 1;">
+						<div class="portfolio-wrapper">		
+							<a href="single.html" class="b-link-stripe b-animate-go  thickbox">
+						     <img src="smartphone/images/p15.jpg" /><div class="b-wrapper"><h2 class="b-animate b-from-left    b-delay03 "><img src="smartphone/images/prew.png"  class="img-responsive" alt=""/><img src="smartphone/images/link.png"  class="img-responsive" alt=""/></h2>
+						  	 </div></a>
+		                </div>
+					</div>	
+					<div class="portfolio app mix_all" data-cat="app" style="display: inline-block; opacity: 1;">
+						<div class="portfolio-wrapper">		
+							<a href="single.html" class="b-link-stripe b-animate-go  thickbox">
+						     <img src="smartphone/images/p16.jpg" /><div class="b-wrapper"><h2 class="b-animate b-from-left    b-delay03 "><img src="smartphone/images/prew.png"  class="img-responsive" alt=""/><img src="smartphone/images/link.png"  class="img-responsive" alt=""/></h2>
+						  	 </div></a>
+		                </div>
+					</div>	
+					<div class="clear"></div>																																												
+				</div>
+			    <ul class="dc_pagination">
+				  <li><a href="#"class="current">1</a></li>
+				  <li><a href="#">2</a></li>
+				  <li><a href="#">3</a></li>
+				  <li><a href="#">4</a></li>
+				  <li><a href="#">5</a></li>
+				  <li><a href="#" class="previous"><img src="smartphone/images/pre.png" alt=""/></a></li>
+				  <li><a href="#" class="next"><img src="smartphone/images/next.png" alt=""/></a></li>
+			     </ul>
+		  </div>	
+	   </div>
+      <!----/start-footer---->
+	    <div class="footer">
+			    <div class="footer-grid">
+					<h3>About Us</h3>
+					<p>Lorem Ipsum is simply dummy text of the printing and typesetting industr</p>
+				</div>
+				<div class="footer-grid">
+					<h3>Explore</h3>
+				    <ul class="list1">
+						  <li><a href="#">Home</a></li>
+						  <li><a href="#">About us</a></li>
+						  <li><a href="#">Services</a></li>
+				    </ul>
+				</div>
+				<div class="footer-grid">
+					<h3>Browse</h3>
+					<ul class="list1">
+						  <li><a href="#">Careers</a></li>
+						  <li><a href="#">Press& Media</a></li>
+						  <li><a href="#">Contact</a></li>
+				    </ul>
+				  </div>
+				  <div class="footer-grid">
+					  <h3>Contact Us</h3>
+					  <p> 2321 Street name,<br> City name,Country</p>
+					  <p class="f_text">Fax:00-250-2131</p>
+				      <p>Phone:00-250-2258</p>
+				 </div>
+				 <div class="footer-grid footer-grid_last">
+					<h3>contact  with  us</h3>
+					 <ul class="social">	
+					 	 <li><a href="#"><span class="fb-icon"> </span></a></li>
+					 	  <li><a href="#"> <span class="Db-icon"> </span></a></li>	
+					 	  <li><a href="#">  <span class="pin-icon"> </span></a></li><br>
+					 	  <li><a href="#"><span class="in-icon"> </span></a></li>
+					 	  <li><a href="#"><span class="sky-icon"> </span></a></li>	
+					 	  <li><a href="#"><span class="share-icon"> </span></a></li>
+				     </ul>
+			     </div>
+				<div class="footer-bottom">
+	     	  	<div class="copy">
+				   <p>&copy; 2014 Template by <a href="http://w3layouts.com" target="_blank"> w3layouts</a></p>
+			    </div>
+			    <div class="footer-logo">
+			       <a href="index.html"><img src="smartphone/images/logo.png" alt=""/></a>
+			    </div>
+			   </div>
+	   </div>
+</body>
+</html>
