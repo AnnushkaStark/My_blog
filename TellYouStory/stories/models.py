@@ -12,6 +12,7 @@ class User(AbstractUser):
     username = models.CharField(max_length=50, unique=True)
     email = models.EmailField(unique=True)
     password = models.CharField(max_length=100)
+    is_verificate = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
 
@@ -19,4 +20,4 @@ class User(AbstractUser):
         """
         Отображение полей в админке
         """
-        return f"{self.username} {self.email} {self.password}{self.is_superuser} {self.is_active}"
+        return f"{self.username} {self.email} {self.password}  {self.is_verificate}  {self.is_superuser} {self.is_active}"
