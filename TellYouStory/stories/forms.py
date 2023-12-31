@@ -5,15 +5,16 @@ from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.hashers import make_password
+from django.forms import ModelForm
 
 
-class UserRegisterForm(UserCreationForm):
+class UserRegisterForm(ModelForm):
     """
     Обработка формы регитсрации пользователя
     кастомная форма UserCreationForm
     """
 
-    username = forms.CharField(min_length=5, max_length=150)
+    username = forms.CharField(min_length=5, max_length=150, widget=forms.TextInput)
     email = forms.EmailField(widget=forms.EmailInput)
     password = forms.CharField(widget=forms.PasswordInput)
     password2 = forms.CharField(widget=forms.PasswordInput)
@@ -42,7 +43,7 @@ class UserRegisterForm(UserCreationForm):
         """
         Проверка наличия и совпадения паролей
         """
-        password = self.cleaned_data["password1"]
+        password = self.cleaned_data["password"]
         password2 = self.cleaned_data["password2"]
 
         if password and password2 and password != password2:
@@ -50,13 +51,6 @@ class UserRegisterForm(UserCreationForm):
         password = make_password(password)
         return password
 
-    def save(self, commit=True):
-        """
-        Создание объекта пользователя
-        """
-        user = User.objects.create(
-            self.cleaned_data["username"],
-            self.cleaned_data["email"],
-            self.cleaned_data["password1"],
-        )
-        return user
+    class Meta:
+        model = User
+        fields = ["username", "email", "password"]
