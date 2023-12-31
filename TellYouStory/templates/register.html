@@ -5,17 +5,23 @@
 <div class="container">
     <div class="row">
         <div class =col12>
-            <form name="registerform" action="{% url 'register'}%" method="post">
+            <form name="registerform" action="{% url 'register_form' %}" method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <div class="mb-3">
+                    <label for="exampleInputEmail1" class="form-label">Имя пользовтаеля</label>
+                    <input type="text" class="form-control" aria-describedby="emailHelp"name='email'>
+                  <div class="mb-3">
                 <div class="mb-3">
                   <label for="exampleInputEmail1" class="form-label">Адрес электронной почты</label>
-                  <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"name='email'>
+                  <input type="email" class="form-control"  aria-describedby="emailHelp"name='email'>
                 <div class="mb-3">
                   <label for="exampleInputPassword1" class="form-label">Пароль</label>
-                  <input type="password" class="form-control" id="exampleInputPassword1" name="passswowrd">
+                  <input type="password" class="form-control"  name="passswowrd">
                 </div>
                 <div class="mb-3">
                     <label for="exampleInputPassword1" class="form-label">Подтвердите пароль</label>
-                    <input type="password" class="form-control" id="exampleInputPassword1" name="password_2">
+                    <input type="password" class="form-control"  name="password2">
                   </div>
                 <button type="submit" class="btn btn-primary">Зарегистрироваться</button>
               </form>
