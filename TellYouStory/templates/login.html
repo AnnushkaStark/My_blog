@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class =col12>
+            <form>
+                {% csrf_token %}
+                {{ form.as_p }}
+                <div class="mb-3">
+                    <h2 style="text-align: center;">Войдите в ваш аккаунт</h2>
+                  <label for="exampleInputEmail1" class="form-label">Имя</label>
+                  <input type="text" class="form-control">
+                <div class="mb-3">
+                  <label for="exampleInputPassword1" class="form-label">Пароль</label>
+                  <input type="password" class="form-control" id="exampleInputPassword1">
+                </div>
+                <button type="submit" class="btn btn-primary">Войти</button>
+              </form>
+              <p><a class="link-opacity-100" href="#">Забыли пароль?</a></p>
+              <p><a class="link-opacity-100" href="#">Деактивирован аккаунт?</a></p>
+              <p style="text-align: center;"><img src="{% static 'img\fon.jpg' %}" class="img-fluid" alt="Фон"></p> 
+
+
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}

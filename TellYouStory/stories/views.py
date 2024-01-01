@@ -2,8 +2,12 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.views.generic.base import TemplateView
 from django.views.generic import FormView, CreateView, ListView
+from django.contrib.auth.views import LogoutView
+from django.views import View
 from .forms import UserRegisterForm
-from django.contrib.auth.hashers import make_password
+from django.contrib.auth.hashers import make_password, check_password, reset_hashers
+from django.contrib.auth import login, logout
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 
 # Create your views here.
@@ -54,7 +58,7 @@ class UserRegistrationViwe(FormView):
                 user.password = make_password(password)      # Хэширование пароля
                 user.save()
                 messages.success(request, "Создан аккаунт!")
-                return redirect("index")
+                return redirect("login_page")
             print(form.errors)
             messages.error(request, "Ошибка ввода данных")
             return redirect("register")
@@ -64,3 +68,31 @@ class UserRegistrationViwe(FormView):
         except ValueError:
             messages.error(request, "Ошибка ввода данных")
             return redirect("register")
+
+
+class UserLoginView(TemplateView):
+    """
+    Представление страницы login
+    Запрос GET
+    """
+
+    template_name = "login.html"
+
+
+class UserLogoutView(LogoutView,LoginRequiredMixin):
+    """
+    Представление выхода пользователя из системы
+    """
+    http_method_names =['post']
+
+    def dispatch(self, request, *args, **kwargs):
+        """
+        Если пользоваетель уже залогинен
+        выводит пользователя из системы
+        """
+        if request.user.is_authenticated:
+            logout(request)
+            messages.success(request, "Спасибо за проведенное время!")
+            return redirect("index")
+        messages.error(request, "Ошибка входа из системы")
+        return redirect("register")
