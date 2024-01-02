@@ -1,7 +1,7 @@
-from django.test import TestCase
+from django.test import TestCase, Client
 from .models import User
 from .forms import UserRegisterForm ,UserLoginForm  
-
+from django.urls import reverse, reverse_lazy
 
 class TestUserModel(TestCase):
     """
@@ -109,3 +109,86 @@ class TestUserLoginForm(TestCase):
         self.assertFalse(form.is_valid())
         self.assertEqual(form.errors["username"], ["Обязательное поле."])
         self.assertEqual(form.errors["password"], ["Обязательное поле."])
+
+
+
+class TestUserRegistrationView(TestCase):
+    """
+    Тестирование представления регистрации
+    """
+    def setUp(self):
+        """
+        Создание тест пользователя
+        """
+        self.client = Client()             
+        self.url = reverse("register")               # Страница  регистрации
+   
+    def test_register_view(self):
+        """
+        Проверка доступности страницы регистрации
+        """
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code,200)
+        self.assertTemplateUsed(response,'register.html')
+
+
+class TestIndexPageView(TestCase):
+    """
+    Тестирование стратовой страницы сайта
+    """
+
+    def setUp(self):
+        """
+        Создание тест пользователя
+        """
+        self.client = Client()             
+        self.url = reverse("index")               # Страница index (стартовая)
+   
+    def test_index_view(self):
+        """
+        Проверка доступности cтартовой страницы сайта
+        """
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code,200)
+        self.assertTemplateUsed(response,'index.html')
+
+    
+class TestLogiPageView(TestCase):
+    """
+    Тестирование представления страницы входа в систему
+    """
+    def setUp(self):
+        """
+        Создание тест пользователя
+        """
+        self.client = Client()             
+        self.url = reverse("login_page")               # Страница login
+   
+    def test_login_page_view(self):
+        """
+        Проверка доступности страницы login
+        """
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code,200)
+        self.assertTemplateUsed(response,'login.html')
+
+
+class TestUserPageView(TestCase):
+    """
+    Тестирование представления страницы пользователя
+    """ 
+
+    def setUp(self):
+        """
+        Создание тест пользователя
+        """
+        self.client = Client()             
+        self.url = reverse("user_page")               # Страница login
+   
+    def test_login_page_view(self):
+        """
+        Проверка доступности страницы user
+        """
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code,200)
+        self.assertTemplateUsed(response,'user.html')       
