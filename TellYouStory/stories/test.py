@@ -1,6 +1,6 @@
 from django.test import TestCase
 from .models import User
-from .forms import UserRegisterForm
+from .forms import UserRegisterForm ,UserLoginForm  
 
 
 class TestUserModel(TestCase):
@@ -82,3 +82,30 @@ class TestUserRegistrationForm(TestCase):
         form = UserRegisterForm(data=form_data)
         self.assertFalse(form.is_valid())
         self.assertEqual(form.errors["password2"], ["Пароли не совпадают"])
+
+
+class TestUserLoginForm(TestCase):
+    """
+    Тестирование формы login
+    """
+    def test_valid_form(self):
+        """
+        Проверка валидности формы
+        """
+        form_data = {
+            "username": "testuser",
+            "password": "testpassword",
+        }
+
+        form = UserLoginForm(data=form_data)
+        self.assertTrue(form.is_valid())
+
+
+    def test_blalnk_form(self):
+        """
+        Проверка отправки не заполненной  формы
+        """
+        form = UserRegisterForm(data={})
+        self.assertFalse(form.is_valid())
+        self.assertEqual(form.errors["username"], ["Обязательное поле."])
+        self.assertEqual(form.errors["password"], ["Обязательное поле."])
