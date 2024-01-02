@@ -3,6 +3,7 @@ from .models import User
 from .forms import UserRegisterForm ,UserLoginForm  
 from django.urls import reverse, reverse_lazy
 
+
 class TestUserModel(TestCase):
     """
     Teст модели пользователя
@@ -183,7 +184,7 @@ class TestUserPageView(TestCase):
         Создание тест пользователя
         """
         self.client = Client()             
-        self.url = reverse("user_page")               # Страница login
+        self.url = reverse("user_page")               # Страница user
    
     def test_login_page_view(self):
         """
@@ -191,4 +192,70 @@ class TestUserPageView(TestCase):
         """
         response = self.client.get(self.url)
         self.assertEqual(response.status_code,200)
-        self.assertTemplateUsed(response,'user.html')       
+        self.assertTemplateUsed(response,'user.html')
+
+
+class TestUserRegistrationFormView(TestCase):
+    """
+    Тестирование предствления формы регистрации пользоватея
+    """
+    def setUp(self):
+        """
+        Создание тест пользователя
+        """
+        self.url = reverse("register_form")           
+        self.data = {
+            "username": "tesuser",
+            "email"   : "test@mail.com",
+            "password" :  "testpassword#!@",
+            "password2": "testpassword#!@",
+        }
+           
+   
+    def test_register_form_view_sucsess(self):
+        """
+        Проверка успешной регистрации
+        """
+        response = self.client.post(self.url,data=self.data)
+        self.assertEqual(response.status_code,302)
+        self.assertRedirects(response,reverse("login_page"))
+        user = User.objects.get(username = self.data["username"])
+        self.assertEqual(user.email, self.data["email"])
+        self.assertTrue(user.check_password(self.data["password"]))
+
+    def test_register_form_view_failure(self):
+        """
+        Тестирование регистрации при не валидной форме
+        """
+        invalid_data=self.data.copy()
+        invalid_data["password2"] = "wrongpassword"
+        response= self.client.post(self.url, data=invalid_data, follow=True)
+        self.assertEqual(response.status_code,200)
+        self.assertRedirects(response,reverse("register"))
+        self.assertContains(response,"Ошибка ввода данных")
+        self.assertFalse(User.objects.filter(username= 'tesuser').exists())
+
+    def test_blank_data(self):
+        """
+        Тестирование попытки регистрации 
+        c  не валидной формой ( пустой юзернейм)
+        """
+        data = {
+            "username": "",
+            "email"   : "test@mail.com",
+            "password" :  "testpassword#!@",
+            "password2": "testpassword#!@",
+            }
+        response = response= self.client.post(self.url, data=data, follow=True)
+        self.assertEqual(response.status_code,200)
+        self.assertRedirects(response,reverse("register"))
+        self.assertContains(response,"Ошибка ввода данных")
+
+
+
+class TestLoginFormView(TestCase):
+    """
+    Тестирование представления входа пользователя
+    в систему (представление формы)
+    """
+

@@ -42,6 +42,7 @@ class UserRegistrationViwe(FormView):
         возврат на страницу индекс
         """
         if request.user.is_authenticated:
+            messages.error(request, "Пользователь уже существует")
             return redirect("index")
         return super().dispatch(request, *args, **kwargs)
 
