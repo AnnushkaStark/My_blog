@@ -252,7 +252,7 @@ class TestUserRegistrationFormView(TestCase):
 
 class TestLoginFormView(TestCase):
     """
-    Тестирование выхода пользователя из системы
+    Тестирование  представления формы login
     """
 
     def setUp(self):
@@ -283,3 +283,32 @@ class TestLoginFormView(TestCase):
         response = self.client.post(self.login_url, data)
         self.assertEqual(response.status_code, 302)
         self.assertRedirects(response, reverse("login_page"))
+
+
+class TestLogoutView(TestCase):
+    """
+    Тестирование представления logout
+    """
+    def setUp(self):
+        """
+        Cоздание тест пользователя
+        """
+        self.client = Client()
+        self.url = reverse("user_page")
+        self.logout_url = reverse("logout")
+        self.user = User.objects.create_user(
+            username="testus", email="mytest@mail.com", password="123testpass"
+        )
+
+        self.client.login( username="testus",password="123testpass")
+
+    def test_logout_view(self):
+        """
+        Тестирование выхода из системы
+        """
+        response = self.client.get(reverse("user_page"))
+        self.assertEqual(response.status_code,200)
+        response = self.client.post(self.logout_url)
+        self.assertRedirects(response,reverse("index"))
+
+
