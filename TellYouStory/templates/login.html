@@ -6,7 +6,7 @@
     <div class="row">
         <div class =col12>
             <form  action="{% url 'login_form' %}", method="post" name="loginform">
-                {% csrf_token %}
+              {% csrf_token %}
                 {{ form.as_p }}
                 <div class="mb-3">
                     <h2 style="text-align: center;">Войдите в ваш аккаунт</h2>

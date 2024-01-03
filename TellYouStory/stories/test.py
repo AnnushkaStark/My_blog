@@ -302,13 +302,99 @@ class TestLogoutView(TestCase):
 
         self.client.login( username="testus",password="123testpass")
 
-    def test_logout_view(self):
+    def test_settings_page_view(self):
         """
-        Тестирование выхода из системы
+        Тестирование доступности страницы настроек аккаунта
         """
         response = self.client.get(reverse("user_page"))
         self.assertEqual(response.status_code,200)
         response = self.client.post(self.logout_url)
         self.assertRedirects(response,reverse("index"))
+       
+
+class TestPrivateSettingsPageView(TestCase):
+    """
+    Тестирование представления 
+    страницы настроек аккаунта
+    """
+    def setUp(self):
+        """
+        Cоздание тест пользователя
+        """
+        self.client = Client()
+        self.url = reverse("user_page")
+        self.settings_url = reverse("settings_page")
+        self.user = User.objects.create_user(
+            username="testus", email="mytest@mail.com", password="123testpass"
+        )
+
+        self.client.login( username="testus",password="123testpass")
+
+    def test_settings_page_view(self):
+        """
+        Тестирование доступности страницы натсроек аккаунта
+        """
+        response = self.client.get(reverse("user_page"))
+        self.assertEqual(response.status_code,200)
+        response = self.client.get(self.settings_url)
+        self.assertEqual(response.status_code,200)
+        self.assertTemplateUsed("settings.html")
 
 
+class TestSettingsPageView(TestCase):
+    """
+    Тестирование представления 
+    страницы настроек профиля
+    """
+    def setUp(self):
+        """
+        Cоздание тест пользователя
+        """
+        self.client = Client()
+        self.url = reverse("user_page")
+        self.private_settings_url = reverse("private_settings_page")
+        self.user = User.objects.create_user(
+            username="testus", email="mytest@mail.com", password="123testpass"
+        )
+
+        self.client.login( username="testus",password="123testpass")
+
+    def test_private_settings_page_view(self):
+        """
+        Тестирование доступности страницы натсроек профиля
+        """
+        response = self.client.get(reverse("user_page"))
+        self.assertEqual(response.status_code,200)
+        response = self.client.get(self.private_settings_url)
+        self.assertEqual(response.status_code,200)
+        self.assertTemplateUsed("private_settings.html")
+
+
+class TestDeactivatePageView(TestCase):
+    """
+    Тестирование представления 
+    страницы настроек профиля
+    """
+    def setUp(self):
+        """
+        Cоздание тест пользователя
+        """
+        self.client = Client()
+        self.url = reverse("user_page")
+        self.deactivate_url = reverse("deactivate_page")
+        self.user = User.objects.create_user(
+            username="testus", email="mytest@mail.com", password="123testpass"
+        )
+
+        self.client.login( username="testus",password="123testpass")
+
+    def test_deactivate_page_view(self):
+        """
+        Тестирование доступности страницы деактивации аккаунта
+        """
+        response = self.client.get(reverse("user_page"))
+        self.assertEqual(response.status_code,200)
+        response = self.client.get(self.deactivate_url)
+        self.assertEqual(response.status_code,200)
+        self.assertTemplateUsed("deactivate.html")
+    
