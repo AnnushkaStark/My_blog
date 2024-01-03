@@ -126,7 +126,7 @@ class UserLoginFormView(FormView):
                 username = form.cleaned_data["username"]        # Получение данных из формы
                 password = form.cleaned_data["password"]
                 user = authenticate(request, username=username, password=password)   # Аутентификация пользователя
-                if user is not None:                                # Если пользователь зарегистрирован
+                if user is not None and user.is_active:                                # Если пользователь зарегистрирован
                     login(request, user)                               
                     messages.success(request, f"Привет {username}!")      # Вход в систему
                     return redirect("user_page")
@@ -146,3 +146,29 @@ class UserPageView(TemplateView, LoginRequiredMixin):
     """
 
     template_name = "user.html"
+
+
+class SettingsPage(TemplateView,LoginRequiredMixin):
+    """
+    Cтраница настроек аккаунта (запрос POST)
+    """
+
+    template_name = "settings.html"
+
+
+
+class PrivateSettingsPage(TemplateView,LoginRequiredMixin):
+    """
+    Страница  насроек профиля (запрос POST)
+    """
+
+    template_name = "private_settings.html"
+
+
+
+class DeactivatePage(TemplateView,LoginRequiredMixin):
+    """
+    Страница деактивации аккаунта (запрос POST)
+    """
+
+    template_name = "deactivate.html"

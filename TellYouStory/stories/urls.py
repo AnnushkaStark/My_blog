@@ -11,4 +11,7 @@ urlpatterns = [
     path("logout/", views.UserLogoutView.as_view(), name="logout"),
     path("login_form/", views.UserLoginFormView.as_view(), name="login_form"),
     path("user/", views.UserPageView.as_view(), name="user_page"),
+    path("settings/", views.SettingsPage.as_view(),name="settings"),
+    path("private_settings/", views.PrivateSettingsPage.as_view(),name="private_settings"),
+    path("deactivate/",views.DeactivatePage.as_view(),name="deactivate")
 ]
