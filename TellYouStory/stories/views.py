@@ -4,10 +4,11 @@ from django.views.generic.base import TemplateView
 from django.views.generic import FormView, CreateView, ListView
 from django.contrib.auth.views import LogoutView
 from django.views import View
-from .forms import UserRegisterForm, UserLoginForm
+from .forms import UserRegisterForm, UserLoginForm, ChangeMailForm
 from django.contrib.auth.hashers import make_password, check_password, reset_hashers
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.mixins import LoginRequiredMixin
+from .models import User
 
 
 # Create your views here.
@@ -172,3 +173,29 @@ class DeactivatePage(TemplateView,LoginRequiredMixin):
     """
 
     template_name = "deactivate.html"
+
+
+
+class ChangeMailFormView(FormView,LoginRequiredMixin):
+    """
+    Представление смены электронной почты пользователя
+    """
+    def post(self,request):
+        """
+        Получение данных из формы смены 
+        электронной почты
+        """
+        user = User.objects.get(id=request.user.id)
+        form = ChangeMailForm(request.POST)
+        if form.is_valid():
+            old_mail = form.cleaned_data["old_mail"]
+            new_mail = form.cleaned_data["new_mail"]
+            if user.email == old_mail:
+                user.email = new_mail
+                user.save()
+                messages.success(request,"Ваша электронная почта изменена")
+                return redirect("settings_page")
+            messages.error(request, "Неверная почта")
+            return redirect("settings_page")
+        messages.error(request, "Ошибка изменения данных")
+        return redirect("settings_page")   

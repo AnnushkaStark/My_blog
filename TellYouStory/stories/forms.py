@@ -83,3 +83,34 @@ class UserLoginForm(forms.Form):
         if password:
             return password
         raise ValidationError("InvalidPassword")
+
+
+
+class ChangeMailForm(forms.Form):
+    """
+    Форма изменения электронной почты пользователя
+    """
+    old_mail = forms.EmailField(widget=forms.EmailInput)  # Старый адрес эл почты
+    new_mail = forms.EmailField(widget=forms.EmailInput)  # Новый адрес эл почты
+
+    def old_mail_clean(self):
+        """
+        Проверка валидности старой эл почты
+        """
+        old_mail = self.cleaned_data["old_mail"]
+        old =   User.objects.filter(email= old_mail)
+        if old.count():
+            return old_mail
+        raise ValidationError("InvalidEmail")
+    
+
+    def new_mail_clean(self):
+        """
+        Проверка валидности 
+        новой электронной почты
+        """
+        new_mail = self.cleaned_data["new_mail"]
+        new =  User.objects.filter(email= new_mail)
+        if new.count():
+            raise ValidationError("Почта уже зарегистрировна")
+        return new_mail
