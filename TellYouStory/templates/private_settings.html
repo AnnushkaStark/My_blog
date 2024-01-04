@@ -2,5 +2,41 @@
 {% load static %}
 
 {% block content %}
+<div class ="container">
+    <div class="row">
+        <div class ="col">
+            <br>
+            <h2 style="text-align: center;">Заполните информацию профиля</h2>
+            <form enctype="multipart/form-data">
+                <div class="mb-3">
+                  <label for="exampleInputEmail1" class="form-label">Ваше имя</label>
+                  <input type="text" class="form-control">
+                </div>
+                <div class="mb-3">
+                    <label for="exampleInputEmail1" class="form-label">Ваш город</label>
+                    <input type="text" class="form-control">
+                  </div>
+                <div class="mb-3">
+                    <label for="exampleInputEmail1" class="form-label">Ваша дата рождения</label>
+                    <input type="date" class="form-control">
+                </div>
+                <div class="mb-3">
+                    <label for="exampleInputEmail1" class="form-label">Ссылка на бусти</label>
+                    <input type="url" class="form-control">
+                </div>
+                <div class="mb-3">
+                    <label for="exampleInputEmail1" class="form-label">Фото профиля</label>
+                    <input type="file" class="form-control">
+                </div>
+                <div class="mb-3">
+                    <label for="exampleInputEmail1" class="form-label">Биография</label>
+                    <textarea type="" class="form-control"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Применить</button>
+              </form>
+        </div>
+        </div>
+    </div>
+</div>
 
 {% endblock %}

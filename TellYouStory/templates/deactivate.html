@@ -2,5 +2,34 @@
 {% load static %}
 
 {% block content %}
+<div class="container">
+    <div class="row">
+        <div class =col12>
+            <br>
+            <h2 style="text-align: center;">Подтвердите деактивацию аккаунта</h2>
+            <form name="registerform" action="#" method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <div class="mb-3">
+                    <label for="exampleInputEmail1" class="form-label">Имя пользовтаеля</label>
+                    <input type="text" class="form-control" aria-describedby="emailHelp"name='username'>
+                  <div class="mb-3">
+                <div class="mb-3">
+                  <label for="exampleInputEmail1" class="form-label">Адрес электронной почты</label>
+                  <input type="email" class="form-control"  aria-describedby="emailHelp"name='email'>
+                <div class="mb-3">
+                  <label for="exampleInputPassword1" class="form-label">Пароль</label>
+                  <input type="password" class="form-control"  name="password">
+                </div>
+                <div class="mb-3">
+                    <label for="exampleInputPassword1" class="form-label">Подтвердите пароль</label>
+                    <input type="password" class="form-control"  name="password2">
+                  </div>
+                <button type="submit" class="btn btn-primary">Деактивировать мой аккаунт</button>
+              </form>
+              <p style="text-align: center;"><img src="{% static 'img\fon.jpg' %}" class="img-fluid" alt="Фон"></p>
+        </div>
+    </div>
+</div>
 
 {% endblock %}
