@@ -1,6 +1,6 @@
 from django.test import TestCase, Client
 from .models import User
-from .forms import UserRegisterForm, UserLoginForm
+from .forms import UserRegisterForm, UserLoginForm, ChangeMailForm
 from django.urls import reverse, reverse_lazy
 from django.contrib.auth import authenticate, login
 
@@ -398,3 +398,44 @@ class TestDeactivatePageView(TestCase):
         self.assertEqual(response.status_code,200)
         self.assertTemplateUsed("deactivate.html")
     
+
+class TestChangeUserMailForm(TestCase):
+    """
+    Тестирование формы изменения элекронной почты
+    """
+
+    def test_valid_form(self):
+        """
+        Проверка валидности формы
+        """
+        form_data = {
+            "old_mail": "mytest@mail.com",
+            "new_mail": "test@testsss.ru",
+        }
+
+        form = ChangeMailForm(data=form_data)
+        self.assertTrue(form.is_valid())
+        
+    def test_invalid_data(self):
+        """
+        Проверка валидности формы при не валидной 
+        почте
+        """
+
+        form_data = {
+            "old_mail": "mytmail.com",
+            "new_mail": "test@testsss.ru",
+        }
+
+        form = ChangeMailForm(data=form_data)
+        self.assertFalse(form.is_valid())
+        self.assertEqual(form.errors["old_mail"], ['Введите правильный адрес электронной почты.'])
+
+    def test_blank_data(self):
+        """
+        Тест не заполненной формы 
+        """
+        form = ChangeMailForm(data={})
+        self.assertFalse(form.is_valid())
+        self.assertEqual(form.errors["old_mail"], ['Обязательное поле.'])
+        self.assertEqual(form.errors["new_mail"], ['Обязательное поле.'])

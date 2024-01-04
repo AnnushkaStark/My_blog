@@ -124,12 +124,16 @@ class UserLoginFormView(FormView):
         try:
             form = UserLoginForm(request.POST)
             if form.is_valid():
-                username = form.cleaned_data["username"]        # Получение данных из формы
+                username = form.cleaned_data["username"]  # Получение данных из формы
                 password = form.cleaned_data["password"]
-                user = authenticate(request, username=username, password=password)   # Аутентификация пользователя
-                if user is not None  and user.is_active:                                # Если пользователь зарегистрирован
-                    login(request, user)                               
-                    messages.success(request, f"Привет {username}!")      # Вход в систему
+                user = authenticate(
+                    request, username=username, password=password
+                )  # Аутентификация пользователя
+                if (
+                    user is not None and user.is_active
+                ):  # Если пользователь зарегистрирован
+                    login(request, user)
+                    messages.success(request, f"Привет {username}!")  # Вход в систему
                     return redirect("user_page")
             messages.error(request, "Ошибка входа ")
             return redirect("login_page")
@@ -149,7 +153,7 @@ class UserPageView(TemplateView, LoginRequiredMixin):
     template_name = "user.html"
 
 
-class SettingsPage(TemplateView,LoginRequiredMixin):
+class SettingsPage(TemplateView, LoginRequiredMixin):
     """
     Cтраница настроек аккаунта (запрос get)
     """
@@ -157,8 +161,7 @@ class SettingsPage(TemplateView,LoginRequiredMixin):
     template_name = "settings.html"
 
 
-
-class PrivateSettingsPage(TemplateView,LoginRequiredMixin):
+class PrivateSettingsPage(TemplateView, LoginRequiredMixin):
     """
     Страница  насроек профиля (запрос get)
     """
@@ -166,8 +169,7 @@ class PrivateSettingsPage(TemplateView,LoginRequiredMixin):
     template_name = "private_settings.html"
 
 
-
-class DeactivatePage(TemplateView,LoginRequiredMixin):
+class DeactivatePage(TemplateView, LoginRequiredMixin):
     """
     Страница деактивации аккаунта (запрос get)
     """
@@ -175,14 +177,14 @@ class DeactivatePage(TemplateView,LoginRequiredMixin):
     template_name = "deactivate.html"
 
 
-
-class ChangeMailFormView(FormView,LoginRequiredMixin):
+class ChangeMailFormView(FormView, LoginRequiredMixin):
     """
     Представление смены электронной почты пользователя
     """
-    def post(self,request):
+
+    def post(self, request):
         """
-        Получение данных из формы смены 
+        Получение данных из формы смены
         электронной почты
         """
         user = User.objects.get(id=request.user.id)
@@ -193,9 +195,9 @@ class ChangeMailFormView(FormView,LoginRequiredMixin):
             if user.email == old_mail:
                 user.email = new_mail
                 user.save()
-                messages.success(request,"Ваша электронная почта изменена")
+                messages.success(request, "Ваша электронная почта изменена")
                 return redirect("settings_page")
             messages.error(request, "Неверная почта")
             return redirect("settings_page")
         messages.error(request, "Ошибка изменения данных")
-        return redirect("settings_page")   
+        return redirect("settings_page")
