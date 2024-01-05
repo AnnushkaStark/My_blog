@@ -3,7 +3,7 @@ from .models import User
 from .forms import UserRegisterForm, UserLoginForm, ChangeMailForm
 from django.urls import reverse, reverse_lazy
 from django.contrib.auth import authenticate, login
-
+from django.contrib.auth.hashers import make_password, check_password, reset_hashers
 
 class TestUserModel(TestCase):
     """
@@ -486,9 +486,46 @@ class TestChangeUserMailFormView(TestCase):
         self.assertContains(response, "Ошибка изменения данных") 
 
 
-    
+class ChangeUserPasswordFormView(TestCase):
+    """
+    Тестирование представления формы
+    смена пароля
+    """ 
+    def setUp(self):
+        """
+        Cоздание тест пользователя
+        """
+        self.client = Client()
+        self.url = reverse("user_page")
+        self.change_pass_url = reverse("change_password")
+        self.user = User.objects.create_user(
+            username="testus", email="mytest@mail.com", password="123testpass"
+        )
+        self.client.login( username="testus",password="123testpass")  
 
-    
+    def test_change_pass_sucsess(self):
+        """
+        Успешная смена пароля 
+        """
+        data = {"old_pass": "123testpass", "new_pass": "testpass", "new_pass2":" testpass",}
+        response = self.client.get(reverse("user_page"))
+        self.assertEqual(response.status_code,200)
+        response = self.client.post(self.change_pass_url,data)
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, reverse("settings_page"))
+        user = User.objects.get(username="testus")
+        user.refresh_from_db()
+        self.assertTrue(user.check_password(data["new_pass"]))
 
+    def test_change_pass_failure(self):
+        """
+        Не успешная смена пароля 
+        """
+        data = {"old_pass": "testpass", "new_pass": "testpass", "new_pass2":" testpass",}
+        response = self.client.get(reverse("user_page"))
+        self.assertEqual(response.status_code,200)
+        response = self.client.post(self.change_pass_url,data,follow=True)
+        self.assertRedirects(response, reverse("settings_page"))
+        self.assertContains(response, "Неверный пароль")
 
- 
+   

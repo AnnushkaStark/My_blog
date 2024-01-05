@@ -208,6 +208,9 @@ class ChangePasswordFormView(FormView,LoginRequiredMixin):
     Представление формы смены пароляпользователя
     """
     def post(self,request):
+        """
+        Получение данных из формы
+        """
         user = User.objects.get(id=request.user.id)
         form = ChangePasswordForm(request.POST)
         if form.is_valid():
