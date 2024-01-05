@@ -1,6 +1,6 @@
 from django.test import TestCase, Client
 from .models import User
-from .forms import UserRegisterForm, UserLoginForm, ChangeMailForm
+from .forms import UserRegisterForm, UserLoginForm, ChangeMailForm, DeactivateForm
 from django.urls import reverse, reverse_lazy
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.hashers import make_password, check_password, reset_hashers
@@ -528,4 +528,51 @@ class ChangeUserPasswordFormView(TestCase):
         self.assertRedirects(response, reverse("settings_page"))
         self.assertContains(response, "Неверный пароль")
 
-   
+
+class TestDeactivateForm(TestCase):
+    """
+    Тестировние формы деакивации аккаунта
+    """
+    def setUp(self):
+        """
+        Cоздание тест пользователя
+        """
+        self.client = Client()
+        self.url = reverse("user_page")
+        self.deactivate_url = reverse("deactivate_form")
+        self.user = User.objects.create_user(
+            username="testus", email="mytest@mail.com", password="123testpass"
+        )
+        self.client.login( username="testus",password="123testpass")
+
+    def test_valid_form(self):
+        """
+        Тест валидная форма деактивации
+        """
+        
+        data = {"username": "testus", "email":"mytest@mail.com", "password": "123testpass", "password2": "123testpass"}
+        form = DeactivateForm(data=data)
+        self.assertTrue(form.is_valid())
+
+
+    def test_invalid_form(self):
+        """
+        Тест  не валидная форма деактивации
+        """
+        data = {"username": "testus", "email":"mytest@mail.com", "password": "123testpass", "password2": "testpass"}
+        form = DeactivateForm(data=data)
+        self.assertFalse(form.is_valid())
+        self.assertEqual(form.errors["password2"], ["Пароли не совпадают"])
+
+    def test_blank_form(self):
+        """
+        Тест пустая форма деактивации
+        """
+        form = DeactivateForm(data={})
+        self.assertFalse(form.is_valid())
+        self.assertFalse(form.is_valid())
+        self.assertEqual(form.errors["username"], ["Обязательное поле."])
+        self.assertEqual(form.errors["email"], ["Обязательное поле."])
+        self.assertEqual(form.errors["password"], ["Обязательное поле."])
+        self.assertEqual(form.errors["password2"], ["Обязательное поле."])
+    
