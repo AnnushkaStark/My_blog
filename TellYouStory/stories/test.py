@@ -533,17 +533,6 @@ class TestDeactivateForm(TestCase):
     """
     Тестировние формы деакивации аккаунта
     """
-    def setUp(self):
-        """
-        Cоздание тест пользователя
-        """
-        self.client = Client()
-        self.url = reverse("user_page")
-        self.deactivate_url = reverse("deactivate_form")
-        self.user = User.objects.create_user(
-            username="testus", email="mytest@mail.com", password="123testpass"
-        )
-        self.client.login( username="testus",password="123testpass")
 
     def test_valid_form(self):
         """
@@ -575,4 +564,45 @@ class TestDeactivateForm(TestCase):
         self.assertEqual(form.errors["email"], ["Обязательное поле."])
         self.assertEqual(form.errors["password"], ["Обязательное поле."])
         self.assertEqual(form.errors["password2"], ["Обязательное поле."])
+
+    
+class TestDaectivateFormView(TestCase):
+    """
+    Тестирование представления формы деактивации 
+    """
+    def setUp(self):
+        """
+        Cоздание тест пользователя
+        """
+        self.client = Client()
+        self.url = reverse("user_page")
+        self.deactivate_url= reverse("deactivate_form")
+        self.user = User.objects.create_user(
+            username="testus", email="mytest@mail.com", password="123testpass"
+        )
+        self.client.login( username="testus",password="123testpass")
+
+    def test_deactivate_sucsess(self):
+        """
+        Успешная деактивация
+        """
+        data = {"username": "testus", "email":"mytest@mail.com", "password": "123testpass", "password2": "123testpass"}
+        response = self.client.get(reverse("user_page"))
+        self.assertEqual(response.status_code,200)
+        response = self.client.post(self.deactivate_url,data)
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, reverse("index"))
+
+    def test_deactivate_failure(self):
+        """
+        Не успешная деактивация не верный пароль
+        """
+        data = {"username": "testus", "email":"mytest@mail.com", "password": "testpass", "password2": "123testpass"}
+        response = self.client.get(reverse("user_page"))
+        self.assertEqual(response.status_code,200)
+        response = self.client.post(self.deactivate_url,data,follow=True)
+        self.assertRedirects(response, reverse("deactivate_page"))
+        self.assertContains(response, "Ошибка ввода данных")
+ 
+        
     
