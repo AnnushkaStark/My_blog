@@ -113,3 +113,57 @@ class ChangeMailForm(forms.Form):
         if new.count():
             raise ValidationError("Почта уже зарегистрировна")
         return new_mail
+
+
+
+class ChangePasswordForm(forms.Form):
+    """
+    Форма изменения пароля пользователя
+    """
+
+    old_pass = forms.CharField(widget=forms.PasswordInput)
+    new_pass = forms.CharField(widget=forms.PasswordInput)
+    new_pass2 = forms.CharField(widget=forms.PasswordInput)
+
+    def old_pass_clean(self):
+        """
+        Проверка валидности старого пароля
+        """
+        old_pass = self.cleaned_data["old_pass"]
+        if old_pass:
+            return old_pass
+        raise ValidationError("InvalidPassword")
+
+    def new_pass_clean(self):
+        """
+        Проверка валидности
+        нового пароля
+        """
+        new_pass = self.cleaned_data["new_pass"]
+       
+        if new_pass:
+            return new_pass
+        raise ValidationError("InvalidPassword")
+    
+    def new_pass_clean(self):
+        """
+        Проверка валидности
+        нового пароля - подтверждения
+        """
+        new_pass2 = self.cleaned_data["new_pass2"]
+       
+        if new_pass2:
+            return new_pass2
+        raise ValidationError("InvalidPassword")
+    
+    def validate(self):
+        """
+        Проверка совпадения нового пароля и его подтверждения
+        """
+        new_pass = self.cleaned_data["new_pass"]
+        new_pass2 = self.cleaned_data["new_pass2"]
+        if new_pass == new_pass2:
+            return new_pass
+        return  ValidationError("Пароли не совпадают")
+    
+      

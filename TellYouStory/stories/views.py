@@ -4,7 +4,7 @@ from django.views.generic.base import TemplateView
 from django.views.generic import FormView, CreateView, ListView
 from django.contrib.auth.views import LogoutView
 from django.views import View
-from .forms import UserRegisterForm, UserLoginForm, ChangeMailForm
+from .forms import UserRegisterForm, UserLoginForm, ChangeMailForm, ChangePasswordForm
 from django.contrib.auth.hashers import make_password, check_password, reset_hashers
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -198,6 +198,27 @@ class ChangeMailFormView(FormView, LoginRequiredMixin):
                 messages.success(request, "Ваша электронная почта изменена")
                 return redirect("settings_page")
             messages.error(request, "Неверная почта")
+            return redirect("settings_page")
+        messages.error(request, "Ошибка изменения данных")
+        return redirect("settings_page")
+
+
+class ChangePasswordFormView(FormView,LoginRequiredMixin):
+    """
+    Представление формы смены пароляпользователя
+    """
+    def post(self,request):
+        user = User.objects.get(id=request.user.id)
+        form = ChangePasswordForm(request.POST)
+        if form.is_valid():
+            old_pasword = form.cleaned_data["old_pass"]
+            if user.check_password(old_pasword):
+                new_password = form.cleaned_data["new_pass"]
+                user.set_password(new_password)
+                user.save()
+                messages.success(request, "Ваш пароль изменен")
+                return redirect("settings_page")
+            messages.error(request, "Неверный пароль")
             return redirect("settings_page")
         messages.error(request, "Ошибка изменения данных")
         return redirect("settings_page")
