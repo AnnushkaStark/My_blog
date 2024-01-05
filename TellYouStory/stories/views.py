@@ -4,7 +4,13 @@ from django.views.generic.base import TemplateView
 from django.views.generic import FormView, CreateView, ListView
 from django.contrib.auth.views import LogoutView
 from django.views import View
-from .forms import UserRegisterForm, UserLoginForm, ChangeMailForm, ChangePasswordForm, DeactivateForm
+from .forms import (
+    UserRegisterForm,
+    UserLoginForm,
+    ChangeMailForm,
+    ChangePasswordForm,
+    DeactivateForm,
+)
 from django.contrib.auth.hashers import make_password, check_password, reset_hashers
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -203,11 +209,12 @@ class ChangeMailFormView(FormView, LoginRequiredMixin):
         return redirect("settings_page")
 
 
-class ChangePasswordFormView(FormView,LoginRequiredMixin):
+class ChangePasswordFormView(FormView, LoginRequiredMixin):
     """
     Представление формы смены пароляпользователя
     """
-    def post(self,request):
+
+    def post(self, request):
         """
         Получение данных из формы
         """
@@ -227,14 +234,14 @@ class ChangePasswordFormView(FormView,LoginRequiredMixin):
         return redirect("settings_page")
 
 
-
-class DeactivateFormView(FormView,LoginRequiredMixin):
+class DeactivateFormView(FormView, LoginRequiredMixin):
     """
     Представление формы деактивации аккаунта
     """
-    def post(self,request):
+
+    def post(self, request):
         """
-        Получение данных из формы 
+        Получение данных из формы
         """
         user = User.objects.get(id=request.user.id)
         form = DeactivateForm(request.POST)
@@ -249,4 +256,3 @@ class DeactivateFormView(FormView,LoginRequiredMixin):
             return redirect("deactivate_page")
         messages.error(request, "Ошибка ввода данных")
         return redirect("deactivate_page")
-        

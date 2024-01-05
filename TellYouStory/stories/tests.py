@@ -5,6 +5,7 @@ from django.urls import reverse, reverse_lazy
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.hashers import make_password, check_password, reset_hashers
 
+
 class TestUserModel(TestCase):
     """
     Teст модели пользователя
@@ -289,6 +290,7 @@ class TestLogoutView(TestCase):
     """
     Тестирование представления logout
     """
+
     def setUp(self):
         """
         Cоздание тест пользователя
@@ -300,23 +302,24 @@ class TestLogoutView(TestCase):
             username="testus", email="mytest@mail.com", password="123testpass"
         )
 
-        self.client.login( username="testus",password="123testpass")
+        self.client.login(username="testus", password="123testpass")
 
     def test_settings_page_view(self):
         """
         Тестирование доступности страницы настроек аккаунта
         """
         response = self.client.get(reverse("user_page"))
-        self.assertEqual(response.status_code,200)
+        self.assertEqual(response.status_code, 200)
         response = self.client.post(self.logout_url)
-        self.assertRedirects(response,reverse("index"))
-       
+        self.assertRedirects(response, reverse("index"))
+
 
 class TestPrivateSettingsPageView(TestCase):
     """
-    Тестирование представления 
+    Тестирование представления
     страницы настроек аккаунта
     """
+
     def setUp(self):
         """
         Cоздание тест пользователя
@@ -328,24 +331,25 @@ class TestPrivateSettingsPageView(TestCase):
             username="testus", email="mytest@mail.com", password="123testpass"
         )
 
-        self.client.login( username="testus",password="123testpass")
+        self.client.login(username="testus", password="123testpass")
 
     def test_settings_page_view(self):
         """
         Тестирование доступности страницы натсроек аккаунта
         """
         response = self.client.get(reverse("user_page"))
-        self.assertEqual(response.status_code,200)
+        self.assertEqual(response.status_code, 200)
         response = self.client.get(self.settings_url)
-        self.assertEqual(response.status_code,200)
+        self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed("settings.html")
 
 
 class TestSettingsPageView(TestCase):
     """
-    Тестирование представления 
+    Тестирование представления
     страницы настроек профиля
     """
+
     def setUp(self):
         """
         Cоздание тест пользователя
@@ -357,24 +361,25 @@ class TestSettingsPageView(TestCase):
             username="testus", email="mytest@mail.com", password="123testpass"
         )
 
-        self.client.login( username="testus",password="123testpass")
+        self.client.login(username="testus", password="123testpass")
 
     def test_private_settings_page_view(self):
         """
         Тестирование доступности страницы натсроек профиля
         """
         response = self.client.get(reverse("user_page"))
-        self.assertEqual(response.status_code,200)
+        self.assertEqual(response.status_code, 200)
         response = self.client.get(self.private_settings_url)
-        self.assertEqual(response.status_code,200)
+        self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed("private_settings.html")
 
 
 class TestDeactivatePageView(TestCase):
     """
-    Тестирование представления 
+    Тестирование представления
     страницы настроек профиля
     """
+
     def setUp(self):
         """
         Cоздание тест пользователя
@@ -386,18 +391,18 @@ class TestDeactivatePageView(TestCase):
             username="testus", email="mytest@mail.com", password="123testpass"
         )
 
-        self.client.login( username="testus",password="123testpass")
+        self.client.login(username="testus", password="123testpass")
 
     def test_deactivate_page_view(self):
         """
         Тестирование доступности страницы деактивации аккаунта
         """
         response = self.client.get(reverse("user_page"))
-        self.assertEqual(response.status_code,200)
+        self.assertEqual(response.status_code, 200)
         response = self.client.get(self.deactivate_url)
-        self.assertEqual(response.status_code,200)
+        self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed("deactivate.html")
-    
+
 
 class TestChangeUserMailForm(TestCase):
     """
@@ -415,10 +420,10 @@ class TestChangeUserMailForm(TestCase):
 
         form = ChangeMailForm(data=form_data)
         self.assertTrue(form.is_valid())
-        
+
     def test_invalid_data(self):
         """
-        Проверка валидности формы при не валидной 
+        Проверка валидности формы при не валидной
         почте
         """
 
@@ -429,23 +434,26 @@ class TestChangeUserMailForm(TestCase):
 
         form = ChangeMailForm(data=form_data)
         self.assertFalse(form.is_valid())
-        self.assertEqual(form.errors["old_mail"], ['Введите правильный адрес электронной почты.'])
+        self.assertEqual(
+            form.errors["old_mail"], ["Введите правильный адрес электронной почты."]
+        )
 
     def test_blank_data(self):
         """
-        Тест не заполненной формы 
+        Тест не заполненной формы
         """
         form = ChangeMailForm(data={})
         self.assertFalse(form.is_valid())
-        self.assertEqual(form.errors["old_mail"], ['Обязательное поле.'])
-        self.assertEqual(form.errors["new_mail"], ['Обязательное поле.'])
+        self.assertEqual(form.errors["old_mail"], ["Обязательное поле."])
+        self.assertEqual(form.errors["new_mail"], ["Обязательное поле."])
 
 
 class TestChangeUserMailFormView(TestCase):
     """
-    Тестирование представление формы 
+    Тестирование представление формы
     изменения электронной почты
     """
+
     def setUp(self):
         """
         Cоздание тест пользователя
@@ -457,8 +465,7 @@ class TestChangeUserMailFormView(TestCase):
             username="testus", email="mytest@mail.com", password="123testpass"
         )
 
-        self.client.login( username="testus",password="123testpass")
-    
+        self.client.login(username="testus", password="123testpass")
 
     def test_change_sucsess(self):
         """
@@ -466,11 +473,13 @@ class TestChangeUserMailFormView(TestCase):
         """
         data = {"old_mail": "mytest@mail.com", "new_mail": "123@testpa.ss"}
         response = self.client.get(reverse("user_page"))
-        self.assertEqual(response.status_code,200)
-        response = self.client.post(self.change_mail_url,data)
+        self.assertEqual(response.status_code, 200)
+        response = self.client.post(self.change_mail_url, data)
         self.assertEqual(response.status_code, 302)
         self.assertRedirects(response, reverse("settings_page"))
-        user = User.objects.get(email=data["new_mail"])          # Проверяем что почта  изменилась
+        user = User.objects.get(
+            email=data["new_mail"]
+        )  # Проверяем что почта  изменилась
         self.assertEqual(user.email, data["new_mail"])
 
     def test_change_failure(self):
@@ -479,18 +488,21 @@ class TestChangeUserMailFormView(TestCase):
         """
         data = {"old_mail": "mytest@mail.com", "new_mail": "123@testpass"}
         response = self.client.get(reverse("user_page"))
-        self.assertEqual(response.status_code,200)
-        response = self.client.post(self.change_mail_url,data,follow=True)
-        self.assertFalse(User.objects.filter(email="123@testpass").exists()) # Проверяем что почта не изменилась
+        self.assertEqual(response.status_code, 200)
+        response = self.client.post(self.change_mail_url, data, follow=True)
+        self.assertFalse(
+            User.objects.filter(email="123@testpass").exists()
+        )  # Проверяем что почта не изменилась
         self.assertRedirects(response, reverse("settings_page"))
-        self.assertContains(response, "Ошибка изменения данных") 
+        self.assertContains(response, "Ошибка изменения данных")
 
 
 class ChangeUserPasswordFormView(TestCase):
     """
     Тестирование представления формы
     смена пароля
-    """ 
+    """
+
     def setUp(self):
         """
         Cоздание тест пользователя
@@ -501,16 +513,20 @@ class ChangeUserPasswordFormView(TestCase):
         self.user = User.objects.create_user(
             username="testus", email="mytest@mail.com", password="123testpass"
         )
-        self.client.login( username="testus",password="123testpass")  
+        self.client.login(username="testus", password="123testpass")
 
     def test_change_pass_sucsess(self):
         """
-        Успешная смена пароля 
+        Успешная смена пароля
         """
-        data = {"old_pass": "123testpass", "new_pass": "testpass", "new_pass2":" testpass",}
+        data = {
+            "old_pass": "123testpass",
+            "new_pass": "testpass",
+            "new_pass2": " testpass",
+        }
         response = self.client.get(reverse("user_page"))
-        self.assertEqual(response.status_code,200)
-        response = self.client.post(self.change_pass_url,data)
+        self.assertEqual(response.status_code, 200)
+        response = self.client.post(self.change_pass_url, data)
         self.assertEqual(response.status_code, 302)
         self.assertRedirects(response, reverse("settings_page"))
         user = User.objects.get(username="testus")
@@ -519,12 +535,16 @@ class ChangeUserPasswordFormView(TestCase):
 
     def test_change_pass_failure(self):
         """
-        Не успешная смена пароля 
+        Не успешная смена пароля
         """
-        data = {"old_pass": "testpass", "new_pass": "testpass", "new_pass2":" testpass",}
+        data = {
+            "old_pass": "testpass",
+            "new_pass": "testpass",
+            "new_pass2": " testpass",
+        }
         response = self.client.get(reverse("user_page"))
-        self.assertEqual(response.status_code,200)
-        response = self.client.post(self.change_pass_url,data,follow=True)
+        self.assertEqual(response.status_code, 200)
+        response = self.client.post(self.change_pass_url, data, follow=True)
         self.assertRedirects(response, reverse("settings_page"))
         self.assertContains(response, "Неверный пароль")
 
@@ -538,17 +558,26 @@ class TestDeactivateForm(TestCase):
         """
         Тест валидная форма деактивации
         """
-        
-        data = {"username": "testus", "email":"mytest@mail.com", "password": "123testpass", "password2": "123testpass"}
+
+        data = {
+            "username": "testus",
+            "email": "mytest@mail.com",
+            "password": "123testpass",
+            "password2": "123testpass",
+        }
         form = DeactivateForm(data=data)
         self.assertTrue(form.is_valid())
-
 
     def test_invalid_form(self):
         """
         Тест  не валидная форма деактивации
         """
-        data = {"username": "testus", "email":"mytest@mail.com", "password": "123testpass", "password2": "testpass"}
+        data = {
+            "username": "testus",
+            "email": "mytest@mail.com",
+            "password": "123testpass",
+            "password2": "testpass",
+        }
         form = DeactivateForm(data=data)
         self.assertFalse(form.is_valid())
         self.assertEqual(form.errors["password2"], ["Пароли не совпадают"])
@@ -565,31 +594,37 @@ class TestDeactivateForm(TestCase):
         self.assertEqual(form.errors["password"], ["Обязательное поле."])
         self.assertEqual(form.errors["password2"], ["Обязательное поле."])
 
-    
+
 class TestDaectivateFormView(TestCase):
     """
-    Тестирование представления формы деактивации 
+    Тестирование представления формы деактивации
     """
+
     def setUp(self):
         """
         Cоздание тест пользователя
         """
         self.client = Client()
         self.url = reverse("user_page")
-        self.deactivate_url= reverse("deactivate_form")
+        self.deactivate_url = reverse("deactivate_form")
         self.user = User.objects.create_user(
             username="testus", email="mytest@mail.com", password="123testpass"
         )
-        self.client.login( username="testus",password="123testpass")
+        self.client.login(username="testus", password="123testpass")
 
     def test_deactivate_sucsess(self):
         """
         Успешная деактивация
         """
-        data = {"username": "testus", "email":"mytest@mail.com", "password": "123testpass", "password2": "123testpass"}
+        data = {
+            "username": "testus",
+            "email": "mytest@mail.com",
+            "password": "123testpass",
+            "password2": "123testpass",
+        }
         response = self.client.get(reverse("user_page"))
-        self.assertEqual(response.status_code,200)
-        response = self.client.post(self.deactivate_url,data)
+        self.assertEqual(response.status_code, 200)
+        response = self.client.post(self.deactivate_url, data)
         self.assertEqual(response.status_code, 302)
         self.assertRedirects(response, reverse("index"))
 
@@ -597,12 +632,14 @@ class TestDaectivateFormView(TestCase):
         """
         Не успешная деактивация не верный пароль
         """
-        data = {"username": "testus", "email":"mytest@mail.com", "password": "testpass", "password2": "123testpass"}
+        data = {
+            "username": "testus",
+            "email": "mytest@mail.com",
+            "password": "testpass",
+            "password2": "123testpass",
+        }
         response = self.client.get(reverse("user_page"))
-        self.assertEqual(response.status_code,200)
-        response = self.client.post(self.deactivate_url,data,follow=True)
+        self.assertEqual(response.status_code, 200)
+        response = self.client.post(self.deactivate_url, data, follow=True)
         self.assertRedirects(response, reverse("deactivate_page"))
         self.assertContains(response, "Ошибка ввода данных")
- 
-        
-    

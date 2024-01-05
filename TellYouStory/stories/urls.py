@@ -11,11 +11,20 @@ urlpatterns = [
     path("logout/", views.UserLogoutView.as_view(), name="logout"),
     path("login_form/", views.UserLoginFormView.as_view(), name="login_form"),
     path("user/", views.UserPageView.as_view(), name="user_page"),
-    path("account_settings/", views.SettingsPage.as_view(),name="settings_page"),
-    path("private_settings/", views.PrivateSettingsPage.as_view(),name="private_settings_page"),
-    path("deactivate/",views.DeactivatePage.as_view(),name="deactivate_page"),
+    path("account_settings/", views.SettingsPage.as_view(), name="settings_page"),
+    path(
+        "private_settings/",
+        views.PrivateSettingsPage.as_view(),
+        name="private_settings_page",
+    ),
+    path("deactivate/", views.DeactivatePage.as_view(), name="deactivate_page"),
     path("change_mail/", views.ChangeMailFormView.as_view(), name="change_mail"),
-    path("change_password/", views.ChangePasswordFormView.as_view(), name="change_password" ),
-    path("deactivate_form/", views.DeactivateFormView.as_view(), name="deactivate_form")
-
+    path(
+        "change_password/",
+        views.ChangePasswordFormView.as_view(),
+        name="change_password",
+    ),
+    path(
+        "deactivate_form/", views.DeactivateFormView.as_view(), name="deactivate_form"
+    ),
 ]

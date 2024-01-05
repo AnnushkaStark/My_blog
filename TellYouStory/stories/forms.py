@@ -115,7 +115,6 @@ class ChangeMailForm(forms.Form):
         return new_mail
 
 
-
 class ChangePasswordForm(forms.Form):
     """
     Форма изменения пароля пользователя
@@ -140,22 +139,22 @@ class ChangePasswordForm(forms.Form):
         нового пароля
         """
         new_pass = self.cleaned_data["new_pass"]
-       
+
         if new_pass:
             return new_pass
         raise ValidationError("InvalidPassword")
-    
+
     def new_pass_clean(self):
         """
         Проверка валидности
         нового пароля - подтверждения
         """
         new_pass2 = self.cleaned_data["new_pass2"]
-       
+
         if new_pass2:
             return new_pass2
         raise ValidationError("InvalidPassword")
-    
+
     def validate(self):
         """
         Проверка совпадения нового пароля и его подтверждения
@@ -164,13 +163,14 @@ class ChangePasswordForm(forms.Form):
         new_pass2 = self.cleaned_data["new_pass2"]
         if new_pass == new_pass2:
             return new_pass
-        return  ValidationError("Пароли не совпадают")
-    
-      
+        return ValidationError("Пароли не совпадают")
+
+
 class DeactivateForm(forms.Form):
     """
     Форма деактивации аккаунта
     """
+
     username = forms.CharField(min_length=4, max_length=150, widget=forms.TextInput)
     email = forms.EmailField(widget=forms.EmailInput)
     password = forms.CharField(widget=forms.PasswordInput)
@@ -185,7 +185,7 @@ class DeactivateForm(forms.Form):
         if new.count():
             return username
         raise ValidationError("Пользователь уже существует")
-    
+
     def email_clean(self):
         """
         Проверка совпадения email
