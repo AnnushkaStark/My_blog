@@ -15,5 +15,7 @@ urlpatterns = [
     path("private_settings/", views.PrivateSettingsPage.as_view(),name="private_settings_page"),
     path("deactivate/",views.DeactivatePage.as_view(),name="deactivate_page"),
     path("change_mail/", views.ChangeMailFormView.as_view(), name="change_mail"),
-    path("change_password/", views.ChangePasswordFormView.as_view(), name="change_password" )
+    path("change_password/", views.ChangePasswordFormView.as_view(), name="change_password" ),
+    path("deactivate_form/", views.DeactivateFormView.as_view(), name="deactivate_form")
+
 ]

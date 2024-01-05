@@ -4,7 +4,7 @@ from django.views.generic.base import TemplateView
 from django.views.generic import FormView, CreateView, ListView
 from django.contrib.auth.views import LogoutView
 from django.views import View
-from .forms import UserRegisterForm, UserLoginForm, ChangeMailForm, ChangePasswordForm
+from .forms import UserRegisterForm, UserLoginForm, ChangeMailForm, ChangePasswordForm, DeactivateForm
 from django.contrib.auth.hashers import make_password, check_password, reset_hashers
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -225,3 +225,28 @@ class ChangePasswordFormView(FormView,LoginRequiredMixin):
             return redirect("settings_page")
         messages.error(request, "Ошибка изменения данных")
         return redirect("settings_page")
+
+
+
+class DeactivateFormView(FormView,LoginRequiredMixin):
+    """
+    Представление формы деактивации аккаунта
+    """
+    def post(self,request):
+        """
+        Получение данных из формы 
+        """
+        user = User.objects.get(id=request.user.id)
+        form = DeactivateForm(request.POST)
+        if form.is_valid():
+            old_pasword = form.cleaned_data["password"]
+            if user.check_password(old_pasword):
+                user.is_active = False
+                user.save()
+                messages.success(request, "Ваш aккаунт деактивирован")
+                return redirect("index")
+            messages.error(request, "Неверный пароль")
+            return redirect("deactivate_page")
+        messages.error(request, "Ошибка ввода данных")
+        return redirect("deactivate_page")
+        

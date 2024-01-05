@@ -167,3 +167,42 @@ class ChangePasswordForm(forms.Form):
         return  ValidationError("Пароли не совпадают")
     
       
+class DeactivateForm(forms.Form):
+    """
+    Форма деактивации аккаунта
+    """
+    username = forms.CharField(min_length=4, max_length=150, widget=forms.TextInput)
+    email = forms.EmailField(widget=forms.EmailInput)
+    password = forms.CharField(widget=forms.PasswordInput)
+    password2 = forms.CharField(widget=forms.PasswordInput)
+
+    def username_clean(self):
+        """
+        Проверка совпадения username
+        """
+        username = self.cleaned_data["username"]
+        new = User.objects.filter(username=username)
+        if new.count():
+            return username
+        raise ValidationError("Пользователь уже существует")
+    
+    def email_clean(self):
+        """
+        Проверка совпадения email
+        """
+        email = self.cleaned_data["email"]
+        new = User.objects.filter(email=email)
+        if new.count():
+            return email
+        raise ValidationError("Неверный адрес электронной почты")
+
+    def clean_password2(self):
+        """
+        Проверка наличия и совпадения паролей
+        """
+        password = self.cleaned_data["password"]
+        password2 = self.cleaned_data["password2"]
+
+        if password and password2 and password == password2:
+            return password
+        raise ValidationError("Пароли не совпадают")
