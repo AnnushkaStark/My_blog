@@ -41,4 +41,4 @@ class Biography(models.Model):
         verbose_name_plural = "Biographys"
 
     def __str__(self):
-        return f"{self.name} {self.town} {self.birth_date} {self.link} {self.avatar} {self.bio} {self.user}"
+        return f"{self.name} {self.town} {self.birth_date} {self.link} {self.avatar} {self.bio} {self.user.id}"
