@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import User
+from .models import User, Biography
 
 # Register your models here.
 
@@ -18,3 +18,12 @@ class UserAdmin(admin.ModelAdmin):
         "is_superuser",
         "is_active",
     )
+
+
+@admin.register(Biography)
+class BiographyAdmin(admin.ModelAdmin):
+    """
+    Регитсрация модели биографии пользователя
+    """
+
+    list_display = ("name", "town", "birth_date", "link", "avatar", "bio", "user")
