@@ -1,6 +1,17 @@
 from django.test import TestCase, Client
 from .models import User, Biography
-from .forms import UserRegisterForm, UserLoginForm, ChangeMailForm, DeactivateForm, BiographyForm
+from .forms import (
+    UserRegisterForm,
+    UserLoginForm,
+    ChangeMailForm,
+    DeactivateForm,
+    ChangeTownForm,
+    NameChangeForm,
+    FormLinkChange,
+    BioChangeForm,
+    BirthDateForm,
+    AvatarChangeForm,
+)
 from django.urls import reverse, reverse_lazy
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.hashers import make_password, check_password, reset_hashers
@@ -701,3 +712,128 @@ class TestBiographyModel(TestCase):
         self.assertEqual(self.user, self.bio.user)
 
 
+class TestChangeNameForm(TestCase):
+    """
+    Тестирование формы изменения имени пользователя
+    """
+
+    def test_valid_form(self):
+        """
+        Тест валидная форма
+        """
+
+        data = {
+            "name": "test",
+        }
+        form = NameChangeForm(data=data)
+        self.assertTrue(form.is_valid())
+
+
+class TestChangeTownForm(TestCase):
+    """
+    Тестирование формы изменения города пользователя
+    """
+
+    def test_valid_form(self):
+        """
+        Тест валидная форма
+        """
+
+        data = {
+            "town": "Moscow",
+        }
+        form = ChangeTownForm(data=data)
+        self.assertTrue(form.is_valid())
+
+
+class TestChangeBio(TestCase):
+    """
+    Тестирование формы изменения биографии пользователя
+    """
+
+    def test_valid_form(self):
+        """
+        Тест валидная форма
+        """
+
+        data = {
+            "bio": "bla-bla-bla",
+        }
+        form = BioChangeForm(data=data)
+        self.assertTrue(form.is_valid())
+
+
+class TestChangeBirthDate(TestCase):
+    """
+    Тестирование формы изменения даты рождения
+    """
+
+    def test_valid_form(self):
+        """
+        Тест валидная форма
+        """
+
+        data = {
+            "birth_date": "",  # Поле может быть пустым
+        }
+        form = BirthDateForm(data=data)
+        self.assertTrue(form.is_valid())
+
+    def test_invalid_form(self):
+        """
+        Тест  не валидная форма
+        """
+
+        data = {
+            "birth_date": "1234567",
+        }
+        form = BirthDateForm(data=data)
+        self.assertFalse(form.is_valid())
+        self.assertEqual(form.errors["birth_date"], ["Введите правильную дату."])
+
+
+class TestLinkChangeForm(TestCase):
+    """
+    Тестирование формы изменения ссылки на соцсеть
+    или бусти в профиле пользователя
+    """
+
+    def test_valid_form(self):
+        """
+        Тест валидная форма
+        """
+
+        data = {
+            "link": "",  # Поле может быть пустым
+        }
+        form = FormLinkChange(data=data)
+        self.assertTrue(form.is_valid())
+
+    def test_invalid_form(self):
+        """
+        Тест  не валидная форма
+        """
+
+        data = {
+            "link": "1234567",
+        }
+        form = FormLinkChange(data=data)
+        self.assertFalse(form.is_valid())
+        self.assertEqual(form.errors["link"], ["Введите правильный URL."])
+
+
+class TestChangeAvatarForm(TestCase):
+    """
+    Тестирование формы изменения фото профиля пользователя
+    """
+
+    def test_valid_form(self):
+        """
+        Тест валидная форма
+        """
+
+        data = {
+            "avatar": "",  # Поле может быть пустым
+        }
+        form = AvatarChangeForm(data=data)
+        self.assertTrue(form.is_valid())
