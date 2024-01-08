@@ -1,4 +1,4 @@
-from .models import User
+from .models import User, Biography
 from django import forms
 from django.core import validators
 from django.core.validators import validate_email
@@ -206,3 +206,71 @@ class DeactivateForm(forms.Form):
         if password and password2 and password == password2:
             return password
         raise ValidationError("Пароли не совпадают")
+    
+
+class BiographyForm(forms.ModelForm):
+    """
+    Форма биографии пользователя
+    """
+    name = forms.CharField(required=False, max_length=100,widget=forms.TextInput)
+    town = forms.CharField(required=False, max_length=100,widget=forms.TextInput)
+    birth_date = forms.DateField(required=False, widget=forms.DateInput)
+    link = forms.URLField(required=False, widget=forms.URLInput)
+    avatar = forms.FileField(required=False, widget=forms.FileInput)
+    bio = forms.Textarea()
+  
+
+    def name_clean(self):
+        """
+        получение имени пользователя
+        """
+        name = self.cleaned_data["name"]
+       
+        return name
+    
+    def town_clean(self):
+        """
+        Получение данных о городе пользователя
+        """
+        town = self.cleaned_data["town"]
+        return town
+    
+    def birth_date_clean(self):
+        """
+        Получение данных о годе рождени пользователя
+        """
+        birth_date = self.cleaned_data["birth_date"]
+        return birth_date
+    
+
+    def link_clean(self):
+        """
+        Получение ссылки пользователя
+        """
+
+        link = self.cleaned_data["link"]
+        return link
+    
+
+    def avatar_clean(self):
+        """
+        Получение фото профиля пользоватея
+        """
+        avatar = self.cleaned_data["avatar"]
+        return avatar
+    
+    def bio_clean(self):
+        """
+        Получение биографии пользователя
+        """
+        bio = self.cleaned_data["bio"]
+        return bio
+
+   
+   
+    class Meta:
+        model = Biography
+        fields = ["name","town","birth_date","link", "avatar", "bio"]
+
+
+

@@ -7,32 +7,87 @@
         <div class ="col">
             <br>
             <h2 style="text-align: center;">Заполните информацию профиля</h2>
-            <form enctype="multipart/form-data">
+            <form enctype="multipart/form-data" method="post", action="{% url 'biography_form' %}">
+                {% csrf_token %}
+                {{ form.as_p }}
                 <div class="mb-3">
-                  <label for="exampleInputEmail1" class="form-label">Ваше имя</label>
-                  <input type="text" class="form-control">
+                  <label  class="form-label">Ваше имя</label>
+                  <form enctype="multipart/form-data" method="post", action="#" name="change_name">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                  <input type="text" class="form-control"  name="name" >
+                  <br>
+                 <button type="button" class= "btn btn-primary btn-sm">Изменить</button> 
+                  </form>
                 </div>
+                
                 <div class="mb-3">
-                    <label for="exampleInputEmail1" class="form-label">Ваш город</label>
-                    <input type="text" class="form-control">
+                    <form enctype="multipart/form-data" method="post", action="#" name="change_town">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                    <label  class="form-label">Ваш город</label>
+                    
+                    <input type="text" class="form-control"name ="town" >
+                    <br>
+                    <button type="button" class= "btn btn-primary btn-sm">Изменить</button> 
+                     </form>
+                   
                   </div>
+                
+                
                 <div class="mb-3">
-                    <label for="exampleInputEmail1" class="form-label">Ваша дата рождения</label>
-                    <input type="date" class="form-control">
+                    <form enctype="multipart/form-data" method="post", action="#" name="change_birth_day">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                    <label class="form-label">Ваша дата рождения</label>
+                    
+                    <input type="date" class="form-control"name='birth_date'>
+                    <br>
+                    <button type="button" class= "btn btn-primary btn-sm">Изменить</button> 
+                     </form>
+                   
                 </div>
+                
+               
                 <div class="mb-3">
-                    <label for="exampleInputEmail1" class="form-label">Ссылка на cоциальную сеть или бусти</label>
-                    <input type="url" class="form-control">
+                    <form enctype="multipart/form-data" method="post", action="#" name="change_link">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                    <label  class="form-label">Ссылка на cоциальную сеть или бусти</label>
+                    
+                    <input type="url" class="form-control" name="link" >
+                    <br>
+                    <button type="button" class= "btn btn-primary btn-sm">Изменить</button> 
+                     </form>
+                    
                 </div>
+               
                 <div class="mb-3">
-                    <label for="exampleInputEmail1" class="form-label">Фото профиля</label>
-                    <input type="file" class="form-control">
+                    <form enctype="multipart/form-data" method="post", action="#" name="change_avatar">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                    <label  class="form-label">Фото профиля</label>
+                   
+                    <input type="file" class="form-control"name="avatar" >
+                    <br>
+                    <button type="button" class= "btn btn-primary btn-sm">Изменить</button> 
+                     </form>
+                    
                 </div>
+                
                 <div class="mb-3">
-                    <label for="exampleInputEmail1" class="form-label">Биография</label>
-                    <textarea type="" class="form-control"></textarea>
+                    <form enctype="multipart/form-data" method="post", action="#" name="change_bio">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                    <label  class="form-label">Биография</label>
+                    
+                    <textarea name="bio" class="form-control" ></textarea>
+                    <br>
+                    <button type="button" class= "btn btn-primary btn-sm">Изменить</button> 
+                     </form>
                 </div>
-                <button type="submit" class="btn btn-primary">Применить</button>
+                
+                <button type="submit"class="btn btn-primary">Применить  все</button>
               </form>
         </div>
         </div>

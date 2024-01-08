@@ -27,3 +27,6 @@ class BiographyAdmin(admin.ModelAdmin):
     """
 
     list_display = ("name", "town", "birth_date", "link", "avatar", "bio", "user")
+
+    
+   

@@ -10,11 +10,14 @@ from .forms import (
     ChangeMailForm,
     ChangePasswordForm,
     DeactivateForm,
+    BiographyForm,
 )
 from django.contrib.auth.hashers import make_password, check_password, reset_hashers
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .models import User
+from .models import User, Biography
+
+
 
 
 # Create your views here.
@@ -171,10 +174,10 @@ class PrivateSettingsPage(TemplateView, LoginRequiredMixin):
     """
     Страница  насроек профиля (запрос get)
     """
-
+    
     template_name = "private_settings.html"
 
-
+        
 class DeactivatePage(TemplateView, LoginRequiredMixin):
     """
     Страница деактивации аккаунта (запрос get)
@@ -256,3 +259,34 @@ class DeactivateFormView(FormView, LoginRequiredMixin):
             return redirect("deactivate_page")
         messages.error(request, "Ошибка ввода данных")
         return redirect("deactivate_page")
+    
+
+class BiographyFormView(FormView,LoginRequiredMixin):
+    """
+    Представление формы добавления или изменения имени
+    пользователя в профиле
+    """
+    def post(self,request):
+        """
+        Получение и сохранение данных формы
+        """
+        try:
+            biodraphy = Biography.objects.get(user_id = request.user.id)
+            form = BiographyForm(request.POST,request.FILES,instance=biodraphy)
+            if form.is_valid():
+                form = form.save(commit=False)
+                form.user_id =  request.user.id
+                form.save()
+                messages.success(request, "Данные профиля обновлены")
+                return redirect("private_settings_page")
+            messages.error(request, "Ошибка ввода данных")
+            return redirect("private_settings_page")
+        except Biography.DoesNotExist:
+            form = BiographyForm(request.POST,request.FILES)
+            if form.is_valid():
+                form = form.save(commit=False)
+                form.user_id =  request.user.id
+                form.save()
+                messages.success(request, "Данные профиля обновлены")
+                return redirect("private_settings_page")
+

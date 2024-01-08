@@ -27,4 +27,6 @@ urlpatterns = [
     path(
         "deactivate_form/", views.DeactivateFormView.as_view(), name="deactivate_form"
     ),
+    path("biography_form/", views.BiographyFormView.as_view(), name="biography_form"),
+   
 ]
