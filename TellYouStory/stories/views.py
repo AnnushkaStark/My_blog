@@ -10,14 +10,17 @@ from .forms import (
     ChangeMailForm,
     ChangePasswordForm,
     DeactivateForm,
-    BiographyForm,
+    NameChangeForm,
+    ChangeTownForm,
+    BirthDateForm,
+    FormLinkChange,
+    AvatarChangeForm,
+    BioChangeForm,
 )
 from django.contrib.auth.hashers import make_password, check_password, reset_hashers
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import User, Biography
-
-
 
 
 # Create your views here.
@@ -174,10 +177,10 @@ class PrivateSettingsPage(TemplateView, LoginRequiredMixin):
     """
     Страница  насроек профиля (запрос get)
     """
-    
+
     template_name = "private_settings.html"
 
-        
+
 class DeactivatePage(TemplateView, LoginRequiredMixin):
     """
     Страница деактивации аккаунта (запрос get)
@@ -259,34 +262,212 @@ class DeactivateFormView(FormView, LoginRequiredMixin):
             return redirect("deactivate_page")
         messages.error(request, "Ошибка ввода данных")
         return redirect("deactivate_page")
-    
 
-class BiographyFormView(FormView,LoginRequiredMixin):
+
+class NameChangeFormView(FormView, LoginRequiredMixin):
     """
-    Представление формы добавления или изменения имени
-    пользователя в профиле
+    Представление формы изменения пользователя в
+    настройках профиля
     """
-    def post(self,request):
+
+    def post(self, request):
         """
-        Получение и сохранение данных формы
+        Получение данных из формы
         """
         try:
-            biodraphy = Biography.objects.get(user_id = request.user.id)
-            form = BiographyForm(request.POST,request.FILES,instance=biodraphy)
+            user = request.user
+            biography = Biography.objects.get(user=request.user)
+            form = NameChangeForm(request.POST, request.FILES)
             if form.is_valid():
-                form = form.save(commit=False)
-                form.user_id =  request.user.id
-                form.save()
+                biography.name = form.cleaned_data["name"]
+                biography.save()
+                messages.success(request, "Данные имени обновлены")
+                return redirect("private_settings_page")
+            messages.error(request, "Ошибка ввода данных")
+            messages.success(request, "Данные имени обновлены")
+            return redirect("private_settings_page")
+        except Biography.DoesNotExist:
+            form = NameChangeForm(request.POST, request.FILES)
+            if form.is_valid():
+                biography = Biography.objects.create(
+                    name=form.cleaned_data["name"], user_id=request.user.id
+                )
+                biography.save()
                 messages.success(request, "Данные профиля обновлены")
                 return redirect("private_settings_page")
             messages.error(request, "Ошибка ввода данных")
             return redirect("private_settings_page")
-        except Biography.DoesNotExist:
-            form = BiographyForm(request.POST,request.FILES)
+
+
+class TownChangeFormView(FormView, LoginRequiredMixin):
+    """
+    Представление формы изменения пользователя в
+    настройках профиля
+    """
+
+    def post(self, request):
+        """
+        Получение данных из формы
+        """
+        try:
+            user = request.user
+            biography = Biography.objects.get(user=request.user)
+            form = ChangeTownForm(request.POST, request.FILES)
             if form.is_valid():
-                form = form.save(commit=False)
-                form.user_id =  request.user.id
-                form.save()
-                messages.success(request, "Данные профиля обновлены")
+                biography.town = form.cleaned_data["town"]
+                biography.save()
+                messages.success(request, "Данные города обновлены")
+                return redirect("private_settings_page")
+            messages.error(request, "Ошибка ввода данных")
+            return redirect("private_settings_page")
+        except Biography.DoesNotExist:
+            form = ChangeTownForm(request.POST, request.FILES)
+            if form.is_valid():
+                biography = Biography.objects.create(
+                    town=form.cleaned_data["town"], user_id=request.user.id
+                )
+                biography.save()
+                messages.success(request, "Данные города обновлены")
+                return redirect("private_settings_page")
+            messages.error(request, "Ошибка ввода данных")
+            return redirect("private_settings_page")
+
+
+class ChangeBirthDateFormView(FormView, LoginRequiredMixin):
+    """
+    Изменение даты рождения в профиле пользователя
+    """
+
+    def post(self, request):
+        """
+        Получение данных из формы
+        """
+        try:
+            user = request.user
+            biography = Biography.objects.get(user=request.user)
+            form = BirthDateForm(request.POST, request.FILES)
+            if form.is_valid():
+                biography.birth_date = form.cleaned_data["birth_date"]
+                biography.save()
+                messages.success(request, "Данные даты рождения обновлены")
+                return redirect("private_settings_page")
+            messages.error(request, "Ошибка ввода данных")
+            return redirect("private_settings_page")
+        except Biography.DoesNotExist:
+            form = BirthDateForm(request.POST, request.FILES)
+            if form.is_valid():
+                biography = Biography.objects.create(
+                    birth_date=form.cleaned_data["birth_date"], user_id=request.user.id
+                )
+                biography.save()
+                messages.success(request, "Данные даты рождения обновлены")
+                return redirect("private_settings_page")
+            messages.error(request, "Ошибка ввода данных")
+            return redirect("private_settings_page")
+
+
+class ChangeLinkFormView(FormView, LoginRequiredMixin):
+    """
+    Представление формы измененния ссылки на соцсеть или
+    бусти в профиле пользователя
+    """
+
+    def post(self, request):
+        """
+        Получение данных из формы
+        """
+        try:
+            user = request.user
+            biography = Biography.objects.get(user=request.user)
+            form = FormLinkChange(request.POST, request.FILES)
+            if form.is_valid():
+                biography.link = form.cleaned_data["link"]
+                biography.save()
+                messages.success(request, "Данные ссылки обновлены")
+                return redirect("private_settings_page")
+            messages.error(request, "Ошибка ввода данных")
+            return redirect("private_settings_page")
+        except Biography.DoesNotExist:
+            form = FormLinkChange(request.POST, request.FILES)
+            if form.is_valid():
+                biography = Biography.objects.create(
+                    link=form.cleaned_data["link"], user_id=request.user.id
+                )
+                biography.save()
+                messages.success(request, "Данные ссылки обновлены")
+                return redirect("private_settings_page")
+            messages.error(request, "Ошибка ввода данных")
+            return redirect("private_settings_page")
+
+
+class AvatarFormView(FormView, LoginRequiredMixin):
+    """
+    Представления формы изменения фото профиля пользователя
+    """
+
+    def post(self, request):
+        """
+        Получение данных из формы
+        """
+        try:
+            user = request.user
+            biography = Biography.objects.get(user=request.user)
+            form = AvatarChangeForm(request.POST, request.FILES)
+            if form.is_valid():
+                biography.avatar = form.cleaned_data["avatar"]
+                biography.save()
+                messages.success(request, "Фото профиля обновлено")
+                return redirect("private_settings_page")
+            messages.error(request, "Ошибка ввода данных")
+            return redirect("private_settings_page")
+        except Biography.DoesNotExist:
+            form = AvatarChangeForm(request.POST, request.FILES)
+            if form.is_valid():
+                biography = Biography.objects.create(
+                    avatar=form.cleaned_data["avatar"], user_id=request.user.id
+                )
+                biography.save()
+                messages.success(request, "Фото профиля обновлено")
+                return redirect("private_settings_page")
+            messages.error(request, "Ошибка ввода данных")
+            return redirect("private_settings_page")
+
+
+class BioChangeFormView(FormView, LoginRequiredMixin):
+    """
+    Представление формы изменения биографии пользователя
+    """
+
+    def post(self, request):
+        """
+        Получение данных из формы
+        """
+        try:
+            user = request.user
+            biography = Biography.objects.get(user=request.user)
+            form = BioChangeForm(request.POST, request.FILES)
+            print(form)
+            if form.is_valid():
+                biography.bio = form.data["bio"]
+                biography.save()
+                messages.success(request, "Биография обновлена")
+                print(form)
                 return redirect("private_settings_page")
 
+            print(form)
+            messages.error(request, "Ошибка ввода данных")
+            return redirect("private_settings_page")
+        except Biography.DoesNotExist:
+            form = BioChangeForm(request.POST, request.FILES)
+            if form.is_valid():
+                biography = Biography.objects.create(
+                    bio=form.data["bio"], user_id=request.user.id
+                )
+                biography.save()
+                messages.success(request, "Биография обновлена")
+                return redirect("private_settings_page")
+            messages.error(request, "Ошибка ввода данных")
+            return redirect("private_settings_page")
+        except KeyError:
+            print(form.data)
+            return redirect("private_settings_page")

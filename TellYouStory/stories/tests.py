@@ -1,6 +1,6 @@
 from django.test import TestCase, Client
 from .models import User, Biography
-from .forms import UserRegisterForm, UserLoginForm, ChangeMailForm, DeactivateForm
+from .forms import UserRegisterForm, UserLoginForm, ChangeMailForm, DeactivateForm, BiographyForm
 from django.urls import reverse, reverse_lazy
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.hashers import make_password, check_password, reset_hashers
@@ -699,3 +699,5 @@ class TestBiographyModel(TestCase):
         """
         self.assertEqual(self.bio.user, self.user)
         self.assertEqual(self.user, self.bio.user)
+
+

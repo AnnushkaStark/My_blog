@@ -206,71 +206,101 @@ class DeactivateForm(forms.Form):
         if password and password2 and password == password2:
             return password
         raise ValidationError("Пароли не совпадают")
-    
 
-class BiographyForm(forms.ModelForm):
+
+class NameChangeForm(forms.Form):
     """
-    Форма биографии пользователя
+    Форма изменения имени пользователя
     """
-    name = forms.CharField(required=False, max_length=100,widget=forms.TextInput)
-    town = forms.CharField(required=False, max_length=100,widget=forms.TextInput)
-    birth_date = forms.DateField(required=False, widget=forms.DateInput)
-    link = forms.URLField(required=False, widget=forms.URLInput)
-    avatar = forms.FileField(required=False, widget=forms.FileInput)
-    bio = forms.Textarea()
-  
+
+    name = forms.CharField(required=False, max_length=100, widget=forms.TextInput)
 
     def name_clean(self):
         """
         получение имени пользователя
         """
         name = self.cleaned_data["name"]
-       
+
         return name
-    
+
+
+class ChangeTownForm(forms.Form):
+    """
+    Форма изменения города пользователя
+    """
+
+    town = forms.CharField(required=False, max_length=100, widget=forms.TextInput)
+
     def town_clean(self):
         """
-        Получение данных о городе пользователя
+        получение города пользователя пользователя
         """
         town = self.cleaned_data["town"]
+
         return town
-    
-    def birth_date_clean(self):
+
+
+class BirthDateForm(forms.Form):
+    """
+    Форма изменения даты рождения
+    пользователя
+    """
+
+    birth_date = forms.DateField(required=False, widget=forms.DateInput)
+
+    def date_clean(self):
         """
-        Получение данных о годе рождени пользователя
+        получение даты рождения пользователя
         """
         birth_date = self.cleaned_data["birth_date"]
+
         return birth_date
-    
+
+
+class FormLinkChange(forms.Form):
+    """
+    Изменение ссылки на соц сеть или бусти
+    в профиле пользователя
+    """
+
+    link = forms.URLField(required=False, widget=forms.URLInput)
 
     def link_clean(self):
         """
-        Получение ссылки пользователя
+        получение ссылки на соцсеть или бусти пользователя
         """
-
         link = self.cleaned_data["link"]
+
         return link
-    
+
+
+class AvatarChangeForm(forms.Form):
+    """
+    Форма изменения аватакри профиля
+    """
+
+    avatar = forms.FileField(required=False, widget=forms.FileInput)
 
     def avatar_clean(self):
         """
-        Получение фото профиля пользоватея
+        получение фото профиля пользователя
         """
         avatar = self.cleaned_data["avatar"]
+
         return avatar
-    
+
+
+class BioChangeForm(forms.Form):
+    """
+    Форма изменения биографии пользователя
+    """
+
+    bio = forms.Textarea()
+
     def bio_clean(self):
         """
-        Получение биографии пользователя
+        получение биографии пользователя
         """
-        bio = self.cleaned_data["bio"]
+        bio = self.data["bio"]
+
         return bio
-
-   
-   
-    class Meta:
-        model = Biography
-        fields = ["name","town","birth_date","link", "avatar", "bio"]
-
-
-

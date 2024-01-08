@@ -27,6 +27,14 @@ urlpatterns = [
     path(
         "deactivate_form/", views.DeactivateFormView.as_view(), name="deactivate_form"
     ),
-    path("biography_form/", views.BiographyFormView.as_view(), name="biography_form"),
-   
+    path("change_name/", views.NameChangeFormView.as_view(), name="change_name"),
+    path("change_town/", views.TownChangeFormView.as_view(), name="change_town"),
+    path(
+        "change_birth_date/",
+        views.ChangeBirthDateFormView.as_view(),
+        name="change_birth_date",
+    ),
+    path("link_change/", views.ChangeLinkFormView.as_view(), name="link_change"),
+    path("avatar_change/", views.AvatarFormView.as_view(), name="change_avatar"),
+    path("change_bio/", views.BioChangeFormView.as_view(), name="bio_change"),
 ]
