@@ -1,5 +1,6 @@
 from django.test import TestCase, Client
 from .models import User, Biography
+from datetime import date
 from .forms import (
     UserRegisterForm,
     UserLoginForm,
@@ -837,3 +838,236 @@ class TestChangeAvatarForm(TestCase):
         }
         form = AvatarChangeForm(data=data)
         self.assertTrue(form.is_valid())
+
+
+class TestChangeNameFormView(TestCase):
+    """
+    Тестирование представления формы
+    изменения имени пользователя
+    """
+
+    def setUp(self):
+        """
+        Cоздание тест пользователя
+        """
+        self.client = Client()
+        self.url = reverse("user_page")
+        self.change_name_url = reverse("change_name")
+        self.user = User.objects.create_user(
+            username="testus", email="mytest@mail.com", password="123testpass"
+        )
+        self.client.login(username="testus", password="123testpass")
+
+    def test_change_name_sucsess(self):
+        """
+        Успешная смена имени
+        """
+        data = {
+            "name": "test",
+        }
+        response = self.client.get(reverse("user_page"))
+        self.assertEqual(response.status_code, 200)
+        response = self.client.post(self.change_name_url, data)
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, reverse("private_settings_page"))
+        biography = Biography.objects.get(name=data["name"])
+        self.assertEqual(biography.name, data["name"])
+
+
+class TestChangeTownFormView(TestCase):
+    """
+    Тестирвание представление формы
+    изменения города пользователя
+    """
+
+    def setUp(self):
+        """
+        Cоздание тест пользователя
+        """
+        self.client = Client()
+        self.url = reverse("user_page")
+        self.change_town_url = reverse("change_town")
+        self.user = User.objects.create_user(
+            username="testus", email="mytest@mail.com", password="123testpass"
+        )
+        self.client.login(username="testus", password="123testpass")
+
+    def test_change_name_sucsess(self):
+        """
+        Успешная смена города
+        """
+        data = {
+            "town": "Moscow",
+        }
+        response = self.client.get(reverse("user_page"))
+        self.assertEqual(response.status_code, 200)
+        response = self.client.post(self.change_town_url, data)
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, reverse("private_settings_page"))
+        biography = Biography.objects.get(town=data["town"])
+        self.assertEqual(biography.town, data["town"])
+
+
+class TestChangeBiographyFormView(TestCase):
+    """
+    Тестирование представления формы
+    изменения биографии пользователя
+    """
+
+    def setUp(self):
+        """
+        Cоздание тест пользователя
+        """
+        self.client = Client()
+        self.url = reverse("user_page")
+        self.change_bio_url = reverse("bio_change")
+        self.user = User.objects.create_user(
+            username="testus", email="mytest@mail.com", password="123testpass"
+        )
+        self.client.login(username="testus", password="123testpass")
+
+    def test_change_name_sucsess(self):
+        """
+        Успешная смена биографии
+        """
+        data = {
+            "bio": "bla-bla-bla",
+        }
+        response = self.client.get(reverse("user_page"))
+        self.assertEqual(response.status_code, 200)
+        response = self.client.post(self.change_bio_url, data)
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, reverse("private_settings_page"))
+        biography = Biography.objects.get(bio=data["bio"])
+        self.assertEqual(biography.bio, data["bio"])
+
+
+class TestChangeAvatarFormView(TestCase):
+    """
+    Тестировнание формы изменения фото
+    профиля пользовтателя
+    """
+
+    def setUp(self):
+        """
+        Cоздание тест пользователя
+        """
+        self.client = Client()
+        self.url = reverse("user_page")
+        self.change_avatar_url = reverse("change_avatar")
+        self.user = User.objects.create_user(
+            username="testus", email="mytest@mail.com", password="123testpass"
+        )
+        self.client.login(username="testus", password="123testpass")
+
+    def test_change_name_sucsess(self):
+        """
+        Успешная смена аватара
+        """
+        data = {
+            "avatar": "",  # Поле может быть пустым
+        }
+        response = self.client.get(reverse("user_page"))
+        self.assertEqual(response.status_code, 200)
+        response = self.client.post(self.change_avatar_url, data)
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, reverse("private_settings_page"))
+        biography = Biography.objects.get(avatar=data["avatar"])
+        self.assertEqual(biography.avatar, data["avatar"])
+
+
+class TestChangeBirthDateFormView(TestCase):
+    """
+    Тестирование формы представления
+    изменения даты рождения пользователя
+    """
+
+    def setUp(self):
+        """
+        Cоздание тест пользователя
+        """
+        self.client = Client()
+        self.url = reverse("user_page")
+        self.change_birth_date_url = reverse("change_birth_date")
+        self.user = User.objects.create_user(
+            username="testus", email="mytest@mail.com", password="123testpass"
+        )
+        self.client.login(username="testus", password="123testpass")
+
+    def test_change_birth_date_sucsess(self):
+        """
+        Успешная смена даты рождения
+        """
+        data = {
+            "birth_date": "2024-09-01",
+        }
+        response = self.client.get(reverse("user_page"))
+        self.assertEqual(response.status_code, 200)
+        response = self.client.post(self.change_birth_date_url, data)
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, reverse("private_settings_page"))
+        biography = Biography.objects.filter(birth_date=data["birth_date"]).count()
+        self.assertEqual(biography, 1)
+
+    def test_change_birth_date_failure(self):
+        """
+        Не успешное изменение даты рождения
+        """
+        data = {
+            "birth_date": "1234567",
+        }
+        response = self.client.get(reverse("user_page"))
+        self.assertEqual(response.status_code, 200)
+        response = self.client.post(self.change_birth_date_url, data, follow=True)
+        self.assertRedirects(response, reverse("private_settings_page"))
+        self.assertContains(response, "Ошибка ввода данных")
+
+
+class TestChangeLinkFormView(TestCase):
+    """
+    Тестирование представления формы изменения ссылки
+    на соц сеть или бусти в профиле пользователя
+    """
+
+    def setUp(self):
+        """
+        Cоздание тест пользователя
+        """
+        self.client = Client()
+        self.url = reverse("user_page")
+        self.change_link_url = reverse("link_change")
+        self.user = User.objects.create_user(
+            username="testus", email="mytest@mail.com", password="123testpass"
+        )
+        self.client.login(username="testus", password="123testpass")
+
+    def test_change_link_sucsess(self):
+        """
+        Успешное изменение ссылки на соц сеть
+        или бусти в профиле пользователя
+        """
+        data = {
+            "link": "",  # Поле может быть пустым
+        }
+        response = self.client.get(reverse("user_page"))
+        self.assertEqual(response.status_code, 200)
+        response = self.client.post(self.change_link_url, data)
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, reverse("private_settings_page"))
+        biography = Biography.objects.get(link=data["link"])
+        self.assertEqual(biography.link, data["link"])
+
+    def test_change_link_failure(self):
+        """
+        Не успешное изменение ссылки на соц сеть
+        или бусти в профиле пользователя
+
+        """
+        data = {
+            "link": "1234567",
+        }
+        response = self.client.get(reverse("user_page"))
+        self.assertEqual(response.status_code, 200)
+        response = self.client.post(self.change_link_url, data, follow=True)
+        self.assertRedirects(response, reverse("private_settings_page"))
+        self.assertContains(response, "Ошибка ввода данных")
