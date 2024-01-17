@@ -2,4 +2,59 @@
 {% load static %}
 
 {% block content %}
+<div class="container">
+
+    <div class="row">
+        <div class="col12">
+            {% if biography.avatar  %}
+            <br>
+            <p style="text-align:center"><img src="{{ biography.avatar.url }}" class="img-fluid" alt="Аватар" style="height: 200px;width: 300px;"></p>
+            <br>
+            {% else %}
+            <br>
+            <p style="text-align:center"><img src="{% static 'img\fon.jpg' %}" class="img-fluid" alt="Аватар" style="height: 200;width: 300;"></p>
+            <br>
+            {% endif %}
+            {% if biography.name %}
+            <p style="text-align:center">Имя : {{ biography.name }}</p>
+            <br>
+            {% else %}
+            <p style="text-align:center">Имя : не представился </p>
+            <br>
+            {% endif %}
+            {% if biography.town %}
+            <p style="text-align:center">Город : {{ biography.town }}</p>
+            <br>
+            {% else %}
+            <p style="text-align:center">Город : не найдено </p>
+            <br>
+            {% endif %}
+            {% if biography.birth_date %}
+            <p style="text-align:center">Дата рождения : {{ biography.birth_date }}</p>
+            <br>
+            {% else %}
+            <p style="text-align:center">Дата рождения : без возраста </p>
+            <br>
+            {% endif %}
+            {% if biography.link %}
+            <p style="text-align:center">Ссылка : {{ biography.link }}</p>
+            <br>
+            {% else %}
+            <p style="text-align:center">Cсылка  : не найдено </p>
+            <br>
+            {% endif %}
+            {% if biography.bio %}
+            <p style="text-align:center">О себе : {{ biography.bio }}</p>
+            <br>
+            {% else %}
+            <p style="text-align:center">О себе  : anonimus  </p>
+            <br>
+            {% endif %}
+
+
+
+   
+    </div>
+</div>
+</div>
 {% endblock %}

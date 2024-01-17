@@ -157,12 +157,29 @@ class UserLoginFormView(FormView):
             return redirect("login_page")
 
 
-class UserPageView(TemplateView, LoginRequiredMixin):
+class UserPageView(ListView, LoginRequiredMixin):
     """
     Личный кабинет пользователя запрос GET
     """
-
-    template_name = "user.html"
+    def get(self, request, *args, **kwargs):
+        """
+        Вывод биографии пользователя на страницу
+        """
+        try:
+            user = request.user
+            biography = Biography.objects.get(user=user)
+            if biography:
+                return render(request, "user.html", {"biography": biography})
+            else:
+                biography = Biography(user=user)
+                biography.save()
+                biography = Biography.objects.get(user=user)
+                return render(request, "user.html", {"biography": biography})
+        except Biography.DoesNotExist:
+            biography = Biography(user=user)
+            biography.save()
+            biography = Biography.objects.get(user=user)
+            return render(request, "user.html", {"biography": biography})
 
 
 class SettingsPage(TemplateView, LoginRequiredMixin):
