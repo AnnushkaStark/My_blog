@@ -31,7 +31,7 @@ class TestUserModel(TestCase):
         self.user = User.objects.create(
             username="testuser",
             email="test@mail.com",
-            password="my_password##&&7",
+            password="my_password##&&7B",
         )
 
     def test_user_creation(self):
@@ -65,8 +65,8 @@ class TestUserRegistrationForm(TestCase):
         form_data = {
             "username": "testuser",
             "email": "tesuser@mail.ru",
-            "password": "testpassword",
-            "password2": "testpassword",
+            "password": "testpasswordB5%",
+            "password2": "testpasswordB5%",
         }
 
         form = UserRegisterForm(data=form_data)
@@ -91,8 +91,8 @@ class TestUserRegistrationForm(TestCase):
         form_data = {
             "username": "testuser",
             "email": "tesuser@mail.ru",
-            "password": "testpassword",
-            "password2": "wrongpassword",
+            "password": "testpassword1B%",
+            "password2": "wrongpassword1B&",
         }
 
         form = UserRegisterForm(data=form_data)
@@ -111,7 +111,7 @@ class TestUserLoginForm(TestCase):
         """
         form_data = {
             "username": "testuser",
-            "password": "testpassword",
+            "password": "testpassword1B@",
         }
 
         form = UserLoginForm(data=form_data)
@@ -201,7 +201,7 @@ class TestUserPageView(TestCase):
         """
         self.client = Client()
         self.user = User.objects.create_user(
-            username="tesuser", email="test@mail.ru", password="Test123#pass"
+            username="tesuser", email="test@mail.ru", password="Test123#passS"
         )
         self.url = reverse("user_page")  # Страница user
 
@@ -211,7 +211,7 @@ class TestUserPageView(TestCase):
         и того что при переходе на страницу если у пользователя
         нет биографии она корректно создается
         """
-        self.client.login(username="tesuser", password="Test123#pass")
+        self.client.login(username="tesuser", password="Test123#passS")
         response = self.client.get(self.url)
         self.biography = Biography(user=self.user)
         self.biography.save()
@@ -227,7 +227,7 @@ class TestUserPageView(TestCase):
         """
         self.biography = Biography(user=self.user, name="Vasya", town="test_town")
         self.biography.save()
-        self.client.login(username="tesuser", password="Test123#pass")
+        self.client.login(username="tesuser", password="Test123#passS")
         response = self.client.get(self.url)
         biography = Biography.objects.get(user=self.user)
         self.assertEqual(response.status_code, 200)
@@ -249,8 +249,8 @@ class TestUserRegistrationFormView(TestCase):
         self.data = {
             "username": "tesuser",
             "email": "test@mail.com",
-            "password": "testpassword#!@",
-            "password2": "testpassword#!@",
+            "password": "testpassword#!@T1",
+            "password2": "testpassword#!@T1",
         }
 
     def test_register_form_view_sucsess(self):
@@ -301,14 +301,14 @@ class TestLoginFormView(TestCase):
         self.client = Client()
         self.login_url = reverse("login_form")
         self.user = User.objects.create_user(
-            username="testus", email="mytest@mail.com", password="123testpass"
+            username="testus", email="mytest@mail.com", password="123testpassS@"
         )
 
     def test_login_form_view_sucsess(self):
         """
         Успешный вход в систему
         """
-        data = {"username": "testus", "password": "123testpass"}
+        data = {"username": "testus", "password": "123testpassS@"}
         response = self.client.post(self.login_url, data)
         self.assertEqual(response.status_code, 302)
         self.assertRedirects(response, reverse("user_page"))
@@ -317,7 +317,7 @@ class TestLoginFormView(TestCase):
         """
         Не успешный вход в систеу
         """
-        data = {"username": "testus", "password": "123test"}
+        data = {"username": "testus", "password": "123testS"}
 
         response = self.client.post(self.login_url, data)
         self.assertEqual(response.status_code, 302)
@@ -337,10 +337,10 @@ class TestLogoutView(TestCase):
         self.url = reverse("user_page")
         self.logout_url = reverse("logout")
         self.user = User.objects.create_user(
-            username="testus", email="mytest@mail.com", password="123testpass"
+            username="testus", email="mytest@mail.com", password="123testpassS@"
         )
 
-        self.client.login(username="testus", password="123testpass")
+        self.client.login(username="testus", password="123testpassS@")
 
     def test_settings_page_view(self):
         """
@@ -366,10 +366,10 @@ class TestPrivateSettingsPageView(TestCase):
         self.url = reverse("user_page")
         self.settings_url = reverse("settings_page")
         self.user = User.objects.create_user(
-            username="testus", email="mytest@mail.com", password="123testpass"
+            username="testus", email="mytest@mail.com", password="123testpassS@"
         )
 
-        self.client.login(username="testus", password="123testpass")
+        self.client.login(username="testus", password="123testpassS@")
 
     def test_settings_page_view(self):
         """
@@ -396,10 +396,10 @@ class TestSettingsPageView(TestCase):
         self.url = reverse("user_page")
         self.private_settings_url = reverse("private_settings_page")
         self.user = User.objects.create_user(
-            username="testus", email="mytest@mail.com", password="123testpass"
+            username="testus", email="mytest@mail.com", password="123testpassS@"
         )
 
-        self.client.login(username="testus", password="123testpass")
+        self.client.login(username="testus", password="123testpassS@")
 
     def test_private_settings_page_view(self):
         """
@@ -426,10 +426,10 @@ class TestDeactivatePageView(TestCase):
         self.url = reverse("user_page")
         self.deactivate_url = reverse("deactivate_page")
         self.user = User.objects.create_user(
-            username="testus", email="mytest@mail.com", password="123testpass"
+            username="testus", email="mytest@mail.com", password="123testpassS@"
         )
 
-        self.client.login(username="testus", password="123testpass")
+        self.client.login(username="testus", password="123testpassS@")
 
     def test_deactivate_page_view(self):
         """
@@ -500,10 +500,10 @@ class TestChangeUserMailFormView(TestCase):
         self.url = reverse("user_page")
         self.change_mail_url = reverse("change_mail")
         self.user = User.objects.create_user(
-            username="testus", email="mytest@mail.com", password="123testpass"
+            username="testus", email="mytest@mail.com", password="123testpassS@"
         )
 
-        self.client.login(username="testus", password="123testpass")
+        self.client.login(username="testus", password="123testpassS@")
 
     def test_change_sucsess(self):
         """
@@ -549,18 +549,18 @@ class ChangeUserPasswordFormView(TestCase):
         self.url = reverse("user_page")
         self.change_pass_url = reverse("change_password")
         self.user = User.objects.create_user(
-            username="testus", email="mytest@mail.com", password="123testpass"
+            username="testus", email="mytest@mail.com", password="123testpassS@"
         )
-        self.client.login(username="testus", password="123testpass")
+        self.client.login(username="testus", password="123testpassS@")
 
     def test_change_pass_sucsess(self):
         """
         Успешная смена пароля
         """
         data = {
-            "old_pass": "123testpass",
-            "new_pass": "testpass",
-            "new_pass2": " testpass",
+            "old_pass": "123testpassS@",
+            "new_pass": "testpass123S@",
+            "new_pass2": " testpass123S@",
         }
         response = self.client.get(reverse("user_page"))
         self.assertEqual(response.status_code, 200)
@@ -576,9 +576,9 @@ class ChangeUserPasswordFormView(TestCase):
         Не успешная смена пароля
         """
         data = {
-            "old_pass": "testpass",
-            "new_pass": "testpass",
-            "new_pass2": " testpass",
+            "old_pass": "133testpassS@",
+            "new_pass": "222testpassS@",
+            "new_pass2": "222testpassS@",
         }
         response = self.client.get(reverse("user_page"))
         self.assertEqual(response.status_code, 200)
@@ -600,8 +600,8 @@ class TestDeactivateForm(TestCase):
         data = {
             "username": "testus",
             "email": "mytest@mail.com",
-            "password": "123testpass",
-            "password2": "123testpass",
+            "password": "123testpassS@",
+            "password2": "123testpassS@",
         }
         form = DeactivateForm(data=data)
         self.assertTrue(form.is_valid())
@@ -613,8 +613,8 @@ class TestDeactivateForm(TestCase):
         data = {
             "username": "testus",
             "email": "mytest@mail.com",
-            "password": "123testpass",
-            "password2": "testpass",
+            "password": "123testpassS@",
+            "password2": "133testpassS@",
         }
         form = DeactivateForm(data=data)
         self.assertFalse(form.is_valid())
@@ -646,9 +646,9 @@ class TestDaectivateFormView(TestCase):
         self.url = reverse("user_page")
         self.deactivate_url = reverse("deactivate_form")
         self.user = User.objects.create_user(
-            username="testus", email="mytest@mail.com", password="123testpass"
+            username="testus", email="mytest@mail.com", password="123testpassS@"
         )
-        self.client.login(username="testus", password="123testpass")
+        self.client.login(username="testus", password="123testpassS@")
 
     def test_deactivate_sucsess(self):
         """
@@ -657,8 +657,8 @@ class TestDaectivateFormView(TestCase):
         data = {
             "username": "testus",
             "email": "mytest@mail.com",
-            "password": "123testpass",
-            "password2": "123testpass",
+            "password": "123testpassS@",
+            "password2": "123testpassS@",
         }
         response = self.client.get(reverse("user_page"))
         self.assertEqual(response.status_code, 200)
@@ -673,8 +673,8 @@ class TestDaectivateFormView(TestCase):
         data = {
             "username": "testus",
             "email": "mytest@mail.com",
-            "password": "testpass",
-            "password2": "123testpass",
+            "password": "12testpassS@",
+            "password2": "123testpassS@",
         }
         response = self.client.get(reverse("user_page"))
         self.assertEqual(response.status_code, 200)
@@ -696,7 +696,7 @@ class TestBiographyModel(TestCase):
         self.user = User.objects.create(
             username="testuser",
             email="test@mail.com",
-            password="my_password##&&7",
+            password="my_password##&&7Q",
         )
 
         self.bio = Biography.objects.create(
@@ -879,9 +879,9 @@ class TestChangeNameFormView(TestCase):
         self.url = reverse("user_page")
         self.change_name_url = reverse("change_name")
         self.user = User.objects.create_user(
-            username="testus", email="mytest@mail.com", password="123testpass"
+            username="testus", email="mytest@mail.com", password="123testpassS@"
         )
-        self.client.login(username="testus", password="123testpass")
+        self.client.login(username="testus", password="123testpassS@")
 
     def test_change_name_sucsess(self):
         """
@@ -913,9 +913,9 @@ class TestChangeTownFormView(TestCase):
         self.url = reverse("user_page")
         self.change_town_url = reverse("change_town")
         self.user = User.objects.create_user(
-            username="testus", email="mytest@mail.com", password="123testpass"
+            username="testus", email="mytest@mail.com", password="123testpassS@"
         )
-        self.client.login(username="testus", password="123testpass")
+        self.client.login(username="testus", password="123testpassS@")
 
     def test_change_name_sucsess(self):
         """
@@ -947,9 +947,9 @@ class TestChangeBiographyFormView(TestCase):
         self.url = reverse("user_page")
         self.change_bio_url = reverse("bio_change")
         self.user = User.objects.create_user(
-            username="testus", email="mytest@mail.com", password="123testpass"
+            username="testus", email="mytest@mail.com", password="123testpass@Q"
         )
-        self.client.login(username="testus", password="123testpass")
+        self.client.login(username="testus", password="123testpass@Q")
 
     def test_change_name_sucsess(self):
         """
@@ -981,9 +981,9 @@ class TestChangeAvatarFormView(TestCase):
         self.url = reverse("user_page")
         self.change_avatar_url = reverse("change_avatar")
         self.user = User.objects.create_user(
-            username="testus", email="mytest@mail.com", password="123testpass"
+            username="testus", email="mytest@mail.com", password="123testpassS@"
         )
-        self.client.login(username="testus", password="123testpass")
+        self.client.login(username="testus", password="123testpassS@")
 
     def test_change_name_sucsess(self):
         """
@@ -1015,9 +1015,9 @@ class TestChangeBirthDateFormView(TestCase):
         self.url = reverse("user_page")
         self.change_birth_date_url = reverse("change_birth_date")
         self.user = User.objects.create_user(
-            username="testus", email="mytest@mail.com", password="123testpass"
+            username="testus", email="mytest@mail.com", password="123testpassS@"
         )
-        self.client.login(username="testus", password="123testpass")
+        self.client.login(username="testus", password="123testpassS@")
 
     def test_change_birth_date_sucsess(self):
         """
@@ -1062,9 +1062,9 @@ class TestChangeLinkFormView(TestCase):
         self.url = reverse("user_page")
         self.change_link_url = reverse("link_change")
         self.user = User.objects.create_user(
-            username="testus", email="mytest@mail.com", password="123testpass"
+            username="testus", email="mytest@mail.com", password="123testpassS@"
         )
-        self.client.login(username="testus", password="123testpass")
+        self.client.login(username="testus", password="123testpassS@")
 
     def test_change_link_sucsess(self):
         """
