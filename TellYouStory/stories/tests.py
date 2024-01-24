@@ -126,6 +126,24 @@ class TestUserLoginForm(TestCase):
         self.assertEqual(form.errors["username"], ["Обязательное поле."])
         self.assertEqual(form.errors["password"], ["Обязательное поле."])
 
+    def test_uncorrect_username(self):
+        """
+        Тест некорректного
+        имени пользователя
+        """
+        form_data = {
+            "username": "t",
+            "email": "tesuser@mail.ru",
+            "password": "testpasswordB5%",
+            "password2": "testpasswordB5%",
+        }
+        form = UserRegisterForm(data=form_data)
+        self.assertFalse(form.is_valid())
+        self.assertEqual(
+            form.errors["username"],
+            ["Убедитесь, что это значение содержит не менее 3 символов (сейчас 1)."],
+        )
+
 
 class TestUserRegistrationView(TestCase):
     """

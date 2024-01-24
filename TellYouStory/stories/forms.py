@@ -7,6 +7,7 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.hashers import make_password, check_password
 from django.forms import ModelForm
 from django.contrib.auth import authenticate
+from .validators import valid_name, valid_email, valid_password
 
 
 class UserRegisterForm(ModelForm):
@@ -15,7 +16,7 @@ class UserRegisterForm(ModelForm):
     кастомная форма UserCreationForm
     """
 
-    username = forms.CharField(min_length=5, max_length=150, widget=forms.TextInput)
+    username = forms.CharField(min_length=3, max_length=50, widget=forms.TextInput)
     email = forms.EmailField(widget=forms.EmailInput)
     password = forms.CharField(widget=forms.PasswordInput)
     password2 = forms.CharField(widget=forms.PasswordInput)
@@ -25,10 +26,14 @@ class UserRegisterForm(ModelForm):
         Проверка совпадения username
         """
         username = self.cleaned_data["username"]
-        new = User.objects.filter(username=username)
-        if new.count():
-            raise ValidationError("Пользователь уже существует")
-        return username
+        if valid_name("username") == "is_valid":
+            new = User.objects.filter(username=username)
+            if new.count():
+                raise ValidationError("Пользователь уже существует")
+            return username
+        raise ValidationError(
+            "Длина имени пользователя должна быть от 3х до 50 символов"
+        )
 
     def email_clean(self):
         """
