@@ -136,45 +136,31 @@ class ChangePasswordForm(forms.Form):
     new_pass = forms.CharField(widget=forms.PasswordInput, min_length=6, max_length=64)
     new_pass2 = forms.CharField(widget=forms.PasswordInput, min_length= 6, max_length=64)
 
-    def old_pass_clean(self):
+
+    def old_pasword_clean(self):
         """
-        Проверка валидности старого пароля
+        Валидация старого пароля
         """
         old_pass = self.cleaned_data["old_pass"]
         if old_pass:
             return old_pass
-        raise ValidationError("InvalidPassword")
+        raise forms.ValidationError("Пароль не верный")
 
-    def new_pass_clean(self):
+    def validate_data(self):
         """
-        Проверка валидности
-        нового пароля
+        Функция валидации формы
         """
-        new_pass = self.cleaned_data["new_pass"]
-        if new_pass and valid_password(new_pass) == "is_valid":
-            return new_pass
-        raise ValidationError("InvalidPassword")
-
-    def new_pass_clean(self):
-        """
-        Проверка валидности
-        нового пароля - подтверждения
-        """
-        new_pass2 = self.cleaned_data["new_pass2"]
-
-        if new_pass2 and valid_password(new_pass2) == "is_valid":
-            return new_pass2
-        raise ValidationError("InvalidPassword")
-
-    def validate(self):
-        """
-        Проверка совпадения нового пароля и его подтверждения
-        """
+        
         new_pass = self.cleaned_data["new_pass"]
         new_pass2 = self.cleaned_data["new_pass2"]
-        if new_pass == new_pass2  and valid_password(new_pass) == "is_valid":
+        if new_pass != new_pass2:
+            raise forms.ValidationError("Пароли не совпадают")
+        if valid_password(new_pass) != "is_valid":
+            raise forms.ValidationError("Пароль не достаточно сложный")
+        else:
             return new_pass
-        return ValidationError("Пароли не совпадают")
+        
+  
 
 
 class DeactivateForm(forms.Form):

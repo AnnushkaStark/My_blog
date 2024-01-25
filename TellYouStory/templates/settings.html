@@ -27,15 +27,15 @@
               {% csrf_token %}
               {{ form.as_p }}
                 <div class="mb-3">
-                  <label for="exampleInputEmail1" class="form-label">Пароль</label>
+                  <label for="exampleInputPassword1" class="form-label">Пароль</label>
                   <input type="password" class="form-control"name="old_pass">
                   
                 <div class="mb-3">
                   <label for="exampleInputPassword1" class="form-label">Новый пароль</label>
-                  <input type="password" class="form-control"name="new_pass" >
+                  <input type="password" class="form-control"name="new_pass" value="new_pass",id>
                 </div>
                 <div class="mb-3">
-                    <label for="exampleInputPassword1" class="form-label">Подтвердить новый пароль</label>
+                    <label for="exampleInputPassword2" class="form-label">Подтвердить новый пароль</label>
                     <input type="password" class="form-control" name="new_pass2">
                   </div>
                 

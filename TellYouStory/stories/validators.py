@@ -129,5 +129,3 @@ def valid_password(password):
     return "Invalid_password"
 
 
-print(valid_email('test@testsss.ru'))
-print(valid_email('mytest@mail.com'))

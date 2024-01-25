@@ -506,7 +506,6 @@ class TestChangeUserMailForm(TestCase):
         }
 
         form = ChangeMailForm(data=form_data)
-        print(form.errors)
         self.assertTrue(form.is_valid())
 
     def test_invalid_data(self):
@@ -549,11 +548,48 @@ class TestChangeUserMailForm(TestCase):
 
 
 
-class TestChangePasswordForm:
+class TestChangePasswordForm(TestCase):
     """
     Тестирование формы смены пароля
     """
-    pass
+    def test_is_valid_form(self):
+        """
+        Тестирование валидной формы
+        """
+        form_data = {
+                "old_pass": "Mytmail.com1",
+                "new_pass": "Test@testsss1ru",
+                "new_pass2": "Test@testsss1ru",
+            }
+        form = ChangePasswordForm(data=form_data)
+        self.assertTrue(form.is_valid())
+    
+    def test_blank_data(self):
+        """
+        Тестирование не заполненной формы
+        """
+        form_data = {
+                "old_pass": "",
+                "new_pass": "Test@testsss1ru",
+                "new_pass2": "",
+            }
+        form = ChangePasswordForm(data=form_data)
+        self.assertFalse(form.is_valid())
+        self.assertEqual(form.errors["old_pass"], ["Обязательное поле."])
+        self.assertEqual(form.errors["new_pass2"], ["Обязательное поле."])
+
+    def test_invalid_form(self):
+        """
+        Тестировние с несовпадающими паролями
+        """
+        form_data = {
+                "old_pass": "Mytmail.com1",
+                "new_pass": "Test@testsss1ru",
+                "new_pass2": "Yest@testsss1ru",
+            }
+        form = ChangePasswordForm(data=form_data)
+        self.assertFalse(form.is_valid())
+
 
 
 
