@@ -2,7 +2,7 @@ def valid_name(first_name):
     """
     Проверка валидности имени пользователя
     """
-    if first_name.isalpha() and 3 <= len(first_name) <= 20:
+    if first_name.isalnum() and 3 <= len(first_name) <= 20:
         return "is_valid"
     return "invalid first_name"
 
@@ -126,3 +126,4 @@ def valid_password(password):
 
         return "is_valid"
     return "Invalid_password"
+

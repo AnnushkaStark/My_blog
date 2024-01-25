@@ -17,9 +17,9 @@ class UserRegisterForm(ModelForm):
     """
 
     username = forms.CharField(min_length=3, max_length=50, widget=forms.TextInput)
-    email = forms.EmailField(widget=forms.EmailInput)
-    password = forms.CharField(widget=forms.PasswordInput)
-    password2 = forms.CharField(widget=forms.PasswordInput)
+    email = forms.EmailField(widget=forms.EmailInput,min_length=6, max_length=15)
+    password = forms.CharField(widget=forms.PasswordInput,min_length=6, max_length=64)
+    password2 = forms.CharField(widget=forms.PasswordInput, min_length=6, max_length=64)
 
     def username_clean(self):
         """
@@ -40,23 +40,28 @@ class UserRegisterForm(ModelForm):
         Проверка совпадения email
         """
         email = self.cleaned_data["email"]
-        new = User.objects.filter(email=email)
-        if new.count():
-            raise ValidationError("Почта уже зарегистрировна")
-        return email
-
+        if valid_email(email) == "is_valid":
+            email = self.cleaned_data["email"]
+            new = User.objects.filter(email=email)
+            if new.count():
+                raise ValidationError("Почта уже зарегистрировна")
+            return email
+        raise ValidationError("Почта уже зарегистрировна")
+    
     def clean_password2(self):
         """
         Проверка наличия и совпадения паролей
         """
         password = self.cleaned_data["password"]
-        password2 = self.cleaned_data["password2"]
+        if valid_password(password) == "is_valid":
+            password2 = self.cleaned_data["password2"]
 
-        if password and password2 and password != password2:
-            raise ValidationError("Пароли не совпадают")
-        password = make_password(password)
-        return password
-
+            if password and password2 and password != password2:
+                raise ValidationError("Пароли не совпадают")
+            password = make_password(password)
+            return password
+        raise forms.ValidationError("Пароль слишком простой")
+    
     class Meta:
         model = User
         fields = ["username", "email", "password"]

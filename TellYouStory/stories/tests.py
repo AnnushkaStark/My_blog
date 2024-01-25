@@ -17,6 +17,7 @@ from django.urls import reverse, reverse_lazy
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.hashers import make_password, check_password, reset_hashers
 from django.db.models.fields.files import ImageFieldFile
+from django.core.exceptions import ValidationError
 
 
 class TestUserModel(TestCase):
@@ -99,6 +100,52 @@ class TestUserRegistrationForm(TestCase):
         self.assertFalse(form.is_valid())
         self.assertEqual(form.errors["password2"], ["Пароли не совпадают"])
 
+    def test_uncorrect_username(self):
+        """
+        Тест некорректного
+        имени пользователя
+        """
+        form_data = {
+            "username": "t",
+            "email": "tesuser@mail.ru",
+            "password": "testpasswordB5%",
+            "password2": "testpasswordB5%",
+        }
+        form = UserRegisterForm(data=form_data)
+        self.assertFalse(form.is_valid())
+        self.assertEqual(
+            form.errors["username"],
+            ["Убедитесь, что это значение содержит не менее 3 символов (сейчас 1)."],
+        )
+       
+
+    def test_unorrect_password(self):
+        """
+        Проверка некорректного пароля 
+        """
+        form_data = {
+            "username": "user",
+            "email": "tesuser@mail.ru",
+            "password": "testpass1",
+            "password2": "testpass1",
+        }
+        form = UserRegisterForm(data=form_data)
+        self.assertFalse(form.is_valid())
+
+    def test_unorrect_email(self):
+        """
+        Проверка некорректной электронной почты
+        """
+        form_data = {
+            "username": "user",
+            "email": "tesu#ser@mail.ru",
+            "password": "testpass123@W",
+            "password2": "testpass123@W",
+        }
+        form = UserRegisterForm(data=form_data)
+        self.assertFalse(form.is_valid())      
+
+
 
 class TestUserLoginForm(TestCase):
     """
@@ -121,28 +168,11 @@ class TestUserLoginForm(TestCase):
         """
         Проверка отправки не заполненной  формы
         """
-        form = UserRegisterForm(data={})
+        form = UserLoginForm(data={})
         self.assertFalse(form.is_valid())
         self.assertEqual(form.errors["username"], ["Обязательное поле."])
         self.assertEqual(form.errors["password"], ["Обязательное поле."])
 
-    def test_uncorrect_username(self):
-        """
-        Тест некорректного
-        имени пользователя
-        """
-        form_data = {
-            "username": "t",
-            "email": "tesuser@mail.ru",
-            "password": "testpasswordB5%",
-            "password2": "testpasswordB5%",
-        }
-        form = UserRegisterForm(data=form_data)
-        self.assertFalse(form.is_valid())
-        self.assertEqual(
-            form.errors["username"],
-            ["Убедитесь, что это значение содержит не менее 3 символов (сейчас 1)."],
-        )
 
 
 class TestUserRegistrationView(TestCase):
