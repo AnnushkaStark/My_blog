@@ -19,6 +19,7 @@ from .forms import (
 )
 from django.contrib.auth.hashers import make_password, check_password, reset_hashers
 from django.contrib.auth import login, logout, authenticate
+from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import User, Biography
 
@@ -249,6 +250,7 @@ class ChangePasswordFormView(FormView, LoginRequiredMixin):
                 new_password = form.cleaned_data["new_pass"]
                 user.set_password(new_password)
                 user.save()
+                update_session_auth_hash(request, user)
                 messages.success(request, "Ваш пароль изменен")
                 return redirect("settings_page")
             messages.error(request, "Неверный пароль")
