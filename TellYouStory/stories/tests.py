@@ -590,6 +590,18 @@ class TestChangePasswordForm(TestCase):
         form = ChangePasswordForm(data=form_data)
         self.assertFalse(form.is_valid())
 
+    def test_uncorrect_form(self):
+        """
+        Тестировние не проходящего требования к валидации пароля
+        """
+        form_data = {
+                "old_pass": "Mytmail.com1",
+                "new_pass": "еest@testsss1ru",
+                "new_pass2": "eest@testsss1ru",
+            }
+        form = ChangePasswordForm(data=form_data)
+        self.assertFalse(form.is_valid())
+
 
 
 

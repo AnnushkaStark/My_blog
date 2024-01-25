@@ -137,28 +137,25 @@ class ChangePasswordForm(forms.Form):
     new_pass2 = forms.CharField(widget=forms.PasswordInput, min_length= 6, max_length=64)
 
 
-    def old_pasword_clean(self):
+    def clean(self):
         """
-        Валидация старого пароля
+        Валидация  формы
         """
-        old_pass = self.cleaned_data["old_pass"]
-        if old_pass:
-            return old_pass
-        raise forms.ValidationError("Пароль не верный")
-
-    def validate_data(self):
-        """
-        Функция валидации формы
-        """
+        cleaned_data = super().clean()
+        old_pass = cleaned_data.get("old_pass")
+        new_pass = cleaned_data.get("new_pass")
+        new_pass2 = cleaned_data.get("new_pass2")
         
-        new_pass = self.cleaned_data["new_pass"]
-        new_pass2 = self.cleaned_data["new_pass2"]
-        if new_pass != new_pass2:
+        if old_pass and new_pass and new_pass2:
+            if new_pass2 == new_pass:
+                if valid_password(new_pass) == "is_valid":
+                    return cleaned_data
+                raise forms.ValidationError("Пароль слишком простой")
             raise forms.ValidationError("Пароли не совпадают")
-        if valid_password(new_pass) != "is_valid":
-            raise forms.ValidationError("Пароль не достаточно сложный")
-        else:
-            return new_pass
+        raise forms.ValidationError("Поле не может быть пустым")
+
+
+        
         
   
 
