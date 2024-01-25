@@ -12,6 +12,7 @@ def valid_email(email):
     Проверка валидности
     электронной почты
     """
+    uncorrect_chars = "йёукенгшщзхъэждлорпавыфячсмитьбюЙЦУКЕНГШЩЗХЪЭЖДЛОРПАВЫФЯЧСМИТЬБЮ"
     incorrect_chars = [  # Символы которые
         " ",
         ":",  # нельзя использовать в электронной почте
@@ -44,7 +45,7 @@ def valid_email(email):
     test_mail_2 = test_mail_2.replace("-", "")
     test_mail_2 = test_mail_2.replace("_", "")
     for char in email:
-        if char in incorrect_chars:
+        if char in incorrect_chars or char in uncorrect_chars:
             incorrect_counter += 1
     if incorrect_counter == 0:
         counter += 1
@@ -127,3 +128,6 @@ def valid_password(password):
         return "is_valid"
     return "Invalid_password"
 
+
+print(valid_email('test@testsss.ru'))
+print(valid_email('mytest@mail.com'))

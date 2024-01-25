@@ -100,8 +100,8 @@ class ChangeMailForm(forms.Form):
     Форма изменения электронной почты пользователя
     """
 
-    old_mail = forms.EmailField(widget=forms.EmailInput)  # Старый адрес эл почты
-    new_mail = forms.EmailField(widget=forms.EmailInput)  # Новый адрес эл почты
+    old_mail = forms.EmailField(widget=forms.EmailInput, min_length=6, max_length=15)  # Старый адрес эл почты
+    new_mail = forms.EmailField(widget=forms.EmailInput,min_length=6, max_length=15)  # Новый адрес эл почты
 
     def old_mail_clean(self):
         """
@@ -119,10 +119,12 @@ class ChangeMailForm(forms.Form):
         новой электронной почты
         """
         new_mail = self.cleaned_data["new_mail"]
-        new = User.objects.filter(email=new_mail)
-        if new.count():
-            raise ValidationError("Почта уже зарегистрировна")
-        return new_mail
+        if valid_email(new_mail) == "is_valid":
+            new = User.objects.filter(email=new_mail)
+            if new.count():
+                raise ValidationError("Почта уже зарегистрировна")
+            return new_mail
+        raise forms.ValidationError("Bведите актуальную почту")
 
 
 class ChangePasswordForm(forms.Form):
@@ -130,9 +132,9 @@ class ChangePasswordForm(forms.Form):
     Форма изменения пароля пользователя
     """
 
-    old_pass = forms.CharField(widget=forms.PasswordInput)
-    new_pass = forms.CharField(widget=forms.PasswordInput)
-    new_pass2 = forms.CharField(widget=forms.PasswordInput)
+    old_pass = forms.CharField(widget=forms.PasswordInput, min_length=6, max_length=64)
+    new_pass = forms.CharField(widget=forms.PasswordInput, min_length=6, max_length=64)
+    new_pass2 = forms.CharField(widget=forms.PasswordInput, min_length= 6, max_length=64)
 
     def old_pass_clean(self):
         """
@@ -149,8 +151,7 @@ class ChangePasswordForm(forms.Form):
         нового пароля
         """
         new_pass = self.cleaned_data["new_pass"]
-
-        if new_pass:
+        if new_pass and valid_password(new_pass) == "is_valid":
             return new_pass
         raise ValidationError("InvalidPassword")
 
@@ -161,7 +162,7 @@ class ChangePasswordForm(forms.Form):
         """
         new_pass2 = self.cleaned_data["new_pass2"]
 
-        if new_pass2:
+        if new_pass2 and valid_password(new_pass2) == "is_valid":
             return new_pass2
         raise ValidationError("InvalidPassword")
 
@@ -171,7 +172,7 @@ class ChangePasswordForm(forms.Form):
         """
         new_pass = self.cleaned_data["new_pass"]
         new_pass2 = self.cleaned_data["new_pass2"]
-        if new_pass == new_pass2:
+        if new_pass == new_pass2  and valid_password(new_pass) == "is_valid":
             return new_pass
         return ValidationError("Пароли не совпадают")
 

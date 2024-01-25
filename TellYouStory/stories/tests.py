@@ -12,6 +12,7 @@ from .forms import (
     BioChangeForm,
     BirthDateForm,
     AvatarChangeForm,
+    ChangePasswordForm
 )
 from django.urls import reverse, reverse_lazy
 from django.contrib.auth import authenticate, login
@@ -505,6 +506,7 @@ class TestChangeUserMailForm(TestCase):
         }
 
         form = ChangeMailForm(data=form_data)
+        print(form.errors)
         self.assertTrue(form.is_valid())
 
     def test_invalid_data(self):
@@ -532,6 +534,30 @@ class TestChangeUserMailForm(TestCase):
         self.assertFalse(form.is_valid())
         self.assertEqual(form.errors["old_mail"], ["Обязательное поле."])
         self.assertEqual(form.errors["new_mail"], ["Обязательное поле."])
+
+    def test_uncorrect_email(self):
+        """
+        тестирование электронной почты на соответствие валидации
+        """
+        form_data = {
+            "old_mail": "mytest@mail.com",
+            "new_mail": "test@tes..tsss.ru",
+        }
+        form = ChangeMailForm(data=form_data)
+        self.assertFalse(form.is_valid())
+
+
+
+
+class TestChangePasswordForm:
+    """
+    Тестирование формы смены пароля
+    """
+    pass
+
+
+
+
 
 
 class TestChangeUserMailFormView(TestCase):
