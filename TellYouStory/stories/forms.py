@@ -17,8 +17,8 @@ class UserRegisterForm(ModelForm):
     """
 
     username = forms.CharField(min_length=3, max_length=50, widget=forms.TextInput)
-    email = forms.EmailField(widget=forms.EmailInput,min_length=6, max_length=15)
-    password = forms.CharField(widget=forms.PasswordInput,min_length=6, max_length=64)
+    email = forms.EmailField(widget=forms.EmailInput, min_length=6, max_length=15)
+    password = forms.CharField(widget=forms.PasswordInput, min_length=6, max_length=64)
     password2 = forms.CharField(widget=forms.PasswordInput, min_length=6, max_length=64)
 
     def username_clean(self):
@@ -47,7 +47,7 @@ class UserRegisterForm(ModelForm):
                 raise ValidationError("Почта уже зарегистрировна")
             return email
         raise ValidationError("Почта уже зарегистрировна")
-    
+
     def clean_password2(self):
         """
         Проверка наличия и совпадения паролей
@@ -61,7 +61,7 @@ class UserRegisterForm(ModelForm):
             password = make_password(password)
             return password
         raise forms.ValidationError("Пароль слишком простой")
-    
+
     class Meta:
         model = User
         fields = ["username", "email", "password"]
@@ -100,8 +100,12 @@ class ChangeMailForm(forms.Form):
     Форма изменения электронной почты пользователя
     """
 
-    old_mail = forms.EmailField(widget=forms.EmailInput, min_length=6, max_length=15)  # Старый адрес эл почты
-    new_mail = forms.EmailField(widget=forms.EmailInput,min_length=6, max_length=15)  # Новый адрес эл почты
+    old_mail = forms.EmailField(
+        widget=forms.EmailInput, min_length=6, max_length=15
+    )  # Старый адрес эл почты
+    new_mail = forms.EmailField(
+        widget=forms.EmailInput, min_length=6, max_length=15
+    )  # Новый адрес эл почты
 
     def old_mail_clean(self):
         """
@@ -134,8 +138,7 @@ class ChangePasswordForm(forms.Form):
 
     old_pass = forms.CharField(widget=forms.PasswordInput, min_length=6, max_length=64)
     new_pass = forms.CharField(widget=forms.PasswordInput, min_length=6, max_length=64)
-    new_pass2 = forms.CharField(widget=forms.PasswordInput, min_length= 6, max_length=64)
-
+    new_pass2 = forms.CharField(widget=forms.PasswordInput, min_length=6, max_length=64)
 
     def clean(self):
         """
@@ -145,7 +148,7 @@ class ChangePasswordForm(forms.Form):
         old_pass = cleaned_data.get("old_pass")
         new_pass = cleaned_data.get("new_pass")
         new_pass2 = cleaned_data.get("new_pass2")
-        
+
         if old_pass and new_pass and new_pass2:
             if new_pass2 == new_pass:
                 if valid_password(new_pass) == "is_valid":
@@ -153,11 +156,6 @@ class ChangePasswordForm(forms.Form):
                 raise forms.ValidationError("Пароль слишком простой")
             raise forms.ValidationError("Пароли не совпадают")
         raise forms.ValidationError("Поле не может быть пустым")
-
-
-        
-        
-  
 
 
 class DeactivateForm(forms.Form):

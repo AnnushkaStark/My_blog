@@ -12,7 +12,7 @@ from .forms import (
     BioChangeForm,
     BirthDateForm,
     AvatarChangeForm,
-    ChangePasswordForm
+    ChangePasswordForm,
 )
 from django.urls import reverse, reverse_lazy
 from django.contrib.auth import authenticate, login
@@ -118,11 +118,10 @@ class TestUserRegistrationForm(TestCase):
             form.errors["username"],
             ["Убедитесь, что это значение содержит не менее 3 символов (сейчас 1)."],
         )
-       
 
     def test_unorrect_password(self):
         """
-        Проверка некорректного пароля 
+        Проверка некорректного пароля
         """
         form_data = {
             "username": "user",
@@ -144,8 +143,7 @@ class TestUserRegistrationForm(TestCase):
             "password2": "testpass123@W",
         }
         form = UserRegisterForm(data=form_data)
-        self.assertFalse(form.is_valid())      
-
+        self.assertFalse(form.is_valid())
 
 
 class TestUserLoginForm(TestCase):
@@ -173,7 +171,6 @@ class TestUserLoginForm(TestCase):
         self.assertFalse(form.is_valid())
         self.assertEqual(form.errors["username"], ["Обязательное поле."])
         self.assertEqual(form.errors["password"], ["Обязательное поле."])
-
 
 
 class TestUserRegistrationView(TestCase):
@@ -546,33 +543,32 @@ class TestChangeUserMailForm(TestCase):
         self.assertFalse(form.is_valid())
 
 
-
-
 class TestChangePasswordForm(TestCase):
     """
     Тестирование формы смены пароля
     """
+
     def test_is_valid_form(self):
         """
         Тестирование валидной формы
         """
         form_data = {
-                "old_pass": "Mytmail.com1",
-                "new_pass": "Test@testsss1ru",
-                "new_pass2": "Test@testsss1ru",
-            }
+            "old_pass": "Mytmail.com1",
+            "new_pass": "Test@testsss1ru",
+            "new_pass2": "Test@testsss1ru",
+        }
         form = ChangePasswordForm(data=form_data)
         self.assertTrue(form.is_valid())
-    
+
     def test_blank_data(self):
         """
         Тестирование не заполненной формы
         """
         form_data = {
-                "old_pass": "",
-                "new_pass": "Test@testsss1ru",
-                "new_pass2": "",
-            }
+            "old_pass": "",
+            "new_pass": "Test@testsss1ru",
+            "new_pass2": "",
+        }
         form = ChangePasswordForm(data=form_data)
         self.assertFalse(form.is_valid())
         self.assertEqual(form.errors["old_pass"], ["Обязательное поле."])
@@ -583,10 +579,10 @@ class TestChangePasswordForm(TestCase):
         Тестировние с несовпадающими паролями
         """
         form_data = {
-                "old_pass": "Mytmail.com1",
-                "new_pass": "Test@testsss1ru",
-                "new_pass2": "Yest@testsss1ru",
-            }
+            "old_pass": "Mytmail.com1",
+            "new_pass": "Test@testsss1ru",
+            "new_pass2": "Yest@testsss1ru",
+        }
         form = ChangePasswordForm(data=form_data)
         self.assertFalse(form.is_valid())
 
@@ -595,17 +591,12 @@ class TestChangePasswordForm(TestCase):
         Тестировние не проходящего требования к валидации пароля
         """
         form_data = {
-                "old_pass": "Mytmail.com1",
-                "new_pass": "еest@testsss1ru",
-                "new_pass2": "eest@testsss1ru",
-            }
+            "old_pass": "Mytmail.com1",
+            "new_pass": "еest@testsss1ru",
+            "new_pass2": "eest@testsss1ru",
+        }
         form = ChangePasswordForm(data=form_data)
         self.assertFalse(form.is_valid())
-
-
-
-
-
 
 
 class TestChangeUserMailFormView(TestCase):

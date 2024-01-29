@@ -19,6 +19,7 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
+
 urlpatterns = [
     path("admin/", admin.site.urls, name="admin"),
     path('',include('stories.urls'))
@@ -28,3 +29,9 @@ urlpatterns = [
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+
+handler400 = "stories.exeption_handler.bad_request_handler"
+handler403 = "stories.exeption_handler.premission_denied_handler"
+handler404 = "stories.exeption_handler.page_not_found_handler"
+handler500 = "stories.exeption_handler.server_error_handler"
