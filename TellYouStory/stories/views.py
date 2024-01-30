@@ -111,7 +111,7 @@ class UserLogoutView(LogoutView, LoginRequiredMixin):
             messages.success(request, "Спасибо за проведенное время!")
             return redirect("index")
         messages.error(request, "Ошибка входа из системы")
-        return redirect("user")
+        return redirect("user_page")
 
 
 class UserLoginFormView(FormView):
@@ -126,7 +126,7 @@ class UserLoginFormView(FormView):
         """
         if request.user.is_authenticated:
             messages.error(request, "Вы уже вошли в систему")
-            return redirect("user")
+            return redirect("user_page")
         return super().dispatch(request, *args, **kwargs)
 
     def post(self, request):
@@ -465,15 +465,11 @@ class BioChangeFormView(FormView, LoginRequiredMixin):
             user = request.user
             biography = Biography.objects.get(user=request.user)
             form = BioChangeForm(request.POST, request.FILES)
-            print(form)
             if form.is_valid():
                 biography.bio = form.data["bio"]
                 biography.save()
                 messages.success(request, "Биография обновлена")
-                print(form)
                 return redirect("private_settings_page")
-
-            print(form)
             messages.error(request, "Ошибка ввода данных")
             return redirect("private_settings_page")
         except Biography.DoesNotExist:
@@ -488,5 +484,4 @@ class BioChangeFormView(FormView, LoginRequiredMixin):
             messages.error(request, "Ошибка ввода данных")
             return redirect("private_settings_page")
         except KeyError:
-            print(form.data)
             return redirect("private_settings_page")
