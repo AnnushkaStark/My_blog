@@ -1,4 +1,4 @@
-from django.test import TestCase, Client
+from django.test import TestCase, Client, RequestFactory
 from .models import User, Biography
 from datetime import date
 from .forms import (
@@ -19,6 +19,7 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.hashers import make_password, check_password, reset_hashers
 from django.db.models.fields.files import ImageFieldFile
 from django.core.exceptions import ValidationError
+
 
 
 class TestUserModel(TestCase):
@@ -1209,3 +1210,5 @@ class TestChangeLinkFormView(TestCase):
         response = self.client.post(self.change_link_url, data, follow=True)
         self.assertRedirects(response, reverse("private_settings_page"))
         self.assertContains(response, "Ошибка ввода данных")
+        
+
