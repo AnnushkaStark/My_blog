@@ -28,6 +28,42 @@ DEBUG = True
 
 ALLOWED_HOSTS = ["127.0.0.1"]
 
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'level': 'WARNING',
+            'formatter': 'simple'
+        },
+        'file': {
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': './log/projet_file.log',
+            'maxBytes': 10485760,
+            'backupCount': 10,
+            'encoding': 'utf-8',
+            'level': 'DEBUG',
+            'formatter': 'verbose'
+        },
+    },
+    'formatters': {
+        'simple': {
+            'format': '%(levelname)s: %(message)s'
+        },
+        'verbose': {
+            'format': '%(asctime)s %(levelname)s %(message)s'
+        },
+    },
+    'loggers': {
+        'middleware_logger': {
+            'handlers': ['console', 'file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    }
+}
+
 
 # Application definition
 
@@ -50,6 +86,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "stories.middleware.MiddlewareLogger"
 ]
 
 ROOT_URLCONF = "TellYouStory.urls"
