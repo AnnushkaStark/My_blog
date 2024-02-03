@@ -42,3 +42,24 @@ class Biography(models.Model):
 
     def __str__(self):
         return f"{self.name} {self.town} {self.birth_date} {self.link} {self.avatar} {self.bio} {self.user.username}"
+
+
+class Story(models.Model):
+    """
+    Модель поста (истории)
+    """
+
+    title = models.CharField(max_length=100)  # Заголовок
+    topic = models.CharField(max_length=100)  # Тема
+    image = models.ImageField(upload_to="image/artices/%Y", blank=True, null=True)
+    content = models.TextField(max_length=5000, blank=True, null=True)
+    date_create = models.DateTimeField(auto_now_add=True)
+    date_update = models.DateTimeField(auto_now=True)
+    is_public = models.BooleanField(default=True)
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name_plural = "Stories"
+
+    def __str__(self):
+        return f"{self.title} {self.topic} {self.image} {self.content} {self.date_create} {self.date_update} {self.is_public} {self.author}"

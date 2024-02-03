@@ -1,5 +1,5 @@
 from django.test import TestCase, Client, RequestFactory
-from .models import User, Biography
+from .models import User, Biography, Story
 from datetime import date
 from .forms import (
     UserRegisterForm,
@@ -19,7 +19,6 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.hashers import make_password, check_password, reset_hashers
 from django.db.models.fields.files import ImageFieldFile
 from django.core.exceptions import ValidationError
-
 
 
 class TestUserModel(TestCase):
@@ -828,7 +827,7 @@ class TestBiographyModel(TestCase):
         Проверка сохренения в модели объекта биографии
         объекта биография
         """
-        self.assertTrue(isinstance(self.user, User))
+        self.assertTrue(isinstance(self.bio, Biography))
 
     def test_models_fields(self):
         """
@@ -1210,5 +1209,55 @@ class TestChangeLinkFormView(TestCase):
         response = self.client.post(self.change_link_url, data, follow=True)
         self.assertRedirects(response, reverse("private_settings_page"))
         self.assertContains(response, "Ошибка ввода данных")
-        
 
+
+class TestStoryModel(TestCase):
+    """
+    Тестирование  модели истории (статьи) пользователя
+    """
+
+    def setUp(self):
+        """
+        Метод данных тест пользоватетеля
+        и тест истории
+        """
+        self.user = User.objects.create(
+            username="testuser",
+            email="test@mail.com",
+            password="my_password##&&7Q",
+        )
+
+        self.story = Story.objects.create(
+            title="testittle",
+            topic="testtopic",
+            image="test.jpg",
+            content="somethingcontent",
+            author=self.user,
+        )
+
+    def test_story_creation(self):
+        """
+        Проверка сохренения в модели объекта истории
+        объекта истории
+        """
+        self.assertTrue(isinstance(self.story, Story))
+
+    def test_models_fields(self):
+        """
+        Проверка данных содержащихся в полях модели
+        """
+
+        self.assertIsInstance(self.story.title, str)
+        self.assertIsInstance(self.story.topic, str)
+        self.assertIsInstance(self.story.image, ImageFieldFile)
+        self.assertIsInstance(self.story.content, str)
+        self.assertIsInstance(self.story.is_public, bool)
+        self.assertIsInstance(self.story.author, User)
+
+    def test_relationship(self):
+        """
+        Тест связи модели ползователя
+          с моделью истории
+        """
+        self.assertEqual(self.story.author, self.user)
+        self.assertEqual(self.user, self.story.author)
