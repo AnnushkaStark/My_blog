@@ -14,10 +14,12 @@ from .forms import (
     AvatarChangeForm,
     ChangePasswordForm,
 )
+import decimal
 from django.urls import reverse, reverse_lazy
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.hashers import make_password, check_password, reset_hashers
 from django.db.models.fields.files import ImageFieldFile
+from django.db.models.fields import DecimalField
 from django.core.exceptions import ValidationError
 
 
@@ -1232,6 +1234,7 @@ class TestStoryModel(TestCase):
             topic="testtopic",
             image="test.jpg",
             content="somethingcontent",
+            rank = 1.0,
             author=self.user,
         )
 
@@ -1252,6 +1255,7 @@ class TestStoryModel(TestCase):
         self.assertIsInstance(self.story.image, ImageFieldFile)
         self.assertIsInstance(self.story.content, str)
         self.assertIsInstance(self.story.is_public, bool)
+        self.assertIsInstance(self.story.rank, float)
         self.assertIsInstance(self.story.author, User)
 
     def test_relationship(self):

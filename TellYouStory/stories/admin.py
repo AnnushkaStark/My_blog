@@ -43,5 +43,6 @@ class StoryAdmin(admin.ModelAdmin):
         "date_create",
         "date_update",
         "is_public",
+        "rank",
         "author",
     )

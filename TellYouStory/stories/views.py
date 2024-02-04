@@ -485,3 +485,12 @@ class BioChangeFormView(FormView, LoginRequiredMixin):
             return redirect("private_settings_page")
         except KeyError:
             return redirect("private_settings_page")
+
+
+
+class AddStoryPage(TemplateView, LoginRequiredMixin):
+    """
+    Cтраница добавления поста ( запрос пост)
+    """
+
+    template_name = "add_story.html"

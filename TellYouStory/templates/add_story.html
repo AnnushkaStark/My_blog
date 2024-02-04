@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class=" container">
+    <div class="row">
+        <div class = col12>
+            <br>
+            <h1 style="text-align: center;">Добавить историю</h1>
+            <br>
+            <form  enctype="multipart/form-data" method="post", action="#" name="add_story">
+                <div class="mb-3">
+                  <label  class="form-label">Заголовок</label>
+                  <input type="text" class="form-control" name="title">
+                </div>
+                <div class="mb-3">
+                    <label  class="form-label">Тема</label>
+                    <input type="text" class="form-control" name="topic">
+                  </div>
+                <div class="mb-3">
+                  <label class="form-label">Изображение</label>
+                  <input type="file" class="form-control" name="image">
+                </div>
+                <div class="mb-3">
+                 <label class="form-label">Контент</label>
+                  <textarea name="content"  class="form-control"></textarea>
+                </div>
+                <br>
+                <button type="submit" class="btn btn-primary">Опубликовать</button>
+              </form>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{% endblock %}
