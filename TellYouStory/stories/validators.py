@@ -1,5 +1,5 @@
 import string
-from ban_words import BAN_WORDS
+from .ban_words import BAN_WORDS
 
 
 def valid_name(first_name):

@@ -1,4 +1,4 @@
-from .models import User, Biography
+from .models import User, Biography, Story
 from django import forms
 from django.core import validators
 from django.core.validators import validate_email
@@ -7,7 +7,7 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.hashers import make_password, check_password
 from django.forms import ModelForm
 from django.contrib.auth import authenticate
-from .validators import valid_name, valid_email, valid_password
+from .validators import valid_name, valid_email, valid_password, valid_text
 
 
 class UserRegisterForm(ModelForm):
@@ -296,3 +296,40 @@ class BioChangeForm(forms.Form):
         bio = self.data["bio"]
 
         return bio
+
+
+class AddArticleForm(ModelForm):
+    """
+    Форма добавления статьи
+    """
+
+    title = forms.CharField(min_length=3, max_length=100, widget=forms.TextInput)
+    topic = forms.CharField(min_length=3, max_length=100, widget=forms.TextInput)
+    image = forms.FileField(required=False, widget=forms.FileInput)
+    content = forms.Textarea()
+
+    def clean(self):
+        """
+        Валидация  формы
+        """
+        cleaned_data = super().clean()
+        title = cleaned_data.get("title")
+        topic = cleaned_data.get("topic")
+        image = cleaned_data.get("image")
+        content = cleaned_data.get("content")
+
+        if (title and topic and image) or (title and topic and content):
+            if (
+                valid_text(title) == "is_valid"
+                and valid_text(topic) == "is_valid"
+                and valid_text(content) == "is_valid"
+            ):
+                return cleaned_data
+            raise forms.ValidationError("Контент не проходит цензуру")
+        raise forms.ValidationError(
+            "Поле изображение или поле контент должно быть заполнено"
+        )
+
+    class Meta:
+        model = Story
+        fields = ["title", "topic", "content"]

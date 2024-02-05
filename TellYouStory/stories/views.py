@@ -16,12 +16,13 @@ from .forms import (
     FormLinkChange,
     AvatarChangeForm,
     BioChangeForm,
+    AddArticleForm,
 )
 from django.contrib.auth.hashers import make_password, check_password, reset_hashers
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .models import User, Biography
+from .models import User, Biography, Story
 
 
 # Create your views here.
@@ -162,6 +163,7 @@ class UserPageView(ListView, LoginRequiredMixin):
     """
     Личный кабинет пользователя запрос GET
     """
+
     def get(self, request, *args, **kwargs):
         """
         Вывод биографии пользователя на страницу
@@ -487,10 +489,29 @@ class BioChangeFormView(FormView, LoginRequiredMixin):
             return redirect("private_settings_page")
 
 
-
 class AddStoryPage(TemplateView, LoginRequiredMixin):
     """
     Cтраница добавления поста ( запрос пост)
     """
 
     template_name = "add_story.html"
+
+
+class AddStoryFormView(FormView, LoginRequiredMixin):
+    """
+    Представление формы добавления статьи
+    """
+
+    def post(self, request):
+        """
+        Функция добвления поста
+        """
+        form = AddArticleForm(request.POST, request.FILES)
+        if form.is_valid():
+            story = form.save(commit=False)
+            story.author = request.user
+            story.save()
+            messages.success(request, "История успешно опубликована")
+            return redirect("add_story_page")
+        messages.error(request, "Контент не прошел модерацию")
+        return redirect("add_story_page")

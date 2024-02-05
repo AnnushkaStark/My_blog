@@ -37,5 +37,6 @@ urlpatterns = [
     path("link_change/", views.ChangeLinkFormView.as_view(), name="link_change"),
     path("avatar_change/", views.AvatarFormView.as_view(), name="change_avatar"),
     path("change_bio/", views.BioChangeFormView.as_view(), name="bio_change"),
-    path("add_story/", views.AddStoryPage.as_view(), name="add_story_page")
+    path("add_story/", views.AddStoryPage.as_view(), name="add_story_page"),
+    path("add_story_form/", views.AddStoryFormView.as_view(), name="add_story_form"),
 ]

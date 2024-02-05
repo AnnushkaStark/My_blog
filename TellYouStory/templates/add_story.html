@@ -8,7 +8,9 @@
             <br>
             <h1 style="text-align: center;">Добавить историю</h1>
             <br>
-            <form  enctype="multipart/form-data" method="post", action="#" name="add_story">
+            <form  enctype="multipart/form-data" method="post", action="{% url 'add_story_form' %}" name="add_story">
+              {% csrf_token %}
+                {{ form.as_p }}
                 <div class="mb-3">
                   <label  class="form-label">Заголовок</label>
                   <input type="text" class="form-control" name="title">
