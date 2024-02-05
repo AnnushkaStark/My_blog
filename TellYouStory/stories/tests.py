@@ -13,6 +13,7 @@ from .forms import (
     BirthDateForm,
     AvatarChangeForm,
     ChangePasswordForm,
+    AddArticleForm,
 )
 import decimal
 from django.urls import reverse, reverse_lazy
@@ -1297,3 +1298,123 @@ class TestAddStoryPageView(TestCase):
         response = self.client.get(self.add_story_url)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed("add_story.html")
+
+
+class TestAddStoryForm(TestCase):
+    """
+    Тестирование формы изменения ссылки на соцсеть
+    или бусти в профиле пользователя
+    """
+
+    def test_valid_form(self):
+        """
+        Тест валидная форма
+        """
+
+        data = {
+            "title": "test_title",
+            "topic": "test_topic",
+            "image": "test.jpg",
+            "content": "test.content",   
+        }
+        form = AddArticleForm(data=data)
+        self.assertTrue(form.is_valid())
+
+    def test_invalid_form_tile(self):
+        """
+        Тест  не валидная форма
+        не заполнено название
+        """
+
+        data = {
+            "title": "",
+            "topic": "test_topic",
+            "image": "test.jpg",
+            "content": "test.content",   
+        }
+        form = AddArticleForm(data=data)
+        self.assertFalse(form.is_valid())
+        self.assertEqual(form.errors["title"], ["Обязательное поле."])
+
+    def test_invalid_form_topic(self):
+        """
+        Тест  не валидная форма
+        не заполнена тема
+        """
+
+        data = {
+            "title": "test_title",
+            "topic": "",
+            "image": "test.jpg",
+            "content": "test.content",   
+        }
+        form = AddArticleForm(data=data)
+        self.assertFalse(form.is_valid())
+        self.assertEqual(form.errors["topic"], ["Обязательное поле."])
+
+
+    def test_invalid_form_no_content(self):
+        """
+        Тест  не валидная форма
+        не заполнены обя поля контент
+        и фотография
+        """
+
+        data = {
+            "title": "test_title",
+            "topic": "test_topic",
+            "image": "",
+            "content": "",   
+        }
+        form = AddArticleForm(data=data)
+        self.assertFalse(form.is_valid())
+
+
+    def test_invalid_form_ban_title(self):
+        """
+        Тест  не валидная форма
+        нецензурное слово в заголовке
+        """
+
+        data = {
+            "title": "гонорея",
+            "topic": "test_topic",
+            "image": "tast.jpg",
+            "content": "test_content",   
+        }
+        form = AddArticleForm(data=data)
+        self.assertFalse(form.is_valid())
+
+    def test_invalid_form_ban_tpoic(self):
+        """
+        Тест  не валидная форма
+        нецензурное слово в теме
+        """
+
+        data = {
+            "title": "test_title",
+            "topic": "гонорея",
+            "image": "tast.jpg",
+            "content": "test_content",   
+        }
+        form = AddArticleForm(data=data)
+        self.assertFalse(form.is_valid())
+
+    def test_invalid_form_ban_content(self):
+        """
+        Тест  не валидная форма
+        нецензурное слово в теме
+        """
+
+        data = {
+            "title": "test_title",
+            "topic": "test_topic",
+            "image": "tast.jpg",
+            "content": "гонорея",   
+        }
+        form = AddArticleForm(data=data)
+        self.assertFalse(form.is_valid())
+
+        #form = FormLinkChange(data=data)
+        #self.assertFalse(form.is_valid())
+        #self.assertEqual(form.errors["link"], ["Введите правильный URL."])
