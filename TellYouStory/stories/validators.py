@@ -1,3 +1,7 @@
+import string
+from ban_words import BAN_WORDS
+
+
 def valid_name(first_name):
     """
     Проверка валидности имени пользователя
@@ -83,7 +87,7 @@ def valid_email(email):
     if email[0] != "." and email[-1] != ".":
         counter += 1
     if test_mail_2.isalnum():
-        counter +=1
+        counter += 1
     if counter == 9:
         return "is_valid"
     else:
@@ -121,11 +125,28 @@ def valid_password(password):
         and counter_lower >= 1
         and counter_upper >= 1
         and counter_uncorrect_chars == 0
-        and len(password) >= 6 
+        and len(password) >= 6
         and len(password) <= 64
-        ):
-
+    ):
         return "is_valid"
     return "Invalid_password"
+
+
+def valid_text(text):
+    """
+    Функция фильтрации бранных
+    в текста
+    """
+    flag = True
+    clean_text = set(text.translate(str.maketrans("", "", string.punctuation)).split())
+    for word in clean_text:
+        if word.lower() in BAN_WORDS:
+            flag = False
+            break
+
+    if flag:
+        return "is_valid"
+    return "Invalid_text"
+
 
 
