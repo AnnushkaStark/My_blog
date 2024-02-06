@@ -51,7 +51,7 @@ class Story(models.Model):
 
     title = models.CharField(max_length=100)  # Заголовок
     topic = models.CharField(max_length=100)  # Тема
-    image = models.ImageField(upload_to="image/artices/%Y", blank=True, null=True)
+    image = models.ImageField(upload_to="image/articles/%Y", blank=True, null=True)
     content = models.TextField(max_length=5000, blank=True, null=True)
     date_create = models.DateTimeField(auto_now_add=True)
     date_update = models.DateTimeField(auto_now=True)

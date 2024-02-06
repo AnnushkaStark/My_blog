@@ -332,4 +332,4 @@ class AddArticleForm(ModelForm):
 
     class Meta:
         model = Story
-        fields = ["title", "topic", "content"]
+        fields = ["title", "topic", "image", "content"]
