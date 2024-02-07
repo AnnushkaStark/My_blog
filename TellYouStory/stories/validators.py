@@ -1,5 +1,7 @@
 import string
 from .ban_words import BAN_WORDS
+import os
+from PIL import Image
 
 
 def valid_name(first_name):
@@ -149,4 +151,12 @@ def valid_text(text):
     return "Invalid_text"
 
 
-
+def valid_image(file):
+    """
+    Функция валидации изображения
+    """
+    try:
+        Image.open(file)
+        return "is_valid"
+    except IOError:
+        return "invalid_file"

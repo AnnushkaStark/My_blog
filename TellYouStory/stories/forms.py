@@ -7,7 +7,7 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.hashers import make_password, check_password
 from django.forms import ModelForm
 from django.contrib.auth import authenticate
-from .validators import valid_name, valid_email, valid_password, valid_text
+from .validators import valid_name, valid_email, valid_password, valid_text,valid_image
 
 
 class UserRegisterForm(ModelForm):
@@ -319,13 +319,17 @@ class AddArticleForm(ModelForm):
         content = cleaned_data.get("content")
 
         if (title and topic and image) or (title and topic and content):
-            if (
-                valid_text(title) == "is_valid"
-                and valid_text(topic) == "is_valid"
-                and valid_text(content) == "is_valid"
-            ):
-                return cleaned_data
-            raise forms.ValidationError("Контент не проходит цензуру")
+            try:
+                if (
+                    valid_text(title) == "is_valid"
+                    and valid_text(topic) == "is_valid"
+                    and valid_text(content) == "is_valid"
+                    and valid_image(image) =="is_valid"
+                ):
+                    return cleaned_data
+                raise forms.ValidationError("Контент не проходит цензуру")
+            except AttributeError:
+                return cleaned_data  
         raise forms.ValidationError(
             "Поле изображение или поле контент должно быть заполнено"
         )
