@@ -1415,6 +1415,7 @@ class TestAddStoryForm(TestCase):
         form = AddArticleForm(data=data)
         self.assertFalse(form.is_valid())
 
+    
 
 class TestAddArticleFormView(TestCase):
     """

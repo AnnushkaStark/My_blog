@@ -273,13 +273,18 @@ class AvatarChangeForm(forms.Form):
 
     avatar = forms.FileField(required=False, widget=forms.FileInput)
 
-    def avatar_clean(self):
+    def clean(self):
         """
         получение фото профиля пользователя
         """
-        avatar = self.cleaned_data["avatar"]
-
-        return avatar
+        cleaned_data = super().clean()
+        avatar = self.cleaned_data.get("avatar")
+        try:
+            if valid_image(avatar) =="is_valid":
+                return cleaned_data
+            raise forms.ValidationError("Некорректное разрешение файла")
+        except AttributeError:
+            return cleaned_data
 
 
 class BioChangeForm(forms.Form):
