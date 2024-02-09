@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import User, Biography, Story
+from .models import User, Biography, Story, FeedBackPublic, FeedBackUsers
 
 # Register your models here.
 
@@ -46,3 +46,22 @@ class StoryAdmin(admin.ModelAdmin):
         "rank",
         "author",
     )
+
+@admin.register(FeedBackUsers)
+class FeedBackUsersAdmin(admin.ModelAdmin):
+    """
+    Регистрация модели писем обратной
+    связи от зарегистрированных пользователей
+    """
+    list_display= ("topic","description","date","user")
+
+
+
+@admin.register(FeedBackPublic)
+class FeedBackPublicAdmin(admin.ModelAdmin):
+    """
+    Регистрация модели писем обратной
+    связи от не зарегистрированных 
+    пользователей
+    """
+    list_display =("name","email", "topic","text","date")

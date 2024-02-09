@@ -69,11 +69,36 @@ class Story(models.Model):
 class FeedBackUsers(models.Model):
     """
     Модель сохранени писем по обратной связи
+    от зарегистрированных пользователей сайта
     """
     topic = models.CharField(max_length=100)
-    description = models.TextField()
-    date = models.DateTimeField(auto_now_add = True)
-    user = models.ForeignKey(User,on_delete = models.CASCADE) 
+    description = models.TextField(max_length=3000)
+    date = models.DateTimeField(auto_now_add=True)
+    user = models.ForeignKey(User,on_delete=models.CASCADE) 
     
     class Meta:
         verbose_name_plural = "FeedBackUsers"
+
+    def __str__(self):
+
+        return f"{self.topic} {self.description} {self.date} {self.user}"
+
+
+class FeedBackPublic(models.Model):
+    """
+    Модель сохранения писем по 
+    обратной связи от пользователей
+    не зарегистрированных на сайте 
+    """
+    name = models.CharField(max_length=50)
+    email = models.EmailField()
+    topic = models.CharField(max_length=100)
+    text = models.TextField(max_length=3000)
+    date = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name_plural = "FeedBackPublic"
+
+    def __str__(self):
+
+        return f"{self.name} {self.email} {self.topic} {self.text} {self.date}"
