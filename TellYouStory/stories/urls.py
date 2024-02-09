@@ -39,4 +39,5 @@ urlpatterns = [
     path("change_bio/", views.BioChangeFormView.as_view(), name="bio_change"),
     path("add_story/", views.AddStoryPage.as_view(), name="add_story_page"),
     path("add_story_form/", views.AddStoryFormView.as_view(), name="add_story_form"),
+    path("feed_back/", views.FeedBackPageView.as_view(), name="feed_back_page"),
 ]

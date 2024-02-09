@@ -515,3 +515,11 @@ class AddStoryFormView(FormView, LoginRequiredMixin):
             return redirect("add_story_page")
         messages.error(request, "Контент не прошел модерацию")
         return redirect("add_story_page")
+    
+
+class FeedBackPageView(TemplateView):
+    """
+    Представление страницы обратной связи
+    """
+
+    template_name = "feed_back.html"

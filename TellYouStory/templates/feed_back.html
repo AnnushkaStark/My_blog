@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class=" container">
+    <div class="row">
+        <div class = col12>
+            <br>
+            <h1 style="text-align: center;">Напишите нам</h1>
+            {% if user.is_authenticated %}
+            <br>
+            <form  enctype="multipart/form-data" method="post", action="#" name="#">
+              {% csrf_token %}
+                {{ form.as_p }}
+                
+                <div class="mb-3">
+                    <label  class="form-label">Тема</label>
+                    <input type="text" class="form-control" name="topic">
+                  </div>
+                <div class="mb-3">
+                 <label class="form-label">Текст Обращения</label>
+                  <textarea name="content"  class="form-control"></textarea>
+                </div>
+                <br>
+                <button type="submit" class="btn btn-primary">Отправить</button>
+              </form>
+              {% else %}
+              <form  enctype="multipart/form-data" method="post", action="{% url 'add_story_form' %}" name="add_story">
+                {% csrf_token %}
+                  {{ form.as_p }}
+                  <div class="mb-3">
+                    <label  class="form-label">Тема</label>
+                    <input type="text" class="form-control" name="title">
+                  </div>
+                  <div class="mb-3">
+                      <label  class="form-label">Элекронная почта</label>
+                      <input type="text" class="form-control" name="topic">
+                  </div>
+                  <div class="mb-3">
+                   <label class="form-label">Текст обращения</label>
+                    <textarea name="content"  class="form-control"></textarea>
+                  </div>
+                  <br>
+                  <button type="submit" class="btn btn-primary">Отправить</button>
+                </form>
+                {% endif %}
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{% endblock %}

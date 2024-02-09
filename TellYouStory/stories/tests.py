@@ -1470,3 +1470,62 @@ class TestAddArticleFormView(TestCase):
         response = self.client.post(self.add_story_url, data, follow=True)
         self.assertRedirects(response, reverse("add_story_page"))
         self.assertContains(response, "Контент не прошел модерацию")
+
+
+
+class TestFeedBackUserPageView(TestCase):
+    """
+    Тестирование доступности страницы 
+    добавления обратной связи 
+    для аутентифицированного пользователя
+    """
+
+    def setUp(self):
+        """
+        Cоздание тест пользователя
+        """
+        self.client = Client()
+        self.url = reverse("user_page")
+        self.add_feed_back_url = reverse("feed_back_page")
+        self.user = User.objects.create_user(
+            username="testus", email="mytest@mail.com", password="123testpassS@"
+        )
+
+        self.client.login(username="testus", password="123testpassS@")
+
+    def test_add_feed_page_view(self):
+        """
+        Тестирование доступности страницы 
+        оставления обратной связи
+        """
+        response = self.client.get(reverse("user_page"))
+        self.assertEqual(response.status_code, 200)
+        response = self.client.get(self.add_feed_back_url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed("feed_back.html")
+
+
+
+class TestFeedBackPublicView(TestCase):
+    """
+    Тестирование доступности страницы 
+    обратной связи для не аутентифицированного
+    пользователя
+    """
+
+    def setUp(self):
+        """
+        Создание тест пользователя
+        """
+        self.client = Client()
+        self.url = reverse("feed_back_page") 
+
+    def test_feed_back_view(self):
+        """
+        Проверка доступности страницы 
+        обратной связи
+        """
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "feed_back.html")
+

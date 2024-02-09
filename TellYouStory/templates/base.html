@@ -29,7 +29,7 @@
                                 <a class="nav-link active" aria-current="page" href="{% url 'login_page' %}">Войти</a>
                               </li>
                               <li class="nav-item">
-                                <a class="nav-link active" href="#">Напишите нам</a>
+                                <a class="nav-link active" href="{% url 'feed_back_page' %}">Напишите нам</a>
                               </li>
                                {% if user.is_authenticated %}
                               <li class="nav-item">
