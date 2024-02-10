@@ -1,5 +1,5 @@
 from django.test import TestCase, Client, RequestFactory
-from .models import User, Biography, Story
+from .models import User, Biography, Story, FeedBackPublic, FeedBackUsers
 from datetime import date
 from .forms import (
     UserRegisterForm,
@@ -1235,7 +1235,7 @@ class TestStoryModel(TestCase):
             topic="testtopic",
             image="test.jpg",
             content="somethingcontent",
-            rank = 1.0,
+            rank=1.0,
             author=self.user,
         )
 
@@ -1268,7 +1268,6 @@ class TestStoryModel(TestCase):
         self.assertEqual(self.user, self.story.author)
 
 
-
 class TestAddStoryPageView(TestCase):
     """
     Тестирование представления
@@ -1290,7 +1289,7 @@ class TestAddStoryPageView(TestCase):
 
     def test_add_story_page_view(self):
         """
-        Тестирование доступности страницы 
+        Тестирование доступности страницы
         добавления поста
         """
         response = self.client.get(reverse("user_page"))
@@ -1315,7 +1314,7 @@ class TestAddStoryForm(TestCase):
             "title": "test_title",
             "topic": "test_topic",
             "image": "test.jpg",
-            "content": "test.content",   
+            "content": "test.content",
         }
         form = AddArticleForm(data=data)
         self.assertTrue(form.is_valid())
@@ -1330,7 +1329,7 @@ class TestAddStoryForm(TestCase):
             "title": "",
             "topic": "test_topic",
             "image": "test.jpg",
-            "content": "test.content",   
+            "content": "test.content",
         }
         form = AddArticleForm(data=data)
         self.assertFalse(form.is_valid())
@@ -1346,12 +1345,11 @@ class TestAddStoryForm(TestCase):
             "title": "test_title",
             "topic": "",
             "image": "test.jpg",
-            "content": "test.content",   
+            "content": "test.content",
         }
         form = AddArticleForm(data=data)
         self.assertFalse(form.is_valid())
         self.assertEqual(form.errors["topic"], ["Обязательное поле."])
-
 
     def test_invalid_form_no_content(self):
         """
@@ -1364,11 +1362,10 @@ class TestAddStoryForm(TestCase):
             "title": "test_title",
             "topic": "test_topic",
             "image": "",
-            "content": "",   
+            "content": "",
         }
         form = AddArticleForm(data=data)
         self.assertFalse(form.is_valid())
-
 
     def test_invalid_form_ban_title(self):
         """
@@ -1380,7 +1377,7 @@ class TestAddStoryForm(TestCase):
             "title": "гонорея",
             "topic": "test_topic",
             "image": "tast.jpg",
-            "content": "test_content",   
+            "content": "test_content",
         }
         form = AddArticleForm(data=data)
         self.assertFalse(form.is_valid())
@@ -1395,7 +1392,7 @@ class TestAddStoryForm(TestCase):
             "title": "test_title",
             "topic": "гонорея",
             "image": "tast.jpg",
-            "content": "test_content",   
+            "content": "test_content",
         }
         form = AddArticleForm(data=data)
         self.assertFalse(form.is_valid())
@@ -1410,18 +1407,18 @@ class TestAddStoryForm(TestCase):
             "title": "test_title",
             "topic": "test_topic",
             "image": "tast.jpg",
-            "content": "гонорея",   
+            "content": "гонорея",
         }
         form = AddArticleForm(data=data)
         self.assertFalse(form.is_valid())
 
-    
 
 class TestAddArticleFormView(TestCase):
     """
     Тестирование представления формы
     добавления поста
     """
+
     def setUp(self):
         """
         Cоздание тест пользователя
@@ -1434,7 +1431,6 @@ class TestAddArticleFormView(TestCase):
         )
         self.client.login(username="testus", password="123testpassS@")
 
-
     def test_add_srory_sucsess(self):
         """
         Успешное добвление статьи
@@ -1443,9 +1439,9 @@ class TestAddArticleFormView(TestCase):
             "title": "test_title",
             "topic": "test_topic",
             "image": "tast.jpg",
-            "content": "test_content",   
+            "content": "test_content",
         }
-        
+
         response = self.client.get(reverse("user_page"))
         self.assertEqual(response.status_code, 200)
         response = self.client.post(self.add_story_url, data)
@@ -1462,9 +1458,9 @@ class TestAddArticleFormView(TestCase):
             "title": "",
             "topic": "test_topic",
             "image": "tast.jpg",
-            "content": "гонорея",   
+            "content": "гонорея",
         }
-        
+
         response = self.client.get(reverse("user_page"))
         self.assertEqual(response.status_code, 200)
         response = self.client.post(self.add_story_url, data, follow=True)
@@ -1472,11 +1468,10 @@ class TestAddArticleFormView(TestCase):
         self.assertContains(response, "Контент не прошел модерацию")
 
 
-
 class TestFeedBackUserPageView(TestCase):
     """
-    Тестирование доступности страницы 
-    добавления обратной связи 
+    Тестирование доступности страницы
+    добавления обратной связи
     для аутентифицированного пользователя
     """
 
@@ -1495,7 +1490,7 @@ class TestFeedBackUserPageView(TestCase):
 
     def test_add_feed_page_view(self):
         """
-        Тестирование доступности страницы 
+        Тестирование доступности страницы
         оставления обратной связи
         """
         response = self.client.get(reverse("user_page"))
@@ -1505,10 +1500,9 @@ class TestFeedBackUserPageView(TestCase):
         self.assertTemplateUsed("feed_back.html")
 
 
-
 class TestFeedBackPublicView(TestCase):
     """
-    Тестирование доступности страницы 
+    Тестирование доступности страницы
     обратной связи для не аутентифицированного
     пользователя
     """
@@ -1518,14 +1512,99 @@ class TestFeedBackPublicView(TestCase):
         Создание тест пользователя
         """
         self.client = Client()
-        self.url = reverse("feed_back_page") 
+        self.url = reverse("feed_back_page")
 
     def test_feed_back_view(self):
         """
-        Проверка доступности страницы 
+        Проверка доступности страницы
         обратной связи
         """
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "feed_back.html")
+
+
+class TestFeedBackPublicModel(TestCase):
+    """
+    Тестирование модели
+    писем обратной связи
+    от не авторизованных
+    пользователей
+    """
+
+    def setUp(self):
+        """
+        создание тестового
+        обращения
+        """
+        self.feedback = FeedBackPublic.objects.create(
+            name="testname", email="test@mail.ru", topic="test_topic", text="testtext"
+        )
+
+    def test_feed_back_creation(self):
+        """
+        Проверка сохренения в модели объекта 
+        обращения от неаутентифицированного пользователя
+        как объекта класса  FeedBackPublic
+        """
+        self.assertTrue(isinstance(self.feedback, FeedBackPublic))
+
+
+    def test_models_fields(self):
+        """
+        Проверка данных содержащихся в полях модели
+        """
+
+        self.assertIsInstance(self.feedback.name, str)
+        self.assertIsInstance(self.feedback.email, str)
+        self.assertIsInstance(self.feedback.topic, str)
+        self.assertIsInstance(self.feedback.text, str)
+        
+
+
+class TestFeedBackUserModel(TestCase):
+    """
+    Тестирование модели писем 
+    обратной связи от аутентифицированных
+    пользователей
+    """
+    def setUp(self):
+        """
+        Метод данных тест пользоватетеля
+        и тест письма обратной связи
+        """
+        self.user = User.objects.create(
+            username="testuser",
+            email="test@mail.com",
+            password="my_password##&&7Q",
+        )
+        
+        self.feedback = FeedBackUsers.objects.create(
+              topic="test_topic", description="testtext",user = self.user
+        )
+
+    def test_feed_back_creation(self):
+        """
+        Проверка сохренения в модели объекта 
+        обращения от неаутентифицированного пользователя
+        как объекта класса  FeedBackUsers
+        """
+        self.assertTrue(isinstance(self.feedback, FeedBackUsers))
+
+    def test_models_fields(self):
+        """
+        Проверка данных содержащихся в полях модели
+        """
+
+        self.assertIsInstance(self.feedback.topic, str)
+        self.assertIsInstance(self.feedback.description, str)
+        self.assertIsInstance(self.feedback.user, User)
+        
+    def test_relationship(self):
+        """
+        Тест связи модели ползователя
+          с моделью обращения
+        """
+        self.assertEqual(self.feedback.user, self.user)
+        self.assertEqual(self.user, self.feedback.user)
 

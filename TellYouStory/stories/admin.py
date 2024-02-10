@@ -47,21 +47,23 @@ class StoryAdmin(admin.ModelAdmin):
         "author",
     )
 
+
 @admin.register(FeedBackUsers)
 class FeedBackUsersAdmin(admin.ModelAdmin):
     """
     Регистрация модели писем обратной
     связи от зарегистрированных пользователей
     """
-    list_display= ("topic","description","date","user")
 
+    list_display = ("topic", "description", "date", "user")
 
 
 @admin.register(FeedBackPublic)
 class FeedBackPublicAdmin(admin.ModelAdmin):
     """
     Регистрация модели писем обратной
-    связи от не зарегистрированных 
+    связи от не зарегистрированных
     пользователей
     """
-    list_display =("name","email", "topic","text","date")
+
+    list_display = ("name", "email", "topic", "text", "date")
