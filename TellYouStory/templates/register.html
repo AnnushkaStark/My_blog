@@ -5,6 +5,9 @@
 <div class="container">
     <div class="row">
         <div class =col12>
+          <br>
+            <h1 style="text-align: center;">Регистрация</h1>
+            <br>
             <form name="registerform" action="{% url 'register_form' %}" method="post">
                 {% csrf_token %}
                 {{ form.as_p }}
