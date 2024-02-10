@@ -25,7 +25,7 @@
                 <button type="submit" class="btn btn-primary">Отправить</button>
               </form>
               {% else %}
-              <form  enctype="multipart/form-data" method="post", action="#" name="#">
+              <form  enctype="multipart/form-data" method="post", action="{% url 'feed_back_public' %}" name="#">
                 {% csrf_token %}
                   {{ form.as_p }}
                   <div class="mb-3">
@@ -42,7 +42,7 @@
                 </div>
                   <div class="mb-3">
                    <label class="form-label">Текст обращения</label>
-                    <textarea name="content"  class="form-control" name = "text"></textarea>
+                    <textarea   class="form-control" name = "text"></textarea>
                   </div>
                   <br>
                   <button type="submit" class="btn btn-primary">Отправить</button>

@@ -40,5 +40,6 @@ urlpatterns = [
     path("add_story/", views.AddStoryPage.as_view(), name="add_story_page"),
     path("add_story_form/", views.AddStoryFormView.as_view(), name="add_story_form"),
     path("feed_back/", views.FeedBackPageView.as_view(), name="feed_back_page"),
-    path("feed_back_user/",views.FeedBackUserFormView.as_view(), name="feed_back_user"),
+    path("feed_back_user/", views.FeedBackUserFormView.as_view(), name="feed_back_user"),
+    path("feed_back_public/",views.FeedBackPublicFormView.as_view(), name="feed_back_public"),
 ]

@@ -544,8 +544,26 @@ class FeedBackUserFormView(FormView,LoginRequiredMixin):
             feedback.save()
             messages.success(request, "Обращение отправлено, ответим вам на электронную почту")
             return redirect("feed_back_page")
-        print(form.data)
-        print(form.errors)
+        messages.error(request, "Обращение не прошло модерацию")
+        return redirect("feed_back_page")
+    
+
+class FeedBackPublicFormView(FormView):
+    """
+    Представление формы отправки обратной
+    связи для не аутентифицированного пользователя
+    """
+    def post(self, request):
+        """
+        Функция отправления обратной
+        связи
+        """
+        form = FeedbackPublicForm(request.POST, request.FILES)
+        if form.is_valid():
+            feedback = form.save(commit=False)
+            feedback.save()
+            messages.success(request, "Обращение отправлено, ответим вам на электронную почту")
+            return redirect("feed_back_page")
         messages.error(request, "Обращение не прошло модерацию")
         return redirect("feed_back_page")
             
