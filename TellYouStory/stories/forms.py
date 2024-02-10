@@ -7,7 +7,7 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.hashers import make_password, check_password
 from django.forms import ModelForm
 from django.contrib.auth import authenticate
-from .validators import valid_name, valid_email, valid_password, valid_text,valid_image
+from .validators import valid_name, valid_email, valid_password, valid_text, valid_image
 
 
 class UserRegisterForm(ModelForm):
@@ -280,7 +280,7 @@ class AvatarChangeForm(forms.Form):
         cleaned_data = super().clean()
         avatar = self.cleaned_data.get("avatar")
         try:
-            if valid_image(avatar) =="is_valid":
+            if valid_image(avatar) == "is_valid":
                 return cleaned_data
             raise forms.ValidationError("Некорректное разрешение файла")
         except AttributeError:
@@ -329,12 +329,12 @@ class AddArticleForm(ModelForm):
                     valid_text(title) == "is_valid"
                     and valid_text(topic) == "is_valid"
                     and valid_text(content) == "is_valid"
-                    and valid_image(image) =="is_valid"
+                    and valid_image(image) == "is_valid"
                 ):
                     return cleaned_data
                 raise forms.ValidationError("Контент не проходит цензуру")
             except AttributeError:
-                return cleaned_data  
+                return cleaned_data
         raise forms.ValidationError(
             "Поле изображение или поле контент должно быть заполнено"
         )
@@ -346,10 +346,11 @@ class AddArticleForm(ModelForm):
 
 class FeedBackUserForm(forms.ModelForm):
     """
-    Форма писем обратной ствязи от 
+    Форма писем обратной ствязи от
     аутентифицированных пользователей
     """
-    topic = forms.CharField(widget=forms.TextInput, min_length=3,max_length=50)
+
+    topic = forms.CharField(widget=forms.TextInput, min_length=3, max_length=50)
     description = forms.Textarea()
 
     def clean(self):
@@ -360,16 +361,56 @@ class FeedBackUserForm(forms.ModelForm):
         topic = cleaned_data.get("topic")
         description = cleaned_data.get("description")
         if topic and description:
-            if valid_text(topic) == "is_valid" and valid_text(description) =="is_valid":
+            if (
+                valid_text(topic) == "is_valid"
+                and valid_text(description) == "is_valid"
+            ):
                 return cleaned_data
             raise forms.ValidationError("Данные не прошли модерацию")
+        raise forms.ValidationError("Поля не могут быть пустыми")
+
+    class Meta:
+        model = FeedBackUsers
+        fields = [
+            "topic",
+            "description",
+        ]
+
+
+class FeedbackPublicForm(forms.ModelForm):
+    """
+    Форма отправления обратной связи
+    для не аутентифицированного пользователя
+    """
+
+    name = forms.CharField(widget=forms.TextInput, min_length=3, max_length=50)
+    email = forms.EmailField(widget=forms.EmailInput, min_length=6, max_length=15)
+    topic = forms.CharField(widget=forms.TimeInput, min_length=3, max_length=50)
+    text = forms.Textarea()
+
+    def clean(self):
+        """
+        Валидация данных
+        """
+        cleaned_data = super().clean()
+        name = cleaned_data.get("name")
+        email = cleaned_data.get("email")
+        topic = cleaned_data.get("topic")
+        text = cleaned_data.get("text")
+        if name and email and topic and text:
+            if (
+                valid_text(name) == "is_valid"
+                and valid_text(email) == "is_valid"
+                and valid_text(topic) == "is_valid"
+                and valid_text(text) == "is_valid"
+            ):
+                if valid_email(email):
+                    return cleaned_data
+                raise forms.ValidationError("Ведите корректную электронну почту")
+            raise forms.ValidationError("Обращение не прошло модерацию")
         raise forms.ValidationError("Поля не могут быть пустыми")
     
     class Meta:
 
-        model = FeedBackUsers
-        fields = ["topic", "description",]
-    
-        
-
-
+        model = FeedBackPublic
+        fields = ["name","email","topic","text"]

@@ -15,6 +15,7 @@ from .forms import (
     ChangePasswordForm,
     AddArticleForm,
     FeedBackUserForm,
+    FeedbackPublicForm,
 )
 import decimal
 from django.urls import reverse, reverse_lazy
@@ -1544,12 +1545,11 @@ class TestFeedBackPublicModel(TestCase):
 
     def test_feed_back_creation(self):
         """
-        Проверка сохренения в модели объекта 
+        Проверка сохренения в модели объекта
         обращения от неаутентифицированного пользователя
         как объекта класса  FeedBackPublic
         """
         self.assertTrue(isinstance(self.feedback, FeedBackPublic))
-
 
     def test_models_fields(self):
         """
@@ -1560,15 +1560,15 @@ class TestFeedBackPublicModel(TestCase):
         self.assertIsInstance(self.feedback.email, str)
         self.assertIsInstance(self.feedback.topic, str)
         self.assertIsInstance(self.feedback.text, str)
-        
 
 
 class TestFeedBackUserModel(TestCase):
     """
-    Тестирование модели писем 
+    Тестирование модели писем
     обратной связи от аутентифицированных
     пользователей
     """
+
     def setUp(self):
         """
         Метод данных тест пользоватетеля
@@ -1579,14 +1579,14 @@ class TestFeedBackUserModel(TestCase):
             email="test@mail.com",
             password="my_password##&&7Q",
         )
-        
+
         self.feedback = FeedBackUsers.objects.create(
-              topic="test_topic", description="testtext",user = self.user
+            topic="test_topic", description="testtext", user=self.user
         )
 
     def test_feed_back_creation(self):
         """
-        Проверка сохренения в модели объекта 
+        Проверка сохренения в модели объекта
         обращения от неаутентифицированного пользователя
         как объекта класса  FeedBackUsers
         """
@@ -1600,7 +1600,7 @@ class TestFeedBackUserModel(TestCase):
         self.assertIsInstance(self.feedback.topic, str)
         self.assertIsInstance(self.feedback.description, str)
         self.assertIsInstance(self.feedback.user, User)
-        
+
     def test_relationship(self):
         """
         Тест связи модели ползователя
@@ -1610,13 +1610,13 @@ class TestFeedBackUserModel(TestCase):
         self.assertEqual(self.user, self.feedback.user)
 
 
-
 class TestFeedbackUserForm(TestCase):
     """
     Тестирование формы обратной
-    связи аутентифицированного 
+    связи аутентифицированного
     пользователя
     """
+
     def test_valid_form(self):
         """
         Тест валидная форма
@@ -1671,7 +1671,7 @@ class TestFeedbackUserForm(TestCase):
         self.assertFalse(form.is_valid())
         self.assertEqual(form.errors["topic"], ["Обязательное поле."])
         self.assertEqual(form.errors["description"], ["Обязательное поле."])
-    
+
     def test_ban_topic(self):
         """
         Тест не валидная форма
@@ -1697,4 +1697,172 @@ class TestFeedbackUserForm(TestCase):
         }
         form = FeedBackUserForm(data=data)
         self.assertFalse(form.is_valid())
-        
+
+
+class TestFeedbackPublicForm(TestCase):
+    """
+    Тестирование формы обратной
+    связи  не аутентифицированного
+    пользователя
+    """
+
+    def test_valid_form(self):
+        """
+        Тест валидная форма
+        """
+
+        data = {
+            "name":"test_name",
+            "email":"test@mail.com",
+            "topic": "test_topic",
+            "text": "test.content",
+        }
+        form = FeedbackPublicForm(data=data)
+        self.assertTrue(form.is_valid())
+    
+    def test_blank_name(self):
+        """
+        Тест не валидная форма
+        не заполнено имя
+        """
+
+        data = {
+            "name":"",
+            "email":"test@mail.com",
+            "topic": "test_topic",
+            "text": "test.content",
+        }
+        form = FeedbackPublicForm(data=data)
+        self.assertFalse(form.is_valid())
+        self.assertEqual(form.errors["name"], ["Обязательное поле."])
+
+    def test_blank_email(self):
+        """
+        Тест не валидная форма
+        не заполнено имя
+        """
+
+        data = {
+            "name":"testname",
+            "email":"",
+            "topic": "test_topic",
+            "text": "test.content",
+        }
+        form = FeedbackPublicForm(data=data)
+        self.assertFalse(form.is_valid())
+        self.assertEqual(form.errors["email"], ["Обязательное поле."])
+
+    def test_blank_topic(self):
+        """
+        Тест не валидная форма
+        не заполнена тема письма
+        """
+
+        data = {
+            "name":"testname",
+            "email":"test@mail.ru",
+            "topic": "",
+            "text": "test.content",
+        }
+        form = FeedbackPublicForm(data=data)
+        self.assertFalse(form.is_valid())
+        self.assertEqual(form.errors["topic"], ["Обязательное поле."])
+
+    def test_blank_text(self):
+        """
+        Тест не валидная форма
+        не заполнено обращение
+        """
+
+        data = {
+            "name":"testname",
+            "email":"test@mail.ru",
+            "topic": "testtopic",
+            "text": "",
+        }
+        form = FeedbackPublicForm(data=data)
+        self.assertFalse(form.is_valid())
+        self.assertEqual(form.errors["text"], ["Обязательное поле."])
+
+    def test_blank_form(self):
+        """
+        Тест не валидная форма
+        (пустая)
+        """
+
+        data = {
+            "name":"",
+            "email":"",
+            "topic": "",
+            "text": "",
+        }
+        form = FeedbackPublicForm(data=data)
+        self.assertFalse(form.is_valid())
+        self.assertEqual(form.errors["name"], ["Обязательное поле."])
+        self.assertEqual(form.errors["email"], ["Обязательное поле."])
+        self.assertEqual(form.errors["topic"], ["Обязательное поле."])
+        self.assertEqual(form.errors["text"], ["Обязательное поле."])
+
+    def test_invalid_mail(self):
+        """
+        Тест не валидная форма
+        кирилица в элетронной
+        почте (e)
+        """
+
+        data = {
+            "name":"testname",
+            "email":"tеst@mail.ru",
+            "topic": "testtopic",
+            "text": "testtext",
+        }
+        form = FeedbackPublicForm(data=data)
+        self.assertFalse(form.is_valid())
+
+    def test_ban_name(self):
+        """
+        Тест не валидная форма
+        нецензурное слово 
+        вместо имени
+        """
+
+        data = {
+            "name":"Гонорея",
+            "email":"test@mail.ru",
+            "topic": "testtopic",
+            "text": "testtext",
+        }
+        form = FeedbackPublicForm(data=data)
+        self.assertFalse(form.is_valid())
+
+    def test_ban_topic(self):
+        """
+        Тест не валидная форма
+        нецензурное слово 
+        в теме письма
+        """
+
+        data = {
+            "name":"test_name",
+            "email":"test@mail.ru",
+            "topic": "гонорея",
+            "text": "testtext",
+        }
+        form = FeedbackPublicForm(data=data)
+        self.assertFalse(form.is_valid())
+
+    def test_ban_text(self):
+        """
+        Тест не валидная форма
+        нецензурное слово 
+        в тексте обращения
+        """
+
+        data = {
+            "name":"test_name",
+            "email":"test@mail.ru",
+            "topic": "test_topic",
+            "text": "гонорея",
+        }
+        form = FeedbackPublicForm(data=data)
+        self.assertFalse(form.is_valid())
