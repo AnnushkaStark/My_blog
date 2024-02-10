@@ -1866,3 +1866,114 @@ class TestFeedbackPublicForm(TestCase):
         }
         form = FeedbackPublicForm(data=data)
         self.assertFalse(form.is_valid())
+
+
+class TestFeedbackPublicFormView(TestCase):
+    """
+    Тестирование представления формы
+    оствления обратной связи
+    для не аутентифицированного пользователя
+    """
+    def setUp(self):
+        """
+        Создание тест пользователя
+        """
+        self.client = Client()
+        self.url = reverse("feed_back_public")
+
+    def test_send_feedback_sucsess(self):
+        """
+        Успешная отправка обратной связи
+        """
+        data = {
+            "name": "test_name",
+            "email": "test@mail.com",
+            "topic": "tast_topic",
+            "text": "test_text",
+        }
+
+        response = self.client.get(reverse("feed_back_page"))
+        self.assertEqual(response.status_code, 200)
+        response = self.client.post(self.url, data)
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, reverse("feed_back_page"))
+        feedback = FeedBackPublic.objects.get(name=data['name'])
+        self.assertEqual(feedback.name, "test_name")
+        self.assertEqual(feedback.email, "test@mail.com")
+        self.assertEqual(feedback.topic, "tast_topic")
+        self.assertEqual(feedback.text, "test_text")
+
+    def test_send_feedback_failure(self):
+        """
+        Не успешная отправка обратной
+        связи
+        """
+        data = {
+            "name": "",
+            "email": "test_topic",
+            "topic": "tast.jpg",
+            "text": "test_text",
+        }
+
+        response = self.client.get(reverse("feed_back_page"))
+        self.assertEqual(response.status_code, 200)
+        response = self.client.post(self.url, data, follow=True)
+        self.assertRedirects(response, reverse("feed_back_page"))
+        self.assertContains(response, "Обращение не прошло модерацию") 
+
+
+class TestFeeedbackPublicFormView(TestCase):
+    """
+    Тестирование представления 
+    формы отправки обратной связи
+    для аутентифицированного 
+    пользователя
+    """  
+    def setUp(self):
+        """
+        Cоздание тест пользователя
+        """
+        self.client = Client()
+        self.url = reverse("user_page")
+        self.send_feedback_url = reverse("feed_back_user")
+        self.user = User.objects.create_user(
+            username="testus", email="mytest@mail.com", password="123testpassS@"
+        )
+        self.client.login(username="testus", password="123testpassS@") 
+
+    def test_send_feedback_sucsess(self):
+        """
+        Успешная отправка
+        обратной связи
+        """
+        data = {
+            "topic": "test_title",
+            "description": "test_topic",
+        }
+
+        response = self.client.get(reverse("user_page"))
+        self.assertEqual(response.status_code, 200)
+        response = self.client.post(self.send_feedback_url, data)
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, reverse("feed_back_page"))
+        feedback = FeedBackUsers.objects.get(user=self.user)
+        self.assertEqual(feedback.user, self.user)
+
+
+    def test_send_feedback_failure(self):
+        """
+        Не успешная отправка
+        обратной связи
+        """
+        data = {
+            "topic": "",
+            "description": "test_topic",
+        }
+
+        response = self.client.get(reverse("user_page"))
+        self.assertEqual(response.status_code, 200)
+        response = self.client.post(self.send_feedback_url, data,follow=True)
+        self.assertRedirects(response, reverse("feed_back_page"))
+        self.assertContains(response, "Обращение не прошло модерацию")
+       
+  

@@ -527,11 +527,12 @@ class FeedBackPageView(TemplateView):
     template_name = "feed_back.html"
 
 
-class FeedBackUserFormView(FormView,LoginRequiredMixin):
+class FeedBackUserFormView(FormView, LoginRequiredMixin):
     """
-    Представление формы отправления 
+    Представление формы отправления
     обратной связи для аутентифицированного пользователя
     """
+
     def post(self, request):
         """
         Функция отправления обратной
@@ -542,17 +543,20 @@ class FeedBackUserFormView(FormView,LoginRequiredMixin):
             feedback = form.save(commit=False)
             feedback.user = request.user
             feedback.save()
-            messages.success(request, "Обращение отправлено, ответим вам на электронную почту")
+            messages.success(
+                request, "Обращение отправлено, ответим вам на электронную почту"
+            )
             return redirect("feed_back_page")
         messages.error(request, "Обращение не прошло модерацию")
         return redirect("feed_back_page")
-    
+
 
 class FeedBackPublicFormView(FormView):
     """
     Представление формы отправки обратной
     связи для не аутентифицированного пользователя
     """
+
     def post(self, request):
         """
         Функция отправления обратной
@@ -562,8 +566,9 @@ class FeedBackPublicFormView(FormView):
         if form.is_valid():
             feedback = form.save(commit=False)
             feedback.save()
-            messages.success(request, "Обращение отправлено, ответим вам на электронную почту")
+            messages.success(
+                request, "Обращение отправлено, ответим вам на электронную почту"
+            )
             return redirect("feed_back_page")
         messages.error(request, "Обращение не прошло модерацию")
         return redirect("feed_back_page")
-            
