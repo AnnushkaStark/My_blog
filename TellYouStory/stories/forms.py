@@ -350,7 +350,7 @@ class FeedBackUserForm(forms.ModelForm):
     аутентифицированных пользователей
     """
 
-    topic = forms.CharField(widget=forms.TextInput, min_length=3, max_length=50)
+    topic = forms.CharField(widget=forms.TextInput, min_length=3, max_length=150)
     description = forms.Textarea()
 
     def clean(self):
@@ -385,7 +385,7 @@ class FeedbackPublicForm(forms.ModelForm):
 
     name = forms.CharField(widget=forms.TextInput, min_length=3, max_length=50)
     email = forms.EmailField(widget=forms.EmailInput, min_length=6, max_length=15)
-    topic = forms.CharField(widget=forms.TimeInput, min_length=3, max_length=50)
+    topic = forms.CharField(widget=forms.TimeInput, min_length=3, max_length=150)
     text = forms.Textarea()
 
     def clean(self):

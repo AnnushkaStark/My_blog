@@ -9,7 +9,7 @@
             <h1 style="text-align: center;">Напишите нам</h1>
             {% if user.is_authenticated %}
             <br>
-            <form  enctype="multipart/form-data" method="post", action="#" name="#">
+            <form  enctype="multipart/form-data" method="post", action="{% url 'feed_back_user' %}" name="#">
               {% csrf_token %}
                 {{ form.as_p }}
                 
@@ -19,7 +19,7 @@
                   </div>
                 <div class="mb-3">
                  <label class="form-label">Текст Обращения</label>
-                  <textarea name="content"  class="form-control" name = "description"></textarea>
+                  <textarea  class="form-control" name = "description"></textarea>
                 </div>
                 <br>
                 <button type="submit" class="btn btn-primary">Отправить</button>
