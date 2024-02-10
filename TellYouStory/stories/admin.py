@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import User, Biography, Story, FeedBackPublic, FeedBackUsers
+from .models import User, Biography, Story, FeedBackPublic, FeedBackUsers, Likes, Dislikes, ArticleRewiews, Comments
 
 # Register your models here.
 
@@ -92,3 +92,43 @@ class FeedBackPublicAdmin(admin.ModelAdmin):
     list_filter =["topic"]
     search_fields = ["topic","name","email"]
     search_help_text = "Поиск по полю  topic, name, email"
+
+
+@admin.register(Likes)
+class AdminLikes(admin.ModelAdmin):
+    """
+    Регистрация модели реакций нравиться
+    """
+
+    list_display = ("article","user")
+
+
+@admin.register(Dislikes)
+class AdminDislikes(admin.ModelAdmin):
+    """
+    Регистрация модели реакций 
+    не нравиться
+    """
+
+    list_display = ("article","user")
+
+
+
+@admin.register(ArticleRewiews)
+class AdminrticleRewiews(admin.ModelAdmin):
+    """
+    Регистрация модели реакций 
+    не нравиться
+    """
+
+    list_display = ("article","user")
+
+
+@admin.register(Comments)
+class AdminComments(admin.ModelAdmin):
+    """
+    Регистрация модели 
+    комментариев 
+    """
+    list_display = ("text","date", "article","user")
+    list_filter =["text","article"]

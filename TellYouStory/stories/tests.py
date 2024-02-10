@@ -1,5 +1,5 @@
 from django.test import TestCase, Client, RequestFactory
-from .models import User, Biography, Story, FeedBackPublic, FeedBackUsers
+from .models import User, Biography, Story, FeedBackPublic, FeedBackUsers, Likes
 from datetime import date
 from .forms import (
     UserRegisterForm,
@@ -1976,4 +1976,9 @@ class TestFeeedbackPublicFormView(TestCase):
         self.assertRedirects(response, reverse("feed_back_page"))
         self.assertContains(response, "Обращение не прошло модерацию")
        
+
+class TestLilkesModel(TestCase):
+    """
+    Тестирование модели реакции нравится
+    """
   

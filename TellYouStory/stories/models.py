@@ -102,3 +102,65 @@ class FeedBackPublic(models.Model):
 
     def __str__(self):
         return f"{self.name} {self.email} {self.topic} {self.text} {self.date}"
+
+
+class Likes(models.Model):
+    """
+    Модель реакций нравиться
+    """
+
+    article = models.ForeignKey(Story, on_delete=models.CASCADE)
+    user = models.ForeignKey(User,  on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name_plural = "Likes"
+
+    def __str__(self):
+        return f"{self.article} {self.user}"
+
+
+class Dislikes(models.Model):
+    """
+    Модель реакций не нравится
+    """
+
+    article = models.ForeignKey(Story, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name_plural = "Dislikes"
+
+    def __str__(self):
+        return f"{self.article} {self.user}"
+
+
+class ArticleRewiews(models.Model):
+    """
+    Модель реакции просмотр
+    """
+
+    article = models.ForeignKey(Story, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name_plural = "ArticleRewiews"
+
+    def __str__(self):
+        return f"{self.article} {self.user}"
+
+
+class Comments(models.Model):
+    """
+    Модель комментария
+    """
+
+    text = models.TextField(max_length=3000)
+    date = models.DateTimeField(auto_now_add=True)
+    article = models.ForeignKey(Story, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name_plural = "Comments"
+
+    def __str__(self):
+        return f"{self.text} {self.date} {self.article} {self.user}"
