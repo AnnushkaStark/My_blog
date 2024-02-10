@@ -19,22 +19,22 @@
                   </div>
                 <div class="mb-3">
                  <label class="form-label">Текст Обращения</label>
-                  <textarea name="content"  class="form-control"></textarea>
+                  <textarea name="content"  class="form-control" name = "description"></textarea>
                 </div>
                 <br>
                 <button type="submit" class="btn btn-primary">Отправить</button>
               </form>
               {% else %}
-              <form  enctype="multipart/form-data" method="post", action="#" name="add_story">
+              <form  enctype="multipart/form-data" method="post", action="#" name="#">
                 {% csrf_token %}
                   {{ form.as_p }}
                   <div class="mb-3">
                     <label  class="form-label">Имя</label>
-                    <input type="text" class="form-control" name="title">
+                    <input type="text" class="form-control" name="name">
                   </div>
                   <div class="mb-3">
                       <label  class="form-label">Элекронная почта</label>
-                      <input type="text" class="form-control" name="topic">
+                      <input type="text" class="form-control" name="email">
                   </div>
                   <div class="mb-3">
                     <label  class="form-label">Тема письма</label>
@@ -42,7 +42,7 @@
                 </div>
                   <div class="mb-3">
                    <label class="form-label">Текст обращения</label>
-                    <textarea name="content"  class="form-control"></textarea>
+                    <textarea name="content"  class="form-control" name = "text"></textarea>
                   </div>
                   <br>
                   <button type="submit" class="btn btn-primary">Отправить</button>

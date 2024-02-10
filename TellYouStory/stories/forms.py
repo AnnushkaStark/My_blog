@@ -1,4 +1,4 @@
-from .models import User, Biography, Story
+from .models import User, Biography, Story, FeedBackUsers, FeedBackPublic
 from django import forms
 from django.core import validators
 from django.core.validators import validate_email
@@ -342,3 +342,34 @@ class AddArticleForm(ModelForm):
     class Meta:
         model = Story
         fields = ["title", "topic", "image", "content"]
+
+
+class FeedBackUserForm(forms.ModelForm):
+    """
+    Форма писем обратной ствязи от 
+    аутентифицированных пользователей
+    """
+    topic = forms.CharField(widget=forms.TextInput, min_length=3,max_length=50)
+    description = forms.Textarea()
+
+    def clean(self):
+        """
+        Валидация данных
+        """
+        cleaned_data = super().clean()
+        topic = cleaned_data.get("topic")
+        description = cleaned_data.get("description")
+        if topic and description:
+            if valid_text(topic) == "is_valid" and valid_text(description) =="is_valid":
+                return cleaned_data
+            raise forms.ValidationError("Данные не прошли модерацию")
+        raise forms.ValidationError("Поля не могут быть пустыми")
+    
+    class Meta:
+
+        model = FeedBackUsers
+        fields = ["topic", "description",]
+    
+        
+
+
