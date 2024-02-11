@@ -1,5 +1,15 @@
 from django.test import TestCase, Client, RequestFactory
-from .models import User, Biography, Story, FeedBackPublic, FeedBackUsers, Likes
+from .models import (
+    User,
+    Biography,
+    Story,
+    FeedBackPublic,
+    FeedBackUsers,
+    Likes,
+    Dislikes,
+    ArticleRewiews,
+    Comments,
+)
 from datetime import date
 from .forms import (
     UserRegisterForm,
@@ -1712,14 +1722,14 @@ class TestFeedbackPublicForm(TestCase):
         """
 
         data = {
-            "name":"test_name",
-            "email":"test@mail.com",
+            "name": "test_name",
+            "email": "test@mail.com",
             "topic": "test_topic",
             "text": "test.content",
         }
         form = FeedbackPublicForm(data=data)
         self.assertTrue(form.is_valid())
-    
+
     def test_blank_name(self):
         """
         Тест не валидная форма
@@ -1727,8 +1737,8 @@ class TestFeedbackPublicForm(TestCase):
         """
 
         data = {
-            "name":"",
-            "email":"test@mail.com",
+            "name": "",
+            "email": "test@mail.com",
             "topic": "test_topic",
             "text": "test.content",
         }
@@ -1743,8 +1753,8 @@ class TestFeedbackPublicForm(TestCase):
         """
 
         data = {
-            "name":"testname",
-            "email":"",
+            "name": "testname",
+            "email": "",
             "topic": "test_topic",
             "text": "test.content",
         }
@@ -1759,8 +1769,8 @@ class TestFeedbackPublicForm(TestCase):
         """
 
         data = {
-            "name":"testname",
-            "email":"test@mail.ru",
+            "name": "testname",
+            "email": "test@mail.ru",
             "topic": "",
             "text": "test.content",
         }
@@ -1775,8 +1785,8 @@ class TestFeedbackPublicForm(TestCase):
         """
 
         data = {
-            "name":"testname",
-            "email":"test@mail.ru",
+            "name": "testname",
+            "email": "test@mail.ru",
             "topic": "testtopic",
             "text": "",
         }
@@ -1791,8 +1801,8 @@ class TestFeedbackPublicForm(TestCase):
         """
 
         data = {
-            "name":"",
-            "email":"",
+            "name": "",
+            "email": "",
             "topic": "",
             "text": "",
         }
@@ -1811,8 +1821,8 @@ class TestFeedbackPublicForm(TestCase):
         """
 
         data = {
-            "name":"testname",
-            "email":"tеst@mail.ru",
+            "name": "testname",
+            "email": "tеst@mail.ru",
             "topic": "testtopic",
             "text": "testtext",
         }
@@ -1822,13 +1832,13 @@ class TestFeedbackPublicForm(TestCase):
     def test_ban_name(self):
         """
         Тест не валидная форма
-        нецензурное слово 
+        нецензурное слово
         вместо имени
         """
 
         data = {
-            "name":"Гонорея",
-            "email":"test@mail.ru",
+            "name": "Гонорея",
+            "email": "test@mail.ru",
             "topic": "testtopic",
             "text": "testtext",
         }
@@ -1838,13 +1848,13 @@ class TestFeedbackPublicForm(TestCase):
     def test_ban_topic(self):
         """
         Тест не валидная форма
-        нецензурное слово 
+        нецензурное слово
         в теме письма
         """
 
         data = {
-            "name":"test_name",
-            "email":"test@mail.ru",
+            "name": "test_name",
+            "email": "test@mail.ru",
             "topic": "гонорея",
             "text": "testtext",
         }
@@ -1854,13 +1864,13 @@ class TestFeedbackPublicForm(TestCase):
     def test_ban_text(self):
         """
         Тест не валидная форма
-        нецензурное слово 
+        нецензурное слово
         в тексте обращения
         """
 
         data = {
-            "name":"test_name",
-            "email":"test@mail.ru",
+            "name": "test_name",
+            "email": "test@mail.ru",
             "topic": "test_topic",
             "text": "гонорея",
         }
@@ -1874,6 +1884,7 @@ class TestFeedbackPublicFormView(TestCase):
     оствления обратной связи
     для не аутентифицированного пользователя
     """
+
     def setUp(self):
         """
         Создание тест пользователя
@@ -1897,7 +1908,7 @@ class TestFeedbackPublicFormView(TestCase):
         response = self.client.post(self.url, data)
         self.assertEqual(response.status_code, 302)
         self.assertRedirects(response, reverse("feed_back_page"))
-        feedback = FeedBackPublic.objects.get(name=data['name'])
+        feedback = FeedBackPublic.objects.get(name=data["name"])
         self.assertEqual(feedback.name, "test_name")
         self.assertEqual(feedback.email, "test@mail.com")
         self.assertEqual(feedback.topic, "tast_topic")
@@ -1919,16 +1930,17 @@ class TestFeedbackPublicFormView(TestCase):
         self.assertEqual(response.status_code, 200)
         response = self.client.post(self.url, data, follow=True)
         self.assertRedirects(response, reverse("feed_back_page"))
-        self.assertContains(response, "Обращение не прошло модерацию") 
+        self.assertContains(response, "Обращение не прошло модерацию")
 
 
 class TestFeeedbackPublicFormView(TestCase):
     """
-    Тестирование представления 
+    Тестирование представления
     формы отправки обратной связи
-    для аутентифицированного 
+    для аутентифицированного
     пользователя
-    """  
+    """
+
     def setUp(self):
         """
         Cоздание тест пользователя
@@ -1939,7 +1951,7 @@ class TestFeeedbackPublicFormView(TestCase):
         self.user = User.objects.create_user(
             username="testus", email="mytest@mail.com", password="123testpassS@"
         )
-        self.client.login(username="testus", password="123testpassS@") 
+        self.client.login(username="testus", password="123testpassS@")
 
     def test_send_feedback_sucsess(self):
         """
@@ -1959,7 +1971,6 @@ class TestFeeedbackPublicFormView(TestCase):
         feedback = FeedBackUsers.objects.get(user=self.user)
         self.assertEqual(feedback.user, self.user)
 
-
     def test_send_feedback_failure(self):
         """
         Не успешная отправка
@@ -1972,13 +1983,221 @@ class TestFeeedbackPublicFormView(TestCase):
 
         response = self.client.get(reverse("user_page"))
         self.assertEqual(response.status_code, 200)
-        response = self.client.post(self.send_feedback_url, data,follow=True)
+        response = self.client.post(self.send_feedback_url, data, follow=True)
         self.assertRedirects(response, reverse("feed_back_page"))
         self.assertContains(response, "Обращение не прошло модерацию")
-       
+
 
 class TestLilkesModel(TestCase):
     """
     Тестирование модели реакции нравится
     """
-  
+
+    def setUp(self):
+        """
+        Метод данных тест пользоватетеля
+        и статьи и реакции нравиться
+        """
+        self.user = User.objects.create(
+            username="testuser",
+            email="test@mail.com",
+            password="my_password##&&7Q",
+        )
+
+        self.story = Story.objects.create(
+            title="testittle",
+            topic="testtopic",
+            image="test.jpg",
+            content="somethingcontent",
+            rank=0.0,
+            author=self.user,
+        )
+
+        self.like = Likes.objects.create(article=self.story, user=self.user)
+
+    def test_likes_creation(self):
+        """
+        Проверка сохренения в модели реакции нравиться
+        объекта класса Likes
+        """
+        self.assertTrue(isinstance(self.like, Likes))
+
+    def test_models_fields(self):
+        """
+        Проверка данных содержащихся в полях модели
+        """
+
+        self.assertIsInstance(self.like.article, Story)
+        self.assertIsInstance(self.like.user, User)
+
+    def test_relationship(self):
+        """
+        Тест связи модели ползователя
+        и модели статьи с моделью лайка
+        """
+        self.assertEqual(self.like.user, self.user)
+        self.assertEqual(self.user, self.like.user)
+        self.assertEqual(self.like.article, self.story)
+        self.assertEqual(self.story, self.like.article)
+
+
+class TestDislilkesModel(TestCase):
+    """
+    Тестирование модели реакции не нравится
+    """
+
+    def setUp(self):
+        """
+        Метод данных тест пользоватетеля
+        и статьи и реакции  не нравиться
+        """
+        self.user = User.objects.create(
+            username="testuser",
+            email="test@mail.com",
+            password="my_password##&&7Q",
+        )
+
+        self.story = Story.objects.create(
+            title="testittle",
+            topic="testtopic",
+            image="test.jpg",
+            content="somethingcontent",
+            rank=0.0,
+            author=self.user,
+        )
+
+        self.dislike = Dislikes.objects.create(article=self.story, user=self.user)
+
+    def test_dislikes_creation(self):
+        """
+        Проверка сохренения в модели реакции нравиться
+        объекта класса Dislikes
+        """
+        self.assertTrue(isinstance(self.dislike, Dislikes))
+
+    def test_models_fields(self):
+        """
+        Проверка данных содержащихся в полях модели
+        """
+
+        self.assertIsInstance(self.dislike.article, Story)
+        self.assertIsInstance(self.dislike.user, User)
+
+    def test_relationship(self):
+        """
+        Тест связи модели ползователя
+        и модели статьи с моделью дизлайка
+        """
+        self.assertEqual(self.dislike.user, self.user)
+        self.assertEqual(self.user, self.dislike.user)
+        self.assertEqual(self.dislike.article, self.story)
+        self.assertEqual(self.story, self.dislike.article)
+
+
+class TestArticlereviewsModel(TestCase):
+    """
+    Тестирование модели реакции просмтр
+    """
+
+    def setUp(self):
+        """
+        Метод данных тест пользоватетеля
+        и статьи и реакции просмотр
+        """
+        self.user = User.objects.create(
+            username="testuser",
+            email="test@mail.com",
+            password="my_password##&&7Q",
+        )
+
+        self.story = Story.objects.create(
+            title="testittle",
+            topic="testtopic",
+            image="test.jpg",
+            content="somethingcontent",
+            rank=0.0,
+            author=self.user,
+        )
+
+        self.review = ArticleRewiews.objects.create(article=self.story, user=self.user)
+
+    def test_dislikes_creation(self):
+        """
+        Проверка сохренения в модели реакции просмотр
+        объекта класса ArticleRewiews
+        """
+        self.assertTrue(isinstance(self.review, ArticleRewiews))
+
+    def test_models_fields(self):
+        """
+        Проверка данных содержащихся в полях модели
+        """
+
+        self.assertIsInstance(self.review.article, Story)
+        self.assertIsInstance(self.review.user, User)
+
+    def test_relationship(self):
+        """
+        Тест связи модели ползователя
+        и модели статьи с моделью просмотра
+        """
+        self.assertEqual(self.review.user, self.user)
+        self.assertEqual(self.user, self.review.user)
+        self.assertEqual(self.review.article, self.story)
+        self.assertEqual(self.story, self.review.article)
+
+
+class TestCommentsModel(TestCase):
+    """
+    Тестирование модели коментария
+    """
+
+    def setUp(self):
+        """
+        Метод данных тест пользоватетеля
+        и статьи и комментраия
+        """
+        self.user = User.objects.create(
+            username="testuser",
+            email="test@mail.com",
+            password="my_password##&&7Q",
+        )
+
+        self.story = Story.objects.create(
+            title="testittle",
+            topic="testtopic",
+            image="test.jpg",
+            content="somethingcontent",
+            rank=0.0,
+            author=self.user,
+        )
+
+        self.comment = Comments.objects.create(
+            text="test_text", article=self.story, user=self.user
+        )
+
+    def test_comment_creation(self):
+        """
+        Проверка сохренения в модели комментария
+        объекта класса Cоmments
+        """
+        self.assertTrue(isinstance(self.comment, Comments))
+
+    def test_models_fields(self):
+        """
+        Проверка данных содержащихся в полях модели
+        """
+
+        self.assertIsInstance(self.comment.article, Story)
+        self.assertIsInstance(self.comment.user, User)
+        self.assertIsInstance(self.comment.text, str)
+
+    def test_relationship(self):
+        """
+        Тест связи модели ползователя
+        и модели статьи с моделью комментария
+        """
+        self.assertEqual(self.comment.user, self.user)
+        self.assertEqual(self.user, self.comment.user)
+        self.assertEqual(self.comment.article, self.story)
+        self.assertEqual(self.story, self.comment.article)
