@@ -1248,6 +1248,10 @@ class TestStoryModel(TestCase):
             image="test.jpg",
             content="somethingcontent",
             rank=1.0,
+            like_counter = 0,
+            dislike_counter = 0,
+            comment_counter = 0,
+            views_counter = 0,
             author=self.user,
         )
 
@@ -1269,6 +1273,10 @@ class TestStoryModel(TestCase):
         self.assertIsInstance(self.story.content, str)
         self.assertIsInstance(self.story.is_public, bool)
         self.assertIsInstance(self.story.rank, float)
+        self.assertIsInstance(self.story.like_counter, int)
+        self.assertIsInstance(self.story.dislike_counter, int)
+        self.assertIsInstance(self.story.comment_counter, int)
+        self.assertIsInstance(self.story.views_counter, int)
         self.assertIsInstance(self.story.author, User)
 
     def test_relationship(self):

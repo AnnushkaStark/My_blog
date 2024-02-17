@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from .validators import valid_file_size
 
 # Create your models here.
 
@@ -33,7 +34,12 @@ class Biography(models.Model):
     town = models.CharField(max_length=100, blank=True, null=True)
     birth_date = models.DateField(null=True, blank=True)
     link = models.URLField(null=True, blank=True)
-    avatar = models.ImageField(upload_to="image/avatars/%Y", blank=True, null=True)
+    avatar = models.ImageField(
+        upload_to="image/avatars/%Y",
+        blank=True,
+        null=True,
+        validators=[valid_file_size],
+    )
     bio = models.TextField(max_length=2000, blank=True, null=True)
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
 
@@ -51,19 +57,39 @@ class Story(models.Model):
 
     title = models.CharField(max_length=100)  # Заголовок
     topic = models.CharField(max_length=100)  # Тема
-    image = models.ImageField(upload_to="image/articles/%Y", blank=True, null=True)
+    image = models.ImageField(
+        upload_to="image/articles/%Y",
+        blank=True,
+        null=True,
+        validators=[valid_file_size],
+    )
     content = models.TextField(max_length=5000, blank=True, null=True)
     date_create = models.DateTimeField(auto_now_add=True)
     date_update = models.DateTimeField(auto_now=True)
     is_public = models.BooleanField(default=True)
     rank = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    like_counter = models.IntegerField(default=0)
+    dislike_counter = models.IntegerField(default=0)
+    comment_counter = models.IntegerField(default=0)
+    views_counter = models.IntegerField(default=0)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
 
     class Meta:
         verbose_name_plural = "Stories"
 
     def __str__(self):
-        return f"{self.title} {self.topic} {self.image} {self.content} {self.date_create} {self.date_update} {self.is_public} {self.rank} {self.author}"
+        return f"{self.title} {self.topic} {self.image} {self.content} {self.date_create} {self.date_update} {self.is_public} {self.rank} {self.like_counter} {self.dislike_counter} {self.comment_counter} {self.views_counter} {self.author}"
+
+    def get_rank(self):
+        """
+        Метод получения ранга статьи
+        """
+        self.rank = (
+            self.like_counter * 0.3
+            + self.comment_counter * 0.3
+            + self.views_counter * 0.2
+        ) - self.dislike_counter * 0.3
+        return self.rank
 
 
 class FeedBackUsers(models.Model):
@@ -110,7 +136,7 @@ class Likes(models.Model):
     """
 
     article = models.ForeignKey(Story, on_delete=models.CASCADE)
-    user = models.ForeignKey(User,  on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     class Meta:
         verbose_name_plural = "Likes"

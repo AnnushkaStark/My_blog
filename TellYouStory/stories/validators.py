@@ -2,6 +2,7 @@ import string
 from .ban_words import BAN_WORDS
 import os
 from PIL import Image
+from django.core.exceptions import ValidationError
 
 
 def valid_name(first_name):
@@ -160,3 +161,14 @@ def valid_image(file):
         return "is_valid"
     except IOError:
         return "invalid_file"
+    
+
+def valid_file_size(file):
+    """
+    Функция валидации размера 
+    изображения в МБ
+    """
+    if file:
+        if file.size > 10485760:
+            raise ValidationError("Файл , больше 10 ти мб не может быть загружен")
+        return file

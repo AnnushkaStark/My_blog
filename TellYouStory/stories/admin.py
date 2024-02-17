@@ -54,6 +54,10 @@ class StoryAdmin(admin.ModelAdmin):
         "date_update",
         "is_public",
         "rank",
+        "like_counter",
+        "dislike_counter",
+        "comment_counter",
+        "views_counter",
         "author",
     )
 
