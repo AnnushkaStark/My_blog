@@ -43,4 +43,5 @@ urlpatterns = [
     path("feed_back_user/", views.FeedBackUserFormView.as_view(), name="feed_back_user"),
     path("feed_back_public/",views.FeedBackPublicFormView.as_view(), name="feed_back_public"),
     path("list_ranking_articles/", views.ArticleRankListView.as_view(), name="ranking_articles"),
+    path("list_time_articles/", views.ArticleTimeListView.as_view(), name="time_list_articles"),
 ]

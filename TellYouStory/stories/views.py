@@ -587,3 +587,18 @@ class ArticleRankListView(ListView,LoginRequiredMixin):
         articles = Story.objects.all().order_by("-rank")
 
         return render(request,"list_story_rank.html",{"articles":articles})
+
+
+class ArticleTimeListView(ListView,LoginRequiredMixin):
+    """
+    Представление вывода
+    на страницу статей 
+    хронологическом порядке
+    """
+    def get(self,request):
+        """
+        Получение списка статей
+        """
+        articles = Story.objects.all().order_by("-date_create")
+
+        return render(request,"list_story_rank.html",{"articles":articles})
