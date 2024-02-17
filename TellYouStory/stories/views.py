@@ -572,3 +572,18 @@ class FeedBackPublicFormView(FormView):
             return redirect("feed_back_page")
         messages.error(request, "Обращение не прошло модерацию")
         return redirect("feed_back_page")
+
+
+class ArticleRankListView(ListView,LoginRequiredMixin):
+    """
+    Представление вывода
+    на страницу статей 
+    в порядке ранжирвания
+    """
+    def get(self,request):
+        """
+        Получение списка статей
+        """
+        articles = Story.objects.all().order_by("-rank")
+
+        return render(request,"list_story_rank.html",{"articles":articles})

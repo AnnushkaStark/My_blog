@@ -42,4 +42,5 @@ urlpatterns = [
     path("feed_back/", views.FeedBackPageView.as_view(), name="feed_back_page"),
     path("feed_back_user/", views.FeedBackUserFormView.as_view(), name="feed_back_user"),
     path("feed_back_public/",views.FeedBackPublicFormView.as_view(), name="feed_back_public"),
+    path("list_ranking_articles/", views.ArticleRankListView.as_view(), name="ranking_articles"),
 ]
