@@ -14,6 +14,8 @@
                 <br>
                 <h6 style="text-align: left;">{{article.topic}}</h6>
                 <br>
+                <h6 style="text-align: left;"><a href = "{% url 'author_info' author_id=article.author_id  %}" class="link-success link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">#AuthorInfo</a></h6>
+                <br>
                 <h6 style="text-align: left;">Автор: {{article.author.username}}</h6>
                 <p>Нравится: {{article.like_counter}} Не нравится: {{article.dislike_counter}} Комментарии: {{article.comment_counter}} Просмотры: {{article.comment_counter}}</p>
                 {% if article.image %}

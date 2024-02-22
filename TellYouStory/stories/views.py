@@ -636,3 +636,19 @@ class ArticleAuthorTimeView(ListView,LoginRequiredMixin):
         articles = Story.objects.filter(author_id=author_id).order_by("-date_create").all()
 
         return render(request,"article_author.html",{"articles":articles})
+
+
+
+class AuthorPageView(ListView,LoginRequiredMixin):
+    """
+    Представление страницы с выводом информации 
+    об авторе статьи
+    """
+    def get(self,request, author_id):
+        """
+        Получение биографии определенного
+        автора
+        """
+        biography = Biography.objects.get(user_id=author_id)
+
+        return render(request,"author_info.html",{"biography":biography})
