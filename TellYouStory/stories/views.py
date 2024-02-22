@@ -602,3 +602,20 @@ class ArticleTimeListView(ListView,LoginRequiredMixin):
         articles = Story.objects.all().order_by("-date_create")
 
         return render(request,"list_story_rank.html",{"articles":articles})
+
+
+
+class ArticleTopicTimeView(ListView,LoginRequiredMixin):
+    """
+    Представление вывода
+    на страницу всех статей 
+    по тематике  упорядчиванием 
+    по хронологии
+    """
+    def get(self, request, topic):
+        """
+        Получение списка статей  по теме
+        """
+        articles = Story.objects.filter(topic=topic).order_by("-date_create").all()
+
+        return render(request,"topic_time.html",{"articles":articles})
