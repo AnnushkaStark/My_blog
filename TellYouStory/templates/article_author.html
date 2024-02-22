@@ -6,7 +6,7 @@
     <div class="row">
         <div class ="col">
             <h1 style="text-align: center;">Истории</h1>
-            <p style="text-align: right;"><button type="button" class="btn btn-info btn-sm"><a href="{% url 'time_list_articles' %}" style="color:white; text-decoration: none;">Упорядочить по хронологии</a></button></p>
+            <p style="text-align: right;"><button type="button" class="btn btn-info btn-sm"><a href="{% url 'ranking_articles' %}" style="color:white; text-decoration: none;">Назад к списку статей</a></button></p>
             {% for article in articles %}
             <container style="margin: 10px,10px,5px,5px; ">
                 <hr>
