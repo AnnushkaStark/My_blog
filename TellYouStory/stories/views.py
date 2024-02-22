@@ -574,81 +574,86 @@ class FeedBackPublicFormView(FormView):
         return redirect("feed_back_page")
 
 
-class ArticleRankListView(ListView,LoginRequiredMixin):
+class ArticleRankListView(ListView, LoginRequiredMixin):
     """
     Представление вывода
-    на страницу статей 
+    на страницу статей
     в порядке ранжирвания
     """
-    def get(self,request):
+
+    def get(self, request):
         """
         Получение списка статей
         """
         articles = Story.objects.all().order_by("-rank")
 
-        return render(request,"list_story_rank.html",{"articles":articles})
+        return render(request, "list_story_rank.html", {"articles": articles})
 
 
-class ArticleTimeListView(ListView,LoginRequiredMixin):
+class ArticleTimeListView(ListView, LoginRequiredMixin):
     """
     Представление вывода
-    на страницу статей 
+    на страницу статей
     хронологическом порядке
     """
-    def get(self,request):
+
+    def get(self, request):
         """
         Получение списка статей
         """
         articles = Story.objects.all().order_by("-date_create")
 
-        return render(request,"list_story_rank.html",{"articles":articles})
+        return render(request, "list_story_rank.html", {"articles": articles})
 
 
-
-class ArticleTopicTimeView(ListView,LoginRequiredMixin):
+class ArticleTopicTimeView(ListView, LoginRequiredMixin):
     """
     Представление вывода
-    на страницу всех статей 
-    по тематике  упорядчиванием 
+    на страницу всех статей
+    по тематике  упорядчиванием
     по хронологии
     """
+
     def get(self, request, topic):
         """
         Получение списка статей  по теме
         """
         articles = Story.objects.filter(topic=topic).order_by("-date_create").all()
 
-        return render(request,"topic_time.html",{"articles":articles})
-    
+        return render(request, "topic_time.html", {"articles": articles})
 
-class ArticleAuthorTimeView(ListView,LoginRequiredMixin):
+
+class ArticleAuthorTimeView(ListView, LoginRequiredMixin):
     """
     Представление вывода
-    на страницу всех статей 
+    на страницу всех статей
     определенного автра
-    с  упорядчиванием 
+    с  упорядчиванием
     по хронологии
     """
+
     def get(self, request, author_id):
         """
         Получение списка статей  автора
         """
-        articles = Story.objects.filter(author_id=author_id).order_by("-date_create").all()
+        articles = (
+            Story.objects.filter(author_id=author_id).order_by("-date_create").all()
+        )
 
-        return render(request,"article_author.html",{"articles":articles})
+        return render(request, "article_author.html", {"articles": articles})
 
 
-
-class AuthorPageView(ListView,LoginRequiredMixin):
+class AuthorPageView(ListView, LoginRequiredMixin):
     """
-    Представление страницы с выводом информации 
+    Представление страницы с выводом информации
     об авторе статьи
     """
-    def get(self,request, author_id):
+
+    def get(self, request, author_id):
         """
         Получение биографии определенного
         автора
         """
         biography = Biography.objects.get(user_id=author_id)
 
-        return render(request,"author_info.html",{"biography":biography})
+        return render(request, "author_info.html", {"biography": biography})

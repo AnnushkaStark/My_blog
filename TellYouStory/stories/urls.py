@@ -40,11 +40,33 @@ urlpatterns = [
     path("add_story/", views.AddStoryPage.as_view(), name="add_story_page"),
     path("add_story_form/", views.AddStoryFormView.as_view(), name="add_story_form"),
     path("feed_back/", views.FeedBackPageView.as_view(), name="feed_back_page"),
-    path("feed_back_user/", views.FeedBackUserFormView.as_view(), name="feed_back_user"),
-    path("feed_back_public/",views.FeedBackPublicFormView.as_view(), name="feed_back_public"),
-    path("list_ranking_articles/", views.ArticleRankListView.as_view(), name="ranking_articles"),
-    path("list_time_articles/", views.ArticleTimeListView.as_view(), name="time_list_articles"),
-    path("list_ranking_articles/<str:topic>/", views.ArticleTopicTimeView.as_view(), name="article_topic_list"),
-    path("articles/<int:author_id>/",views.ArticleAuthorTimeView.as_view(), name="authors_articles"),
-    path("user/<int:author_id>/", views.AuthorPageView.as_view(), name="author_info")
+    path(
+        "feed_back_user/", views.FeedBackUserFormView.as_view(), name="feed_back_user"
+    ),
+    path(
+        "feed_back_public/",
+        views.FeedBackPublicFormView.as_view(),
+        name="feed_back_public",
+    ),
+    path(
+        "list_ranking_articles/",
+        views.ArticleRankListView.as_view(),
+        name="ranking_articles",
+    ),
+    path(
+        "list_time_articles/",
+        views.ArticleTimeListView.as_view(),
+        name="time_list_articles",
+    ),
+    path(
+        "list_ranking_articles/<str:topic>/",
+        views.ArticleTopicTimeView.as_view(),
+        name="article_topic_list",
+    ),
+    path(
+        "articles/<int:author_id>/",
+        views.ArticleAuthorTimeView.as_view(),
+        name="authors_articles",
+    ),
+    path("user/<int:author_id>/", views.AuthorPageView.as_view(), name="author_info"),
 ]

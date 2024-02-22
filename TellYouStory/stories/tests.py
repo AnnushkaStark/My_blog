@@ -2270,7 +2270,7 @@ class TestRankingArticlesView(TestCase):
 
     def test_ranking_article_page(self):
         """
-        Проверка доступности страницы 
+        Проверка доступности страницы
         с отображением статей по
         ранжированию
         """
@@ -2279,9 +2279,9 @@ class TestRankingArticlesView(TestCase):
         articles = Story.objects.all().order_by("-rank")
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "list_story_rank.html")
-        self.assertEqual(articles[0].title,"test_title_1" )
-        self.assertEqual(articles[1].title,"test_title_2" )
-        self.assertEqual(articles[2].title,"test_title_3" )
+        self.assertEqual(articles[0].title, "test_title_1")
+        self.assertEqual(articles[1].title, "test_title_2")
+        self.assertEqual(articles[2].title, "test_title_3")
 
 
 class TestTimeArticlesView(TestCase):
@@ -2342,7 +2342,7 @@ class TestTimeArticlesView(TestCase):
 
     def test_ranking_article_page(self):
         """
-        Проверка доступности страницы 
+        Проверка доступности страницы
         с отображением статей по
         ранжированию
         """
@@ -2351,9 +2351,9 @@ class TestTimeArticlesView(TestCase):
         articles = Story.objects.all().order_by("-date_create")
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "list_story_rank.html")
-        self.assertEqual(articles[0].title,"test_title_3" )
-        self.assertEqual(articles[1].title,"test_title_2" )
-        self.assertEqual(articles[2].title,"test_title_1" )
+        self.assertEqual(articles[0].title, "test_title_3")
+        self.assertEqual(articles[1].title, "test_title_2")
+        self.assertEqual(articles[2].title, "test_title_1")
 
 
 class TestTopicTimeView(TestCase):
@@ -2363,6 +2363,7 @@ class TestTopicTimeView(TestCase):
     по определенной тематике
     с упорядочиванием по хронологии
     """
+
     def setUp(self):
         """
         Cоздание тест пользователя
@@ -2371,7 +2372,9 @@ class TestTopicTimeView(TestCase):
         self.client = Client()
         self.topic = "testopic_1"
         self.url = reverse("user_page")
-        self.time_topic_url = reverse("article_topic_list",kwargs={"topic":self.topic})
+        self.time_topic_url = reverse(
+            "article_topic_list", kwargs={"topic": self.topic}
+        )
         self.user = User.objects.create_user(
             username="testus", email="mytest@mail.com", password="123testpassS@"
         )
@@ -2414,11 +2417,10 @@ class TestTopicTimeView(TestCase):
         )
         self.article_3.rank = self.article_3.get_rank()
         self.article_3.save()
-     
 
     def test_topic_article_page(self):
         """
-        Проверка доступности страницы 
+        Проверка доступности страницы
         с отображением статей по
         определенной тематике
         """
@@ -2427,20 +2429,20 @@ class TestTopicTimeView(TestCase):
         articles = Story.objects.filter(topic=self.topic).order_by("-date_create").all()
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "topic_time.html")
-        self.assertEqual(articles[0].title,"test_title_3" )
-        self.assertEqual(articles[1].title,"test_title_1" )
-        self.assertNotEqual(articles[0].title,"test_title_2" )
-        self.assertNotEqual(articles[1].title,"test_title_2" )
-        
-        
+        self.assertEqual(articles[0].title, "test_title_3")
+        self.assertEqual(articles[1].title, "test_title_1")
+        self.assertNotEqual(articles[0].title, "test_title_2")
+        self.assertNotEqual(articles[1].title, "test_title_2")
+
 
 class TestAuthorArticlesView(TestCase):
     """
     Тестирование представления
     отображения статей определенного
-    автора с упорядочиванием 
+    автора с упорядочиванием
     по хронологии
     """
+
     def setUp(self):
         """
         Cоздание тест пользователя
@@ -2494,21 +2496,69 @@ class TestAuthorArticlesView(TestCase):
         self.article_3.save()
 
         self.author_id = 2
-        self.author_article_url = reverse("authors_articles",kwargs={"author_id":self.author_id})
+        self.author_article_url = reverse(
+            "authors_articles", kwargs={"author_id": self.author_id}
+        )
 
     def test_author_article_page(self):
         """
-        Проверка доступности страницы 
+        Проверка доступности страницы
         с отображением статей по
         определенной тематике
         """
         self.client.login(username="testus", password="123testpassS@")
         response = self.client.get(self.author_article_url)
-        articles = Story.objects.filter(author_id=self.author_id).order_by("-date_create").all()
+        articles = (
+            Story.objects.filter(author_id=self.author_id)
+            .order_by("-date_create")
+            .all()
+        )
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "article_author.html")
-        self.assertEqual(articles[0].title,"test_title_1" )
-        self.assertNotEqual(articles[0].title,"test_title_2" )
-        self.assertNotEqual(articles[0].title,"test_title_3" )
-        
+        self.assertEqual(articles[0].title, "test_title_1")
+        self.assertNotEqual(articles[0].title, "test_title_2")
+        self.assertNotEqual(articles[0].title, "test_title_3")
 
+
+class TestAuthorInfoView(TestCase):
+    """
+    Тестирование представления
+    вывода информации об определенном авторе
+    """
+
+    def setUp(self):
+        """
+        Cоздание тест пользователя
+        """
+        self.client = Client()
+        self.user = User.objects.create_user(
+            username="testus", email="mytest@mail.com", password="123testpassS@"
+        )
+        self.author_id = 1
+        self.url = reverse("author_info", kwargs={"author_id": self.author_id})
+
+        self.bio = Biography.objects.create(
+            name="test",
+            town="TestCity",
+            birth_date="2024-01-07",
+            link="https://stepik.org/lesson/1098495/step/5?unit=1109364",
+            avatar="test.jpg",
+            bio="my_long_long_bio",
+            user=self.user,
+        )
+
+    def test_author_article_page(self):
+        """
+        Проверка доступности страницы
+        с отображением информации
+        об авторе
+        """
+        self.client.login(username="testus", password="123testpassS@")
+        response = self.client.get(self.url)
+        biography = Biography.objects.get(user_id=self.author_id)
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, biography.name)
+        self.assertContains(response, biography.town)
+        self.assertContains(response, biography.link)
+        self.assertContains(response, biography.avatar)
+        self.assertContains(response, biography.bio)
