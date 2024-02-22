@@ -45,4 +45,5 @@ urlpatterns = [
     path("list_ranking_articles/", views.ArticleRankListView.as_view(), name="ranking_articles"),
     path("list_time_articles/", views.ArticleTimeListView.as_view(), name="time_list_articles"),
     path("list_ranking_articles/<str:topic>/", views.ArticleTopicTimeView.as_view(), name="article_topic_list"),
+    path("articles/<int:author_id>/",views.ArticleAuthorTimeView.as_view(), name="authors_articles")
 ]

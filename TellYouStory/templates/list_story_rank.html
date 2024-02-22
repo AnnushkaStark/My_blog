@@ -14,7 +14,7 @@
                 <br>
                 <h6 style="text-align: left;">Тема: <button type="button" class="btn btn-info btn-sm"><a href = "{% url 'article_topic_list' topic=article.topic  %}" style="color: white;text-decoration: none">#{{article.topic}}</a></button></h6>
                 <br>
-                <h6 style="text-align: left;">Автор: {{article.author.username}}</h6>
+                <h6 style="text-align: left;"><a href = "{% url 'authors_articles' author_id=article.author_id  %}" class="link-success link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">Автор: {{article.author.username}}</a></h6>
                 <p>Нравится: {{article.like_counter}} Не нравится: {{article.dislike_counter}} Комментарии: {{article.comment_counter}} Просмотры: {{article.comment_counter}}</p>
                 {% if article.image %}
                 <p style="text-align:center"><img src="{{ article.image.url }}" class="img-fluid" alt="Фото" style="height: 200px;width: 300px;"></p>
