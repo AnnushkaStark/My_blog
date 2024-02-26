@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class ="container">
+    <div class="row">
+        <div class ="col">
+            <h1 style="text-align: center;">Мои истории</h1>
+        
+            {% for article in articles %}
+            <container style="margin: 10px,10px,5px,5px; ">
+                <hr>
+                <h4 style="text-align: center;">{{article.title}}</h4>
+                <br>
+                <h6 style="text-align: left;">Тема: {{article.topic}}</h6>
+                <br>
+                <h6 style="text-align: left;">Автор: {{article.author.username}}</h6>
+                <p>Нравится: {{article.like_counter}} Не нравится: {{article.dislike_counter}} Комментарии: {{article.comment_counter}} Просмотры: {{article.comment_counter}}</p>
+                {% if article.image %}
+                <p style="text-align:center"><img src="{{ article.image.url }}" class="img-fluid" alt="Фото" style="height: 200px;width: 300px;"></p>
+                {% else %}
+                <p style="text-align:center"><img src="{% static 'img\fon.jpg' %}" class="img-fluid" alt="Аватар" style="height: 200;width: 300;"></p>
+                {% endif %}
+                {% if article.content %}
+                <p style="text-align:center">{{article.content}}</p>
+                {% else %}
+                {% endif %}
+                <p style="text-align:center">{{article.date_create}}</p>
+            <hr>
+            </container>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -657,3 +657,24 @@ class AuthorPageView(ListView, LoginRequiredMixin):
         biography = Biography.objects.get(user_id=author_id)
 
         return render(request, "author_info.html", {"biography": biography})
+
+
+class MyStoriesView(LoginRequiredMixin, ListView):
+    """
+    Представление страницы собтвенных
+    статей автора
+    """
+
+    def get(self, request):
+        """
+        Выборка статей пользоватея
+        """
+
+        articles = (
+            Story.objects.filter(author=request.user).order_by("-date_create").all()
+        )
+        if len(articles):
+            return render(request, "my_news.html", {"articles": articles})
+
+        messages.error(request, "У вас еще нет своих статей, добавьте первую историю")
+        return redirect("add_story_page")

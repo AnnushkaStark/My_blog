@@ -17,7 +17,7 @@ class UserRegisterForm(ModelForm):
     """
 
     username = forms.CharField(min_length=3, max_length=50, widget=forms.TextInput)
-    email = forms.EmailField(widget=forms.EmailInput, min_length=6, max_length=15)
+    email = forms.EmailField(widget=forms.EmailInput, min_length=6, max_length=30)
     password = forms.CharField(widget=forms.PasswordInput, min_length=6, max_length=64)
     password2 = forms.CharField(widget=forms.PasswordInput, min_length=6, max_length=64)
 

@@ -53,9 +53,9 @@
             <br>
             {% if user.is_superuser %}
             <p style="text-align: center;"><button type="button" class="btn btn-info btn-sm" style="margin: 10px,10px,10px;"><a href='/admin/' style="color: white;text-decoration: none;">Администирование</a></button></p>
-            <p style="text-align: center;"><button type="button" class="btn btn-info btn-sm"style="margin: 10px,10px,10px;"><a href="#" style="color: white;text-decoration: none;">Moи истории</a></button></p>
+            <p style="text-align: center;"><button type="button" class="btn btn-info btn-sm"style="margin: 10px,10px,10px;"><a href="{% url 'my_stories' %}" style="color: white;text-decoration: none;">Moи истории</a></button></p>
             {%  else %}
-            <p style="text-align: center;"><button type="button" class="btn btn-info btn-sm"style="margin: 10px,10px,10px;"><a href="#" style="color: white;text-decoration: none;">Moи истории</a></button></p>
+            <p style="text-align: center;"><button type="button" class="btn btn-info btn-sm"style="margin: 10px,10px,10px;"><a href="{% url 'my_stories' %}" style="color: white;text-decoration: none;">Moи истории</a></button></p>
             {% endif %}
             
     </div>
