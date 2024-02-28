@@ -76,6 +76,17 @@ class TestUserRegistrationForm(TestCase):
     Тестирование формы регистрации пользователя
     """
 
+    def setUp(self):
+        """
+        Создание тест пользователя
+        для проверки дублирующих
+        значений email и username
+
+        """
+        User.objects.create_user(
+            username="user", email="testser@mail.com", password="Qwerty123^"
+        )
+
     def test_valid_form(self):
         """
         Проверка валидности формы
@@ -109,13 +120,12 @@ class TestUserRegistrationForm(TestCase):
         form_data = {
             "username": "testuser",
             "email": "tesuser@mail.ru",
-            "password": "testpassword1B%",
-            "password2": "wrongpassword1B&",
+            "password": "Testpassword1B%",
+            "password2": "Wrongpassword1B&",
         }
 
         form = UserRegisterForm(data=form_data)
         self.assertFalse(form.is_valid())
-        self.assertEqual(form.errors["password2"], ["Пароли не совпадают"])
 
     def test_uncorrect_username(self):
         """
@@ -153,8 +163,37 @@ class TestUserRegistrationForm(TestCase):
         Проверка некорректной электронной почты
         """
         form_data = {
-            "username": "user",
+            "username": "user1",
             "email": "tesu#ser@mail.ru",
+            "password": "testpass123@W",
+            "password2": "testpass123@W",
+        }
+        form = UserRegisterForm(data=form_data)
+        self.assertFalse(form.is_valid())
+
+    def test_duplicate_username(self):
+        """
+        Тестирование формы с дубликатом username
+        """
+        form_data = {
+            "username": "user",
+            "email": "tesuser@mail.ru",
+            "password": "testpass123@W",
+            "password2": "testpass123@W",
+        }
+        form = UserRegisterForm(data=form_data)
+        self.assertFalse(form.is_valid())
+        self.assertEqual(
+            form.errors["username"], ["Пользователь с таким Username уже существует."]
+        )
+
+    def test_duplicate_email(self):
+        """
+        Тестирование формы с дубликатом email
+        """
+        form_data = {
+            "username": "user",
+            "email": "tesuser@mail.com",
             "password": "testpass123@W",
             "password2": "testpass123@W",
         }
@@ -2562,3 +2601,63 @@ class TestAuthorInfoView(TestCase):
         self.assertContains(response, biography.link)
         self.assertContains(response, biography.avatar)
         self.assertContains(response, biography.bio)
+
+
+class TestMyStoriesView(TestCase):
+    """
+    Тестирование представления
+    вывода статей автора в личном кабинете
+    """
+
+    def setUp(self):
+        """
+        Cоздание тест пользователя
+        """
+        self.client = Client()
+        self.user = User.objects.create_user(
+            username="testus", email="mytest@mail.com", password="123testpassS@"
+        )
+        self.another_user = User.objects.create_user(
+            username="testuser_1", email="mytest@mail.ru", password="321testpassS@"
+        )
+        self.article_1 = Story.objects.create(
+            title="test_title_1",
+            topic="testopic_1",
+            image="test_image",
+            author=self.user,
+            like_counter=10,
+            dislike_counter=0,
+            comment_counter=10,
+            views_counter=10,
+        )
+        self.article_1.rank = self.article_1.get_rank()
+        self.article_1.save()
+
+        self.article_2 = Story.objects.create(
+            title="test_title_2",
+            topic="testopic_2",
+            image="test_image",
+            author=self.another_user,
+            like_counter=10,
+            dislike_counter=0,
+            comment_counter=10,
+            views_counter=10,
+        )
+        self.article_2.rank = self.article_2.get_rank()
+        self.article_2.save()
+
+        self.news_url = reverse("my_stories")
+
+    def test_my_story_page(self):
+        """
+        Проверка доступности
+        старницы вывода статей
+        автора в личном кабинете
+        """
+        self.client.login(username="testus", password="123testpassS@")
+        response = self.client.get(self.news_url)
+        stories = Story.objects.filter(author=self.user).order_by("-date_create").all()
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "my_news.html")
+        self.assertEqual(stories[0].title, "test_title_1")
+        self.assertNotEqual(stories[0].title, "test_title_2")

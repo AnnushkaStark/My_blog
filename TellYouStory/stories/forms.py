@@ -17,50 +17,40 @@ class UserRegisterForm(ModelForm):
     """
 
     username = forms.CharField(min_length=3, max_length=50, widget=forms.TextInput)
-    email = forms.EmailField(widget=forms.EmailInput, min_length=6, max_length=30)
+    email = forms.EmailField(widget=forms.EmailInput, min_length=6, max_length=25)
     password = forms.CharField(widget=forms.PasswordInput, min_length=6, max_length=64)
     password2 = forms.CharField(widget=forms.PasswordInput, min_length=6, max_length=64)
 
-    def username_clean(self):
+    def clean(self):
         """
-        Проверка совпадения username
+        Валидация данных
         """
-        username = self.cleaned_data["username"]
-        if valid_name("username") == "is_valid":
-            new = User.objects.filter(username=username)
-            if new.count():
+        cleaned_data = super().clean()
+        username = cleaned_data.get("username")
+        email = cleaned_data.get("email")
+        password = cleaned_data.get("password")
+        password2 = cleaned_data.get("password2")
+        if username and email and password and password2:
+            if (
+                valid_name("username") == "is_valid"
+                and valid_text("username") == "is_valid"
+            ):
+                if User.objects.filter(username=username).count() == 0:
+                    if valid_email(email) == "is_valid":
+                        if User.objects.filter(email=email).count() == 0:
+                            if (
+                                valid_password(password) == "is_valid"
+                                and valid_password(password2) == "is_valid"
+                            ):
+                                if password == password2:
+                                    return cleaned_data
+                                raise ValidationError("Пароли не совпадают")
+                            raise forms.ValidationError("Пароль слишком простой")
+                        raise ValidationError("Почта уже зарегистрировна")
+                    raise ValidationError("Ведите корректную электронную почту")
                 raise ValidationError("Пользователь уже существует")
-            return username
-        raise ValidationError(
-            "Длина имени пользователя должна быть от 3х до 50 символов"
-        )
-
-    def email_clean(self):
-        """
-        Проверка совпадения email
-        """
-        email = self.cleaned_data["email"]
-        if valid_email(email) == "is_valid":
-            email = self.cleaned_data["email"]
-            new = User.objects.filter(email=email)
-            if new.count():
-                raise ValidationError("Почта уже зарегистрировна")
-            return email
-        raise ValidationError("Почта уже зарегистрировна")
-
-    def clean_password2(self):
-        """
-        Проверка наличия и совпадения паролей
-        """
-        password = self.cleaned_data["password"]
-        if valid_password(password) == "is_valid":
-            password2 = self.cleaned_data["password2"]
-
-            if password and password2 and password != password2:
-                raise ValidationError("Пароли не совпадают")
-            password = make_password(password)
-            return password
-        raise forms.ValidationError("Пароль слишком простой")
+            raise ValidationError("Некорректное имя пользователя")
+        raise ValidationError("Поле не может быть путсым")
 
     class Meta:
         model = User
@@ -409,8 +399,7 @@ class FeedbackPublicForm(forms.ModelForm):
                 raise forms.ValidationError("Ведите корректную электронну почту")
             raise forms.ValidationError("Обращение не прошло модерацию")
         raise forms.ValidationError("Поля не могут быть пустыми")
-    
-    class Meta:
 
+    class Meta:
         model = FeedBackPublic
-        fields = ["name","email","topic","text"]
+        fields = ["name", "email", "topic", "text"]
