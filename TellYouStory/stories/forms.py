@@ -91,34 +91,27 @@ class ChangeMailForm(forms.Form):
     """
 
     old_mail = forms.EmailField(
-        widget=forms.EmailInput, min_length=6, max_length=15
+        widget=forms.EmailInput, min_length=6, max_length=25
     )  # Старый адрес эл почты
-    new_mail = forms.EmailField(
-        widget=forms.EmailInput, min_length=6, max_length=15
-    )  # Новый адрес эл почты
+    new_mail = forms.EmailField(widget=forms.EmailInput, min_length=6, max_length=25)
 
-    def old_mail_clean(self):
+    def clean(self):
         """
-        Проверка валидности старой эл почты
+        Валидация данных
         """
-        old_mail = self.cleaned_data["old_mail"]
-        old = User.objects.filter(email=old_mail)
-        if old.count():
-            return old_mail
-        raise ValidationError("InvalidEmail")
+        cleaned_data = super().clean()
+        old_mail = cleaned_data.get("old_mail")
+        new_mail = cleaned_data.get("new_mail")
 
-    def new_mail_clean(self):
-        """
-        Проверка валидности
-        новой электронной почты
-        """
-        new_mail = self.cleaned_data["new_mail"]
-        if valid_email(new_mail) == "is_valid":
-            new = User.objects.filter(email=new_mail)
-            if new.count():
-                raise ValidationError("Почта уже зарегистрировна")
-            return new_mail
-        raise forms.ValidationError("Bведите актуальную почту")
+        if old_mail and new_mail:
+            if valid_email(old_mail) == "is_valid":
+                if valid_email(new_mail) == "is_valid":
+                    if User.objects.filter(email=new_mail).count() == 0:
+                        return cleaned_data
+                    raise forms.ValidationError(f"Почта {new_mail} уже зарегистрировна")
+                raise forms.ValidationError(f"Введите корректный email")
+            raise forms.ValidationError(f"Введите корректный email")
+        raise forms.ValidationError(f"Поле не может быть пустым")
 
 
 class ChangePasswordForm(forms.Form):

@@ -548,6 +548,18 @@ class TestChangeUserMailForm(TestCase):
     Тестирование формы изменения элекронной почты
     """
 
+    def setUp(self):
+        """
+        создание тест
+        пользователя
+        для проверки
+        валидности формы
+        с дцбликатом email
+        """
+        self.duplicate_user = User.objects.create_user(
+            username="itsmyname", email="pochta@yandex.ru", password="Simple123!!pass"
+        )
+
     def test_valid_form(self):
         """
         Проверка валидности формы
@@ -593,6 +605,18 @@ class TestChangeUserMailForm(TestCase):
         form_data = {
             "old_mail": "mytest@mail.com",
             "new_mail": "test@tes..tsss.ru",
+        }
+        form = ChangeMailForm(data=form_data)
+        self.assertFalse(form.is_valid())
+
+    def test_duplicate_mail_form(self):
+        """
+        Тестирование формы
+        с дубликатом электронной почты
+        """
+        form_data = {
+            "old_mail": "mytest@mail.com",
+            "new_mail": "pochta@yandex.ru",
         }
         form = ChangeMailForm(data=form_data)
         self.assertFalse(form.is_valid())
@@ -672,12 +696,15 @@ class TestChangeUserMailFormView(TestCase):
         )
 
         self.client.login(username="testus", password="123testpassS@")
+        self.duplicate_user = User.objects.create_user(
+            username="itsmyname", email="pochta@yandex.ru", password="Simple123!!pass"
+        )
 
     def test_change_sucsess(self):
         """
         Тест успешное изменение элеткронной почты
         """
-        data = {"old_mail": "mytest@mail.com", "new_mail": "123@testpa.ss"}
+        data = {"old_mail": "mytest@mail.com", "new_mail": "my_new@gmail.ss"}
         response = self.client.get(reverse("user_page"))
         self.assertEqual(response.status_code, 200)
         response = self.client.post(self.change_mail_url, data)
@@ -693,6 +720,21 @@ class TestChangeUserMailFormView(TestCase):
         Не успешное изменение почты
         """
         data = {"old_mail": "mytest@mail.com", "new_mail": "123@testpass"}
+        response = self.client.get(reverse("user_page"))
+        self.assertEqual(response.status_code, 200)
+        response = self.client.post(self.change_mail_url, data, follow=True)
+        self.assertFalse(
+            User.objects.filter(email="123@testpass").exists()
+        )  # Проверяем что почта не изменилась
+        self.assertRedirects(response, reverse("settings_page"))
+        self.assertContains(response, "Ошибка изменения данных")
+
+    def test_duplicate_mail(self):
+        """
+        Тестирование смены электронной
+        почты на уже зарегистрированную
+        """
+        data = {"old_mail": "mytest@mail.com", "new_mail": "pochta@yandex.ru"}
         response = self.client.get(reverse("user_page"))
         self.assertEqual(response.status_code, 200)
         response = self.client.post(self.change_mail_url, data, follow=True)
