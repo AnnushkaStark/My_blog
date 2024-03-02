@@ -70,4 +70,5 @@ urlpatterns = [
     ),
     path("user/<int:author_id>/", views.AuthorPageView.as_view(), name="author_info"),
     path("my_stories/", views.MyStoriesView.as_view(), name="my_stories"),
+    path("my_story/<int:article_id>/", views.MySingleStoryView.as_view(), name="one_my_story")
 ]

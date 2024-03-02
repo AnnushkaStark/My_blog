@@ -678,3 +678,22 @@ class MyStoriesView(LoginRequiredMixin, ListView):
 
         messages.error(request, "У вас еще нет своих статей, добавьте первую историю")
         return redirect("add_story_page")
+
+
+class MySingleStoryView(ListView, LoginRequiredMixin):
+    """
+    Представление перехода
+    страницу статьи
+    в личном кабинете
+    автора
+    """
+
+    def get(serl, request, article_id):
+        """
+        Получение одной статьи
+        по ID
+        """
+        article = Story.objects.filter(
+            id=article_id, author=request.user, is_public=True
+        )
+        return render(request, "my_story.html", {"article": article})

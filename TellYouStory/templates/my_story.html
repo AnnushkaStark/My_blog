@@ -6,11 +6,9 @@
     <div class="row">
         <div class ="col">
             <h1 style="text-align: center;">Мои истории</h1>
-        
-            {% for article in articles %}
-            <container style="margin: 10px,10px,5px,5px; ">
-                <hr>
-                <h2 style="text-align: center;"><a href = "{% url 'one_my_story' article_id=article.id  %}" class="link-danger link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">{{article.title}}</a></h2>
+            {% for article in article %}
+            <p style="text-align: right;"><button type="button" class="btn btn-info btn-sm"><a href="{% url 'my_stories' %}" style="color:white; text-decoration: none;">Назад к моему списку</a></button></p>
+                <h4 style="text-align: center;">{{article.title}}</h4>
                 <br>
                 <h6 style="text-align: left;">Тема: {{article.topic}}</h6>
                 <br>
@@ -26,9 +24,12 @@
                 {% else %}
                 {% endif %}
                 <p style="text-align:center">{{article.date_create}}</p>
-            <hr>
-            </container>
-            {% endfor %}
+                <br>
+                {% endfor %}
+                <form >
+                    <button type="submit" class="btn btn-danger" name="del_article">Удалить историю</button>
+                </form>
+          
         </div>
     </div>
 </div>
