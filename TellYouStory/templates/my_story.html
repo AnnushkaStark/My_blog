@@ -8,7 +8,7 @@
             <h1 style="text-align: center;">Мои истории</h1>
             {% for article in article %}
             <p style="text-align: right;"><button type="button" class="btn btn-info btn-sm"><a href="{% url 'my_stories' %}" style="color:white; text-decoration: none;">Назад к моему списку</a></button></p>
-                <h4 style="text-align: center;">{{article.title}}</h4>
+                <h2 style="text-align: center;">{{article.title}}</h2>
                 <br>
                 <h6 style="text-align: left;">Тема: {{article.topic}}</h6>
                 <br>

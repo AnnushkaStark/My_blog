@@ -618,7 +618,11 @@ class ArticleTopicTimeView(ListView, LoginRequiredMixin):
         """
         Получение списка статей  по теме
         """
-        articles = Story.objects.filter(topic=topic, is_public=True).order_by("-date_create").all()
+        articles = (
+            Story.objects.filter(topic=topic, is_public=True)
+            .order_by("-date_create")
+            .all()
+        )
 
         return render(request, "topic_time.html", {"articles": articles})
 
@@ -637,7 +641,9 @@ class ArticleAuthorTimeView(ListView, LoginRequiredMixin):
         Получение списка статей  автора
         """
         articles = (
-            Story.objects.filter(author_id=author_id, is_public=True).order_by("-date_create").all()
+            Story.objects.filter(author_id=author_id, is_public=True)
+            .order_by("-date_create")
+            .all()
         )
 
         return render(request, "article_author.html", {"articles": articles})
@@ -671,7 +677,9 @@ class MyStoriesView(LoginRequiredMixin, ListView):
         """
 
         articles = (
-            Story.objects.filter(author=request.user, is_public=True).order_by("-date_create").all()
+            Story.objects.filter(author=request.user, is_public=True)
+            .order_by("-date_create")
+            .all()
         )
         if len(articles):
             return render(request, "my_news.html", {"articles": articles})
