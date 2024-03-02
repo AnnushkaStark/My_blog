@@ -2357,12 +2357,15 @@ class TestRankingArticlesView(TestCase):
         """
         self.client.login(username="tesuser", password="Test123#passS")
         response = self.client.get(self.ranking_articles_url)
-        articles = Story.objects.all().order_by("-rank")
+        articles = Story.objects.filter(is_public=True).all().order_by("-rank")
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "list_story_rank.html")
         self.assertEqual(articles[0].title, "test_title_1")
+        self.assertNotEqual(articles[0].is_public, False)
         self.assertEqual(articles[1].title, "test_title_2")
+        self.assertNotEqual(articles[1].is_public, False)
         self.assertEqual(articles[2].title, "test_title_3")
+        self.assertNotEqual(articles[2].is_public, False)
 
 
 class TestTimeArticlesView(TestCase):
@@ -2429,12 +2432,15 @@ class TestTimeArticlesView(TestCase):
         """
         self.client.login(username="tesuser", password="Test123#passS")
         response = self.client.get(self.time_articles_url)
-        articles = Story.objects.all().order_by("-date_create")
+        articles = Story.objects.filter(is_public=True).all().order_by("-date_create")
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "list_story_rank.html")
         self.assertEqual(articles[0].title, "test_title_3")
+        self.assertNotEqual(articles[0].is_public, False)
         self.assertEqual(articles[1].title, "test_title_2")
+        self.assertNotEqual(articles[1].is_public, False)
         self.assertEqual(articles[2].title, "test_title_1")
+        self.assertNotEqual(articles[2].is_public, False)
 
 
 class TestTopicTimeView(TestCase):
@@ -2507,11 +2513,13 @@ class TestTopicTimeView(TestCase):
         """
         self.client.login(username="tesuser", password="Test123#passS")
         response = self.client.get(self.time_topic_url)
-        articles = Story.objects.filter(topic=self.topic).order_by("-date_create").all()
+        articles = Story.objects.filter(topic=self.topic,is_public= True).order_by("-date_create").all()
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "topic_time.html")
         self.assertEqual(articles[0].title, "test_title_3")
+        self.assertNotEqual(articles[0].is_public, False)
         self.assertEqual(articles[1].title, "test_title_1")
+        self.assertNotEqual(articles[1].is_public, False)
         self.assertNotEqual(articles[0].title, "test_title_2")
         self.assertNotEqual(articles[1].title, "test_title_2")
 
@@ -2590,15 +2598,17 @@ class TestAuthorArticlesView(TestCase):
         self.client.login(username="testus", password="123testpassS@")
         response = self.client.get(self.author_article_url)
         articles = (
-            Story.objects.filter(author_id=self.author_id)
+            Story.objects.filter(author_id=self.author_id, is_public=True)
             .order_by("-date_create")
             .all()
         )
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "article_author.html")
         self.assertEqual(articles[0].title, "test_title_1")
+        self.assertNotEqual(articles[0].is_public, False)
         self.assertNotEqual(articles[0].title, "test_title_2")
         self.assertNotEqual(articles[0].title, "test_title_3")
+
 
 
 class TestAuthorInfoView(TestCase):
@@ -2698,11 +2708,12 @@ class TestMyStoriesView(TestCase):
         """
         self.client.login(username="testus", password="123testpassS@")
         response = self.client.get(self.news_url)
-        stories = Story.objects.filter(author=self.user).order_by("-date_create").all()
+        stories = Story.objects.filter(author=self.user, is_public= True).order_by("-date_create").all()
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "my_news.html")
         self.assertEqual(stories[0].title, "test_title_1")
         self.assertNotEqual(stories[0].title, "test_title_2")
+        self.assertNotEqual(stories[0].is_public, False)
 
 
 class TestMyOneStoryView(TestCase):
