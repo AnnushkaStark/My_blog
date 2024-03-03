@@ -75,4 +75,5 @@ urlpatterns = [
         views.MySingleStoryView.as_view(),
         name="one_my_story",
     ),
+    path("del_article/<int:article_id>/",views.DeleteStoryView.as_view(), name="del_story")
 ]

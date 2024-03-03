@@ -25,11 +25,12 @@
                 {% endif %}
                 <p style="text-align:center">{{article.date_create}}</p>
                 <br>
+                <form method="post", action="{% url 'del_story' article_id=article.id %}">
+                    {% csrf_token %}
+         
+                <button type="submit"class="btn btn-danger",name="del_story" value="Удалить историю">Удалить историю<a href = "#" class="link-danger link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"></a></button>
+            </form>
                 {% endfor %}
-                <form >
-                    <button type="submit" class="btn btn-danger" name="del_article">Удалить историю</button>
-                </form>
-          
         </div>
     </div>
 </div>

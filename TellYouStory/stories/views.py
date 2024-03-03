@@ -705,3 +705,28 @@ class MySingleStoryView(ListView, LoginRequiredMixin):
             id=article_id, author=request.user, is_public=True
         )
         return render(request, "my_story.html", {"article": article})
+    
+
+
+
+class DeleteStoryView(View,LoginRequiredMixin):
+    """
+    Представление удаления статьи
+    """
+    http_method_names = ["post"]
+    
+    def post(self,request, article_id):
+        """
+        Удаление статьи по id
+        """
+        try:
+            article = Story.objects.get(id = article_id ,author = request.user)
+            print(article)
+            article.is_public = False
+            article.save()
+            messages.success(request, "Статья успешно удалена")
+            return redirect("my_stories")
+        except Exception as e:
+            messages.error(request, "Статья успешно удалена")
+            return redirect("my_stories")
+
