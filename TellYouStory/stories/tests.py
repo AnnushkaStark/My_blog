@@ -2513,7 +2513,11 @@ class TestTopicTimeView(TestCase):
         """
         self.client.login(username="tesuser", password="Test123#passS")
         response = self.client.get(self.time_topic_url)
-        articles = Story.objects.filter(topic=self.topic,is_public= True).order_by("-date_create").all()
+        articles = (
+            Story.objects.filter(topic=self.topic, is_public=True)
+            .order_by("-date_create")
+            .all()
+        )
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "topic_time.html")
         self.assertEqual(articles[0].title, "test_title_3")
@@ -2608,7 +2612,6 @@ class TestAuthorArticlesView(TestCase):
         self.assertNotEqual(articles[0].is_public, False)
         self.assertNotEqual(articles[0].title, "test_title_2")
         self.assertNotEqual(articles[0].title, "test_title_3")
-
 
 
 class TestAuthorInfoView(TestCase):
@@ -2708,7 +2711,11 @@ class TestMyStoriesView(TestCase):
         """
         self.client.login(username="testus", password="123testpassS@")
         response = self.client.get(self.news_url)
-        stories = Story.objects.filter(author=self.user, is_public= True).order_by("-date_create").all()
+        stories = (
+            Story.objects.filter(author=self.user, is_public=True)
+            .order_by("-date_create")
+            .all()
+        )
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "my_news.html")
         self.assertEqual(stories[0].title, "test_title_1")
@@ -2768,12 +2775,13 @@ class TestDeleteStoryView(TestCase):
     Тестирование эндпойнта
     удаление истории
     """
+
     def setUp(self):
         """
         Создание тест пользователя
         и тест статьи
         """
-        self.target_article =1
+        self.target_article = 1
         self.del_url = reverse("del_story", kwargs={"article_id": self.target_article})
         self.client = Client()
         self.user = User.objects.create_user(
@@ -2792,7 +2800,6 @@ class TestDeleteStoryView(TestCase):
         self.article_1.rank = self.article_1.get_rank()
         self.article_1.save()
 
-
         self.article_2 = Story.objects.create(
             title="test_title_2",
             topic="testopic_2",
@@ -2805,24 +2812,26 @@ class TestDeleteStoryView(TestCase):
         )
         self.article_2.rank = self.article_2.get_rank()
         self.article_2.save()
-        
+
     def test_delete_story_sucsess(self):
         """
         Тестирование удаления истории
         """
         self.client.login(username="testus", password="123testpassS@")
-        response = self.client.post(self.del_url,follow=True)
-        stories = Story.objects.get(
-            author=self.user, id=self.target_article
-            )
+        response = self.client.post(self.del_url, follow=True)
+        stories = Story.objects.get(author=self.user, id=self.target_article)
         stories.is_public = False
         stories.save()
         self.assertEqual(response.status_code, 200)
         self.assertRedirects(response, reverse("my_stories"))
         self.assertContains(response, "Статья успешно удалена")
-        deleted_article = Story.objects.get(
-            author=self.user, id=self.target_article
-            )
+        deleted_article = Story.objects.get(author=self.user, id=self.target_article)
         self.assertEqual(deleted_article.is_public, False)
-        
-    
+
+
+
+class TestOneStoryPage(TestCase):
+    """
+    Тестирование представления
+    перехода на отделную статью
+    """

@@ -24,7 +24,7 @@ from django.contrib.auth.hashers import make_password, check_password, reset_has
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .models import User, Biography, Story
+from .models import User, Biography, Story, ArticleRewiews
 
 
 # Create your views here.
@@ -705,22 +705,21 @@ class MySingleStoryView(ListView, LoginRequiredMixin):
             id=article_id, author=request.user, is_public=True
         )
         return render(request, "my_story.html", {"article": article})
-    
 
 
-
-class DeleteStoryView(View,LoginRequiredMixin):
+class DeleteStoryView(View, LoginRequiredMixin):
     """
     Представление удаления статьи
     """
+
     http_method_names = ["post"]
-    
-    def post(self,request, article_id):
+
+    def post(self, request, article_id):
         """
         Удаление статьи по id
         """
         try:
-            article = Story.objects.get(id = article_id ,author = request.user)
+            article = Story.objects.get(id=article_id, author=request.user)
             print(article)
             article.is_public = False
             article.save()
@@ -730,3 +729,26 @@ class DeleteStoryView(View,LoginRequiredMixin):
             messages.error(request, "Статья успешно удалена")
             return redirect("my_stories")
 
+
+class OneStoryView(ListView, LoginRequiredMixin):
+    """
+    Представление отображения одной статьи
+    """
+
+    def get(self, request, article_id):
+        """
+        Получение отдельной статьи
+        """
+        article = Story.objects.get(id=article_id)
+        rewiew = ArticleRewiews.objects.filter(
+            article=article, user=request.user
+        ).count()
+        if rewiew == 0:
+            article.views_counter = article.views_counter +1
+            article.rank = article.get_rank()
+            article.save()
+            print(article.views_counter)
+            rewiew = ArticleRewiews.objects.create(article=article, user=request.user)
+            return render(request, "one_story.html", {"article": article})
+      
+        return render(request, "one_story.html", {"article": article})

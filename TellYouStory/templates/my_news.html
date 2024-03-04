@@ -15,7 +15,7 @@
                 <h6 style="text-align: left;">Тема: {{article.topic}}</h6>
                 <br>
                 <h6 style="text-align: left;">Автор: {{article.author.username}}</h6>
-                <p>Нравится: {{article.like_counter}} Не нравится: {{article.dislike_counter}} Комментарии: {{article.comment_counter}} Просмотры: {{article.comment_counter}}</p>
+                <p>Нравится: {{article.like_counter}} Не нравится: {{article.dislike_counter}} Комментарии: {{article.comment_counter}} Просмотры: {{article.views_counter}}</p>
                 {% if article.image %}
                 <p style="text-align:center"><img src="{{ article.image.url }}" class="img-fluid" alt="Фото" style="height: 200px;width: 300px;"></p>
                 {% else %}
