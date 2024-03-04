@@ -744,11 +744,11 @@ class OneStoryView(ListView, LoginRequiredMixin):
             article=article, user=request.user
         ).count()
         if rewiew == 0:
-            article.views_counter = article.views_counter +1
+            article.views_counter = article.views_counter + 1
             article.rank = article.get_rank()
             article.save()
             print(article.views_counter)
             rewiew = ArticleRewiews.objects.create(article=article, user=request.user)
             return render(request, "one_story.html", {"article": article})
-      
+
         return render(request, "one_story.html", {"article": article})
