@@ -22,7 +22,7 @@
                 {% endif %}
                 <p style="text-align:center">{{article.date_create}}</p>
                 <br>
-                <form method="post", action="#" style="margin: 20px, 20px, 20px, 20px; display: inline; margin-left: 330; margin-right: 10;">
+                <form method="post", action="{% url 'like_article' article_id=article.id %}" style="margin: 20px, 20px, 20px, 20px; display: inline; margin-left: 330; margin-right: 10;">
                     {% csrf_token %}
          
                 <button type="submit"class="btn btn-success btn-sm",name="del_story" value="Удалить историю">Нравится<a href = "#" class="link-danger link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"></a></button>

@@ -2751,7 +2751,10 @@ class TestMyOneStoryView(TestCase):
         self.article_1.rank = self.article_1.get_rank()
         self.article_1.save()
         self.article_id = 1
-        self.url = reverse("one_my_story", kwargs={"article_id": self.article_id})
+        self.url = reverse(
+            "one_my_story",
+            kwargs={"article_id": self.article_id}
+    )
 
     def test_my_story_page(self):
         """
@@ -2759,7 +2762,9 @@ class TestMyOneStoryView(TestCase):
         старницы вывода статей
         автора в личном кабинете
         """
-        self.client.login(username="testus", password="123testpassS@")
+        self.client.login(
+            username="testus", password="123testpassS@"
+        )
         response = self.client.get(self.url)
         stories = Story.objects.filter(
             author=self.user, id=self.article_id, is_public=True
@@ -2819,13 +2824,17 @@ class TestDeleteStoryView(TestCase):
         """
         self.client.login(username="testus", password="123testpassS@")
         response = self.client.post(self.del_url, follow=True)
-        stories = Story.objects.get(author=self.user, id=self.target_article)
+        stories = Story.objects.get(
+            author=self.user, id=self.target_article
+        )
         stories.is_public = False
         stories.save()
         self.assertEqual(response.status_code, 200)
         self.assertRedirects(response, reverse("my_stories"))
         self.assertContains(response, "Статья успешно удалена")
-        deleted_article = Story.objects.get(author=self.user, id=self.target_article)
+        deleted_article = Story.objects.get(
+            author=self.user, id=self.target_article
+        )
         self.assertEqual(deleted_article.is_public, False)
 
 
@@ -2841,7 +2850,9 @@ class TestOneStoryPage(TestCase):
         """
         self.client = Client()
         self.user = User.objects.create_user(
-            username="testus", email="mytest@mail.com", password="123testpassS@"
+            username="testus",
+            email="mytest@mail.com",
+            password="123testpassS@"
         )
 
         self.article_1 = Story.objects.create(
@@ -2857,7 +2868,10 @@ class TestOneStoryPage(TestCase):
         self.article_1.rank = self.article_1.get_rank()
         self.article_1.save()
         self.article_id = 1
-        self.url = reverse("one_story", kwargs={"article_id": self.article_id})
+        self.url = reverse(
+            "one_story",
+            kwargs={"article_id": self.article_id}
+        )
 
     def test_one_story_page(self):
         """
@@ -2865,7 +2879,9 @@ class TestOneStoryPage(TestCase):
         старницы вывода
         oтдельной статьи
         """
-        self.client.login(username="testus", password="123testpassS@")
+        self.client.login(
+            username="testus", password="123testpassS@"
+        )
         response = self.client.get(self.url)
         story = Story.objects.get(id=self.article_id)
         self.assertEqual(response.status_code, 200)

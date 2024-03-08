@@ -24,7 +24,7 @@ from django.contrib.auth.hashers import make_password, check_password, reset_has
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .models import User, Biography, Story, ArticleRewiews
+from .models import User, Biography, Story, ArticleRewiews, Dislikes, Likes
 
 
 # Create your views here.
@@ -719,8 +719,10 @@ class DeleteStoryView(View, LoginRequiredMixin):
         Удаление статьи по id
         """
         try:
-            article = Story.objects.get(id=article_id, author=request.user)
-            print(article)
+            article = Story.objects.get(
+                id=article_id,
+                author=request.user
+            )
             article.is_public = False
             article.save()
             messages.success(request, "Статья успешно удалена")
@@ -748,7 +750,52 @@ class OneStoryView(ListView, LoginRequiredMixin):
             article.rank = article.get_rank()
             article.save()
             print(article.views_counter)
-            rewiew = ArticleRewiews.objects.create(article=article, user=request.user)
-            return render(request, "one_story.html", {"article": article})
+            rewiew = ArticleRewiews.objects.create(
+                article=article,
+                user=request.user
+            )
+            return render(
+                request, "one_story.html", {"article": article}
+        )
+        return render(
+            request, "one_story.html", {"article": article}
+        )
+    
 
-        return render(request, "one_story.html", {"article": article})
+class LikeStoryView(FormView, LoginRequiredMixin):
+    """
+    Представление просталения
+    реакции нравиться
+    """
+    def post(self, request, article_id):
+        """
+        Проставление реакции нравиться
+        """
+        article = Story.objects.get(id=article_id)
+        likes = Likes.objects.filter(
+            user=request.user,
+              article=article).count()
+        if likes == 0:
+            deslike = Dislikes.objects.filter(
+                article=article, user=request.user
+                ).count()
+            if deslike == 1:
+                Dislikes.objects.delete(
+                    article=article,user=request.user
+                )
+                article.dislike_counter -=1
+                Likes.objects.create(
+                    article=article,user=request.user
+                )
+                article.like_counter +=1
+                article.get_rank()
+                article.save()
+                return redirect("one_story",article_id=article.id)
+            Likes.objects.create(
+                article=article,user=request.user
+                )
+            article.like_counter +=1
+            article.get_rank()
+            article.save()
+            return redirect("one_story",article_id=article.id)
+        return redirect("one_story",article_id=article.id)
