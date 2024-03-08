@@ -719,10 +719,7 @@ class DeleteStoryView(View, LoginRequiredMixin):
         Удаление статьи по id
         """
         try:
-            article = Story.objects.get(
-                id=article_id,
-                author=request.user
-            )
+            article = Story.objects.get(id=article_id, author=request.user)
             article.is_public = False
             article.save()
             messages.success(request, "Статья успешно удалена")
@@ -750,52 +747,80 @@ class OneStoryView(ListView, LoginRequiredMixin):
             article.rank = article.get_rank()
             article.save()
             print(article.views_counter)
-            rewiew = ArticleRewiews.objects.create(
-                article=article,
-                user=request.user
-            )
-            return render(
-                request, "one_story.html", {"article": article}
-        )
-        return render(
-            request, "one_story.html", {"article": article}
-        )
-    
+            rewiew = ArticleRewiews.objects.create(article=article, user=request.user)
+            return render(request, "one_story.html", {"article": article})
+        return render(request, "one_story.html", {"article": article})
+
 
 class LikeStoryView(FormView, LoginRequiredMixin):
     """
     Представление просталения
     реакции нравиться
     """
+
     def post(self, request, article_id):
         """
-        Проставление реакции нравиться
+        Проставление реакции нравится
         """
         article = Story.objects.get(id=article_id)
-        likes = Likes.objects.filter(
-            user=request.user,
-              article=article).count()
+        likes = Likes.objects.filter(user=request.user, article=article).count()
         if likes == 0:
             deslike = Dislikes.objects.filter(
                 article=article, user=request.user
-                ).count()
+            ).count()
             if deslike == 1:
-                Dislikes.objects.delete(
-                    article=article,user=request.user
-                )
-                article.dislike_counter -=1
-                Likes.objects.create(
-                    article=article,user=request.user
-                )
-                article.like_counter +=1
+                deslike = Dislikes.objects.get(article=article, user=request.user)
+                deslike.delete()
+                article.dislike_counter -= 1
+                Likes.objects.create(article=article, user=request.user)
+                article.like_counter += 1
                 article.get_rank()
                 article.save()
-                return redirect("one_story",article_id=article.id)
-            Likes.objects.create(
-                article=article,user=request.user
-                )
-            article.like_counter +=1
+                return redirect("one_story", article_id=article.id)
+            Likes.objects.create(article=article, user=request.user)
+            article.like_counter += 1
             article.get_rank()
             article.save()
-            return redirect("one_story",article_id=article.id)
-        return redirect("one_story",article_id=article.id)
+            return redirect("one_story", article_id=article.id)
+        return redirect("one_story", article_id=article.id)
+
+
+class DislikeStoryView(FormView, LoginRequiredMixin):
+    """
+    Представление проставления реакции
+    не нравится
+    """
+
+    def post(self, request, article_id):
+        """
+        Проставление реакции не нравится
+        """
+        article = Story.objects.get(id=article_id)
+        dislikes = Dislikes.objects.filter(article=article, user=request.user).count()
+        if dislikes == 0:
+            likes = Likes.objects.filter(article=article, user=request.user).count()
+            if likes == 1:
+                likes = Likes.objects.get(article=article, user=request.user)
+                likes.delete()
+                Dislikes.objects.create(article=article, user=request.user)
+                article.like_counter -= 1
+                article.dislike_counter += 1
+                try:
+                    article.get_rank()
+                    article.save()
+                    return redirect("one_story", article_id=article.id)
+                except Exception as e:
+                    article.rank = 0
+                    article.save()
+                    return redirect("one_story", article_id=article.id)
+            Dislikes.objects.create(article=article, user=request.user)
+            article.dislike_counter += 1
+            try:
+                article.get_rank()
+                article.save()
+                return redirect("one_story", article_id=article.id)
+            except Exception as e:
+                article.rank = 0
+                article.save()
+                return redirect("one_story", article_id=article.id)
+        return redirect("one_story", article_id=article.id)

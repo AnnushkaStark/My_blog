@@ -83,5 +83,14 @@ urlpatterns = [
     path(
         "singe_story/<int:article_id>/", views.OneStoryView.as_view(), name="one_story"
     ),
-    path("like_article/<int:article_id>/", views.LikeStoryView.as_view(), name="like_article")
+    path(
+        "like_article/<int:article_id>/",
+        views.LikeStoryView.as_view(),
+        name="like_article",
+    ),
+    path(
+        "dislike_article/<int:article_id>/",
+        views.DislikeStoryView.as_view(),
+        name="dislike_article",
+    ),
 ]
