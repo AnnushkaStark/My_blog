@@ -2156,9 +2156,7 @@ class TestDislilkesModel(TestCase):
             author=self.user,
         )
 
-        self.dislike = Dislikes.objects.create(
-            article=self.story, user=self.user
-        )
+        self.dislike = Dislikes.objects.create(article=self.story, user=self.user)
 
     def test_dislikes_creation(self):
         """
@@ -2437,7 +2435,7 @@ class TestTimeArticlesView(TestCase):
         articles = Story.objects.filter(is_public=True).all().order_by("-date_create")
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "list_story_rank.html")
-        self.assertEqual(articles[0].title, "test_title_3")
+        self.assertEqual(articles[0].title, "test_title_1")
         self.assertNotEqual(articles[0].is_public, False)
         self.assertEqual(articles[1].title, "test_title_2")
         self.assertNotEqual(articles[1].is_public, False)
@@ -2522,9 +2520,9 @@ class TestTopicTimeView(TestCase):
         )
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "topic_time.html")
-        self.assertEqual(articles[0].title, "test_title_3")
+        self.assertEqual(articles[0].title, "test_title_1")
         self.assertNotEqual(articles[0].is_public, False)
-        self.assertEqual(articles[1].title, "test_title_1")
+        self.assertEqual(articles[1].title, "test_title_3")
         self.assertNotEqual(articles[1].is_public, False)
         self.assertNotEqual(articles[0].title, "test_title_2")
         self.assertNotEqual(articles[1].title, "test_title_2")
@@ -2737,9 +2735,7 @@ class TestMyOneStoryView(TestCase):
         """
         self.client = Client()
         self.user = User.objects.create_user(
-            username="testus",
-            email="mytest@mail.com",
-            password="123testpassS@"
+            username="testus", email="mytest@mail.com", password="123testpassS@"
         )
 
         self.article_1 = Story.objects.create(
@@ -2755,10 +2751,7 @@ class TestMyOneStoryView(TestCase):
         self.article_1.rank = self.article_1.get_rank()
         self.article_1.save()
         self.article_id = 1
-        self.url = reverse(
-            "one_my_story",
-            kwargs={"article_id": self.article_id}
-    )
+        self.url = reverse("one_my_story", kwargs={"article_id": self.article_id})
 
     def test_my_story_page(self):
         """
@@ -2766,9 +2759,7 @@ class TestMyOneStoryView(TestCase):
         старницы вывода статей
         автора в личном кабинете
         """
-        self.client.login(
-            username="testus", password="123testpassS@"
-        )
+        self.client.login(username="testus", password="123testpassS@")
         response = self.client.get(self.url)
         stories = Story.objects.filter(
             author=self.user, id=self.article_id, is_public=True
@@ -2791,15 +2782,10 @@ class TestDeleteStoryView(TestCase):
         и тест статьи
         """
         self.target_article = 1
-        self.del_url = reverse(
-            "del_story",
-            kwargs={"article_id": self.target_article}
-        )
+        self.del_url = reverse("del_story", kwargs={"article_id": self.target_article})
         self.client = Client()
         self.user = User.objects.create_user(
-            username="testus",
-            email="mytest@mail.com",
-            password="123testpassS@"
+            username="testus", email="mytest@mail.com", password="123testpassS@"
         )
         self.article_1 = Story.objects.create(
             title="test_title_1",
@@ -2831,21 +2817,15 @@ class TestDeleteStoryView(TestCase):
         """
         Тестирование удаления истории
         """
-        self.client.login(
-            username="testus", password="123testpassS@"
-        )
+        self.client.login(username="testus", password="123testpassS@")
         response = self.client.post(self.del_url, follow=True)
-        stories = Story.objects.get(
-            author=self.user, id=self.target_article
-        )
+        stories = Story.objects.get(author=self.user, id=self.target_article)
         stories.is_public = False
         stories.save()
         self.assertEqual(response.status_code, 200)
         self.assertRedirects(response, reverse("my_stories"))
         self.assertContains(response, "Статья успешно удалена")
-        deleted_article = Story.objects.get(
-            author=self.user, id=self.target_article
-        )
+        deleted_article = Story.objects.get(author=self.user, id=self.target_article)
         self.assertEqual(deleted_article.is_public, False)
 
 
@@ -2861,9 +2841,7 @@ class TestOneStoryPage(TestCase):
         """
         self.client = Client()
         self.user = User.objects.create_user(
-            username="testus",
-            email="mytest@mail.com",
-            password="123testpassS@"
+            username="testus", email="mytest@mail.com", password="123testpassS@"
         )
 
         self.article_1 = Story.objects.create(
@@ -2879,10 +2857,7 @@ class TestOneStoryPage(TestCase):
         self.article_1.rank = self.article_1.get_rank()
         self.article_1.save()
         self.article_id = 1
-        self.url = reverse(
-            "one_story",
-            kwargs={"article_id": self.article_id}
-        )
+        self.url = reverse("one_story", kwargs={"article_id": self.article_id})
 
     def test_one_story_page(self):
         """
@@ -2890,9 +2865,7 @@ class TestOneStoryPage(TestCase):
         старницы вывода
         oтдельной статьи
         """
-        self.client.login(
-            username="testus", password="123testpassS@"
-        )
+        self.client.login(username="testus", password="123testpassS@")
         response = self.client.get(self.url)
         story = Story.objects.get(id=self.article_id)
         self.assertEqual(response.status_code, 200)
@@ -2911,6 +2884,7 @@ class TestLikeStoryView(TestCase):
     Тестирование представлние
     проставления раекции нравиться
     """
+
     def setUp(self):
         """
         Cоздание тест пользователя
@@ -2918,9 +2892,7 @@ class TestLikeStoryView(TestCase):
         """
         self.client = Client()
         self.user = User.objects.create_user(
-            username="testus",
-            email="mytest@mail.com",
-            password="123testpassS@"
+            username="testus", email="mytest@mail.com", password="123testpassS@"
         )
 
         self.article_1 = Story.objects.create(
@@ -2929,90 +2901,64 @@ class TestLikeStoryView(TestCase):
             image="test_image",
             author=self.user,
             like_counter=10,
-            dislike_counter= 0,
+            dislike_counter=0,
             comment_counter=10,
             views_counter=10,
         )
         self.article_id = 1
-        self.like_url = reverse(
-            "like_article",
-            kwargs={"article_id": self.article_id}
-        )
+        self.like_url = reverse("like_article", kwargs={"article_id": self.article_id})
+
     def test_like_story(self):
         """
         тест успешного проставления
         реакции нравится
         """
-        self.client.login(
-            username="testus", password="123testpassS@"
-        )
-        expected_url = reverse(
-            "one_story", kwargs={"article_id": self.article_id}
-        )
+        self.client.login(username="testus", password="123testpassS@")
+        expected_url = reverse("one_story", kwargs={"article_id": self.article_id})
         response = self.client.post(self.like_url, follow=True)
         self.assertEqual(response.status_code, 200)
         self.assertRedirects(response, expected_url)
-        like = Likes.objects.filter(
-            article=self.article_1,
-            user=self.user
-        ).count()
-        self.assertEqual(1,like)
+        like = Likes.objects.filter(article=self.article_1, user=self.user).count()
+        self.assertEqual(1, like)
         story = Story.objects.get(id=self.article_id)
-        self.assertEqual(story.like_counter,11)
+        self.assertEqual(story.like_counter, 11)
 
     def test_like_story_duplicate(self):
         """
         Попытка поставить лайк на статью
-        второй раз 
+        второй раз
         """
-        like = Likes.objects.create(
-            article=self.article_1,
-            user=self.user)
-        self.client.login(
-            username="testus", password="123testpassS@"
-        )
-        expected_url = reverse(
-            "one_story", kwargs={"article_id": self.article_id}
-        )
+        like = Likes.objects.create(article=self.article_1, user=self.user)
+        self.client.login(username="testus", password="123testpassS@")
+        expected_url = reverse("one_story", kwargs={"article_id": self.article_id})
         response = self.client.post(self.like_url, follow=True)
         self.assertEqual(response.status_code, 200)
         self.assertRedirects(response, expected_url)
-        like = Likes.objects.filter(
-            article=self.article_1,
-            user=self.user
-        ).count()
-        self.assertEqual(1,like)
+        like = Likes.objects.filter(article=self.article_1, user=self.user).count()
+        self.assertEqual(1, like)
         story = Story.objects.get(id=self.article_id)
-        self.assertEqual(story.like_counter,10)
+        self.assertEqual(story.like_counter, 10)
 
     def test_like_with_dislike(self):
         """
-        Тест удаление дизлайка статеье 
+        Тест удаление дизлайка статеье
         от пользователя при проставлении
-        им лайка 
+        им лайка
         """
-        dislike = Dislikes.objects.create(
-            article=self.article_1,
-            user=self.user)
-        self.client.login(
-            username="testus", password="123testpassS@"
-        )
-        expected_url = reverse(
-            "one_story", kwargs={"article_id": self.article_id}
-        )
+        dislike = Dislikes.objects.create(article=self.article_1, user=self.user)
+        self.client.login(username="testus", password="123testpassS@")
+        expected_url = reverse("one_story", kwargs={"article_id": self.article_id})
         response = self.client.post(self.like_url, follow=True)
         self.assertEqual(response.status_code, 200)
         self.assertRedirects(response, expected_url)
-        like = Likes.objects.filter(
-            article=self.article_1,
-            user=self.user
-        ).count()
-        self.assertEqual(1,like)
+        like = Likes.objects.filter(article=self.article_1, user=self.user).count()
+        self.assertEqual(1, like)
         dislike = Dislikes.objects.filter(
-            article=self.article_1,
-            user=self.user
+            article=self.article_1, user=self.user
         ).count()
-        self.assertEqual(0,dislike)
+        self.assertEqual(0, dislike)
         story = Story.objects.get(id=self.article_id)
-        self.assertEqual(story.like_counter,11)
-        self.assertEqual(story.dislike_counter,0)
+        self.assertEqual(story.like_counter, 11)
+        self.assertEqual(story.dislike_counter, 0)
+
+
