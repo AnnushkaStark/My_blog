@@ -603,7 +603,7 @@ class ArticleTimeListView(ListView, LoginRequiredMixin):
         """
         articles = Story.objects.filter(is_public=True).all().order_by("-date_create")
 
-        return render(request, "list_story_rank.html", {"articles": articles})
+        return render(request, "list_story_time.html", {"articles": articles})
 
 
 class ArticleTopicTimeView(ListView, LoginRequiredMixin):
