@@ -1,7 +1,17 @@
 from django.contrib import admin
-from .models import User, Biography, Story, FeedBackPublic, FeedBackUsers, Likes, Dislikes, ArticleRewiews, Comments
+from .models import (
+    User,
+    Biography,
+    Story,
+    FeedBackPublic,
+    FeedBackUsers,
+    Likes,
+    Dislikes,
+    ArticleRewiews,
+    Comments,
+    Report,
+)
 
-# Register your models here.
 
 
 @admin.register(User)
@@ -136,3 +146,22 @@ class AdminComments(admin.ModelAdmin):
     """
     list_display = ("text","date", "article","user")
     list_filter =["text","article"]
+
+
+@admin.register(Report)
+class ReportAdmin(admin.ModelAdmin):
+    """
+    Регистрация модели жалобы
+    """
+    list_display =(
+        "title",
+        "text_report",
+        "date",
+        "author",
+        "content"
+    )
+
+    list_filter =["date","content"]
+    ordering =["date"]
+    search_fields = ["title"]
+    search_help_text = "Поиск по полю  title"

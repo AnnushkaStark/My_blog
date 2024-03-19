@@ -190,3 +190,18 @@ class Comments(models.Model):
 
     def __str__(self):
         return f"{self.text} {self.date} {self.article} {self.user}"
+    
+
+class Report(models.Model):
+    """
+    Модель  жалобы
+    """
+    title = models.CharField(max_length=100)
+    text_report = models.TextField(max_length=100)
+    date = models.DateTimeField(auto_now_add=True)
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    content = models.ForeignKey(Story, on_delete=models.CASCADE)
+
+    def __str__(self):
+
+        return f"{self.title} {self.text_report} {self.date} {self.author} {self.content}"
