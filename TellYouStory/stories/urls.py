@@ -93,4 +93,7 @@ urlpatterns = [
         views.DislikeStoryView.as_view(),
         name="dislike_article",
     ),
+    path(
+        "report/<int:article_id>/", views.ReportPageView.as_view(), name="report_page"
+    ),
 ]

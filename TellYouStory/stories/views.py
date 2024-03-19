@@ -841,3 +841,17 @@ class DislikeStoryView(FormView, LoginRequiredMixin):
                 article.save()
                 return redirect("one_story", article_id=article.id)
         return redirect("one_story", article_id=article.id)
+    
+
+class ReportPageView(LoginRequiredMixin, ListView):
+    """
+    Прелставление страницы
+    с формой отпраки жалобы
+    """
+    def get(self, request, article_id):
+
+        article = Story.objects.get(id=article_id)
+        return render(
+            request, "report.html", {"article": article}
+        )
+   

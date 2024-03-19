@@ -42,10 +42,10 @@
     </form>
 
 
-    <form method="post", action="#" style="margin: 20px, 20px, 20px, 20px; display: inline; margin-right: 10;">
-        {% csrf_token %}
+    <form  method="get" action="{% url 'report_page' article_id=article.id %}"    style="margin: 20px, 20px, 20px, 20px; display: inline; margin-right: 10;">
+       
 
-    <button type="submit"class="btn btn-danger btn-sm",name="del_story" value="#">Пожаловаться<a href = "#" class="link-danger link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"></a></button>
+    <button type="submit"class="btn btn-danger btn-sm",name="del_story" value="#">Пожаловаться<a href = "{% url 'report_page' article_id=article.id %}" class="link-danger link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"></a></button>
     
 </form>
 <br>
