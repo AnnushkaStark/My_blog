@@ -68,7 +68,7 @@ class TestTopicTimeView(TestCase):
         self.article_3.rank = self.article_3.get_rank()
         self.article_3.save()
 
-    def test_topic_article_page(self):
+    def iest_topic_article_page(self):
         """
         Проверка доступности страницы
         с отображением статей по

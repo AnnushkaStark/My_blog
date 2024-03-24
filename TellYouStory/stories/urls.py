@@ -96,4 +96,5 @@ urlpatterns = [
     path(
         "report/<int:article_id>/", views.ReportPageView.as_view(), name="report_page"
     ),
+    path("report_form/<int:article_id>/", views.ReportFormView.as_view(), name="report_form")
 ]

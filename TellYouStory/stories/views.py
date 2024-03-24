@@ -19,6 +19,7 @@ from .forms import (
     AddArticleForm,
     FeedBackUserForm,
     FeedbackPublicForm,
+    ReportForm
 )
 from django.contrib.auth.hashers import make_password, check_password, reset_hashers
 from django.contrib.auth import login, logout, authenticate
@@ -619,9 +620,9 @@ class ArticleTopicTimeView(ListView, LoginRequiredMixin):
         Получение списка статей  по теме
         """
         articles = (
-            Story.objects.filter(topic=topic, is_public=True)
-            .order_by("-date_create")
-            .all()
+            Story.objects.filter(
+                topic=topic, is_public=True
+            ).all().order_by("-date_create")    
         )
 
         return render(request, "topic_time.html", {"articles": articles})
@@ -641,10 +642,11 @@ class ArticleAuthorTimeView(ListView, LoginRequiredMixin):
         Получение списка статей  автора
         """
         articles = (
-            Story.objects.filter(author_id=author_id, is_public=True)
-            .order_by("-date_create")
-            .all()
-        )
+            Story.objects.filter(
+                author_id=author_id, is_public=True
+            ).all().order_by("-date_create")
+           
+        ) 
 
         return render(request, "article_author.html", {"articles": articles})
 
@@ -854,4 +856,30 @@ class ReportPageView(LoginRequiredMixin, ListView):
         return render(
             request, "report.html", {"article": article}
         )
-   
+    
+
+class ReportFormView(LoginRequiredMixin,FormView):
+    """
+    Предатсавление формы отправки 
+    жалобы на контент
+    """
+    def post(self, request, article_id):
+        """
+        Отправка жалобы
+        """
+        article = Story.objects.get(id=article_id)
+        form = ReportForm(request.POST, request.FILES)
+        if form.is_valid():
+            report = form.save(commit=False)
+            report.content = article
+            report.author = request.user
+            report.save()
+            messages.success(
+                request, "Обращение отправлено."
+            )
+            print(form)
+            return redirect("one_story", article_id=article.id)
+        print(form)
+        messages.error(request, "Обращение не прошло модерацию")
+        return redirect("report_page", article_id =article.id)
+        

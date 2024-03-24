@@ -1,13 +1,14 @@
-from .models import User, Biography, Story, FeedBackUsers, FeedBackPublic
 from django import forms
-from django.core import validators
-from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from django.contrib.auth.hashers import make_password, check_password
 from django.forms import ModelForm
-from django.contrib.auth import authenticate
-from .validators import valid_name, valid_email, valid_password, valid_text, valid_image
+from .models import User, Story, FeedBackUsers, FeedBackPublic, Report
+from .validators import (
+    valid_name,
+    valid_email,
+    valid_password,
+    valid_text,
+    valid_image
+)
 
 
 class UserRegisterForm(ModelForm):
@@ -16,10 +17,18 @@ class UserRegisterForm(ModelForm):
     кастомная форма UserCreationForm
     """
 
-    username = forms.CharField(min_length=3, max_length=50, widget=forms.TextInput)
-    email = forms.EmailField(widget=forms.EmailInput, min_length=6, max_length=25)
-    password = forms.CharField(widget=forms.PasswordInput, min_length=6, max_length=64)
-    password2 = forms.CharField(widget=forms.PasswordInput, min_length=6, max_length=64)
+    username = forms.CharField(
+        min_length=3, max_length=50, widget=forms.TextInput
+    )
+    email = forms.EmailField(
+        widget=forms.EmailInput, min_length=6, max_length=25
+    )
+    password = forms.CharField(
+        widget=forms.PasswordInput, min_length=6, max_length=64
+    )
+    password2 = forms.CharField(
+        widget=forms.PasswordInput, min_length=6, max_length=64
+    )
 
     def clean(self):
         """
@@ -62,7 +71,9 @@ class UserLoginForm(forms.Form):
     Форма входа пользователя в систему
     """
 
-    username = forms.CharField(min_length=4, max_length=150, widget=forms.TextInput)
+    username = forms.CharField(
+        min_length=4, max_length=150, widget=forms.TextInput
+    )
     password = forms.CharField(widget=forms.PasswordInput)
 
     def username_clean(self):
@@ -93,7 +104,9 @@ class ChangeMailForm(forms.Form):
     old_mail = forms.EmailField(
         widget=forms.EmailInput, min_length=6, max_length=25
     )  # Старый адрес эл почты
-    new_mail = forms.EmailField(widget=forms.EmailInput, min_length=6, max_length=25)
+    new_mail = forms.EmailField(
+        widget=forms.EmailInput, min_length=6, max_length=25
+    )
 
     def clean(self):
         """
@@ -119,9 +132,15 @@ class ChangePasswordForm(forms.Form):
     Форма изменения пароля пользователя
     """
 
-    old_pass = forms.CharField(widget=forms.PasswordInput, min_length=6, max_length=64)
-    new_pass = forms.CharField(widget=forms.PasswordInput, min_length=6, max_length=64)
-    new_pass2 = forms.CharField(widget=forms.PasswordInput, min_length=6, max_length=64)
+    old_pass = forms.CharField(
+        widget=forms.PasswordInput, min_length=6, max_length=64
+    )
+    new_pass = forms.CharField(
+        widget=forms.PasswordInput, min_length=6, max_length=64
+    )
+    new_pass2 = forms.CharField(
+        widget=forms.PasswordInput, min_length=6, max_length=64
+    )
 
     def clean(self):
         """
@@ -146,7 +165,9 @@ class DeactivateForm(forms.Form):
     Форма деактивации аккаунта
     """
 
-    username = forms.CharField(min_length=4, max_length=150, widget=forms.TextInput)
+    username = forms.CharField(
+        min_length=4, max_length=150, widget=forms.TextInput
+    )
     email = forms.EmailField(widget=forms.EmailInput)
     password = forms.CharField(widget=forms.PasswordInput)
     password2 = forms.CharField(widget=forms.PasswordInput)
@@ -188,7 +209,9 @@ class NameChangeForm(forms.Form):
     Форма изменения имени пользователя
     """
 
-    name = forms.CharField(required=False, max_length=100, widget=forms.TextInput)
+    name = forms.CharField(
+        required=False, max_length=100, widget=forms.TextInput
+    )
 
     def name_clean(self):
         """
@@ -204,7 +227,9 @@ class ChangeTownForm(forms.Form):
     Форма изменения города пользователя
     """
 
-    town = forms.CharField(required=False, max_length=100, widget=forms.TextInput)
+    town = forms.CharField(
+        required=False, max_length=100, widget=forms.TextInput
+    )
 
     def town_clean(self):
         """
@@ -291,8 +316,12 @@ class AddArticleForm(ModelForm):
     Форма добавления статьи
     """
 
-    title = forms.CharField(min_length=3, max_length=100, widget=forms.TextInput)
-    topic = forms.CharField(min_length=3, max_length=100, widget=forms.TextInput)
+    title = forms.CharField(
+        min_length=3, max_length=100, widget=forms.TextInput
+    )
+    topic = forms.CharField(
+        min_length=3, max_length=100, widget=forms.TextInput
+    )
     image = forms.FileField(required=False, widget=forms.FileInput)
     content = forms.Textarea()
 
@@ -333,7 +362,9 @@ class FeedBackUserForm(forms.ModelForm):
     аутентифицированных пользователей
     """
 
-    topic = forms.CharField(widget=forms.TextInput, min_length=3, max_length=150)
+    topic = forms.CharField(
+        widget=forms.TextInput, min_length=3, max_length=150
+    )
     description = forms.Textarea()
 
     def clean(self):
@@ -367,8 +398,12 @@ class FeedbackPublicForm(forms.ModelForm):
     """
 
     name = forms.CharField(widget=forms.TextInput, min_length=3, max_length=50)
-    email = forms.EmailField(widget=forms.EmailInput, min_length=6, max_length=20)
-    topic = forms.CharField(widget=forms.TimeInput, min_length=3, max_length=150)
+    email = forms.EmailField(
+        widget=forms.EmailInput, min_length=6, max_length=20
+    )
+    topic = forms.CharField(
+        widget=forms.TimeInput, min_length=3, max_length=150
+    )
     text = forms.Textarea()
 
     def clean(self):
@@ -396,3 +431,31 @@ class FeedbackPublicForm(forms.ModelForm):
     class Meta:
         model = FeedBackPublic
         fields = ["name", "email", "topic", "text"]
+
+
+class ReportForm(forms.ModelForm):
+    """
+    Форма жалобы
+    """
+    title = forms.CharField(
+        widget=forms.TextInput, min_length=3, max_length=50
+    )
+    text_report = forms.Textarea()
+
+    def clean(self):
+        """
+        Валидация данных
+        """
+        cleaned_data = super().clean()
+        title = cleaned_data.get("title")
+        text_report = cleaned_data.get("text_report")
+        if title and text_report:
+            if valid_text(title) == "is_valid" and  valid_text(text_report) == "is_valid":
+                return cleaned_data
+            raise forms.ValidationError("Обращение не прошло модерацию")
+        raise forms.ValidationError("Поле не может быть пустым")
+    
+    class Meta:
+        model = Report
+        fields = ["title", "text_report"]
+        
