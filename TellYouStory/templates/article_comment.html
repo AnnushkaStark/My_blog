@@ -4,19 +4,21 @@
 {% block content %}
 <div class=" container">
     <div class="row">
-        <div class = col12>
+        <div clas=col12>
             <br>
             <h1 style="text-align: center;">{{article.title}}</h1>
             <h4 style="text-align: center;">Комментарий</h4>
             <br>
-            <form method="post", action="{% url 'comment_form' article_id=article.id %}">
+            <form method="post" action="{% url 'comment_form' article_id=article.id %}">
               {% csrf_token %}
-              {{ form.as_p }}
-                <label  class="form-label">Текст комментария</label>
-                <textarea class="form-control" name="text"></textarea>     
-              <br>
-              <button type="submit" class="btn btn-primary">Отправить</button>
-            </form>
+                {{ form.as_p }} 
+                <div class="mb-3">
+                 <label class="form-label">Текст коментария</label>
+                  <textarea  class="form-control" name="text"></textarea>
+                <br>
+                <button type="submit" class="btn btn-primary">Отправить</button>
+              </form>
+        </div>
         </div>
     </div>
 </div>

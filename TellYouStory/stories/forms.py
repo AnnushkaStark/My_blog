@@ -19,6 +19,7 @@ from .validators import (
 )
 
 
+
 class UserRegisterForm(ModelForm):
     """
     Обработка формы регитсрации пользователя
@@ -468,12 +469,13 @@ class ReportForm(forms.ModelForm):
         fields = ["title", "text_report"]
 
 
-class CommentForm(forms.Form):
+class CommentForm(forms.ModelForm):
     """
     Форма комментария"
     """
     text = forms.Textarea()
-    def clean_text_comment(self):
+    
+    def clean(self):
         """
         Валидация данных
         """
@@ -481,11 +483,15 @@ class CommentForm(forms.Form):
         text = cleaned_data.get("text")
         if text:
             if valid_text(text) =="is_valid":
-                return text
+                return cleaned_data
             raise forms.ValidationError("Комментарий не прошел модерацию")
         raise forms.ValidationError("Поле не может быть пустым.")
     
-   
+    class Meta:
+        model=Comments
+        fields=["text"]
+    
+
     
    
 

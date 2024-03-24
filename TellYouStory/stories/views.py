@@ -1,9 +1,14 @@
-from django.shortcuts import render, redirect
 from django.contrib import messages
-from django.views.generic.base import TemplateView
-from django.views.generic import FormView, CreateView, ListView
 from django.contrib.auth.views import LogoutView
+from django.contrib.auth.hashers import make_password
+from django.contrib.auth import login, logout, authenticate
+from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.shortcuts import render, redirect
+from django.views.generic.base import TemplateView
+from django.views.generic import FormView, ListView
 from django.views import View
+
 from .forms import (
     UserRegisterForm,
     UserLoginForm,
@@ -22,10 +27,6 @@ from .forms import (
     ReportForm,
     CommentForm
 )
-from django.contrib.auth.hashers import make_password
-from django.contrib.auth import login, logout, authenticate
-from django.contrib.auth import update_session_auth_hash
-from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import (
     User,
     Biography,
@@ -909,20 +910,19 @@ class CommentsFormView(FormView,LoginRequiredMixin):
         Отправка комментария
         """
         article = Story.objects.get(id=article_id)
-        form = CommentForm(request.POST, request.FILES)
+        form = CommentForm(request.POST, request.FILES, instance=article)
         if form.is_valid():
-            text=form.text
-            comments = Comments.objects.create(
-                text=text,
+            Comments.objects.create(
                 article=article,
+                text=form.data["text"],
                 user=request.user
             )
-            comments.save()
+            article.comment_counter +=1
+            article.rank = article.get_rank()
+            article.save()
             messages.success(
                 request, "Комментарий отправлен."
             )
             return redirect("one_story", article_id=article.id)
-        print(form)
-        print(form.errors)
         messages.error(request, "Комментарий не прошел модерацию")
         return redirect("comment_page", article_id =article.id)
