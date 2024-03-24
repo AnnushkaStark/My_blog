@@ -881,3 +881,14 @@ class ReportFormView(LoginRequiredMixin,FormView):
         messages.error(request, "Обращение не прошло модерацию")
         return redirect("report_page", article_id =article.id)
         
+
+class CommentPageView(ListView,LoginRequiredMixin):
+    """
+    Представление страницы комментария
+    """
+    def get(self, request, article_id):
+
+        article = Story.objects.get(id=article_id)
+        return render(
+            request, "article_comment.html", {"article": article}
+        )
