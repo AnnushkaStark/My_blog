@@ -72,6 +72,20 @@ class TestReportForm(TestCase):
         }
         form = ReportForm(data=data)
         self.assertFalse(form.is_valid())
+
+    def test_blank_report(self):
+        """
+        Тест не валидная форма
+        (пустая)
+        """
+        data = {
+            "title":"",
+            "text_report":""
+        }
+        form = ReportForm(data=data)
+        self.assertFalse(form.is_valid())
+        self.assertEqual(form.errors["title"], ["Обязательное поле."])
+        self.assertEqual(form.errors["text_report"], ["Обязательное поле."])
        
 
 

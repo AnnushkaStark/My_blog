@@ -877,9 +877,7 @@ class ReportFormView(LoginRequiredMixin,FormView):
             messages.success(
                 request, "Обращение отправлено."
             )
-            print(form)
             return redirect("one_story", article_id=article.id)
-        print(form)
         messages.error(request, "Обращение не прошло модерацию")
         return redirect("report_page", article_id =article.id)
         
