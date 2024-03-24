@@ -1,7 +1,15 @@
 from django import forms
 from django.core.exceptions import ValidationError
 from django.forms import ModelForm
-from .models import User, Story, FeedBackUsers, FeedBackPublic, Report
+
+from .models import (
+    User,
+    Story,
+    FeedBackUsers,
+    FeedBackPublic,
+    Report,
+    Comments,
+)
 from .validators import (
     valid_name,
     valid_email,
@@ -458,4 +466,28 @@ class ReportForm(forms.ModelForm):
     class Meta:
         model = Report
         fields = ["title", "text_report"]
+
+
+class CommentForm(forms.Form):
+    """
+    Форма комментария"
+    """
+    text = forms.Textarea()
+    def clean_text_comment(self):
+        """
+        Валидация данных
+        """
+        cleaned_data = super().clean()
+        text = cleaned_data.get("text")
+        if text:
+            if valid_text(text) =="is_valid":
+                return text
+            raise forms.ValidationError("Комментарий не прошел модерацию")
+        raise forms.ValidationError("Поле не может быть пустым.")
+    
+   
+    
+   
+
+    
         

@@ -8,14 +8,13 @@
             <br>
             <h1 style="text-align: center;">{{article.title}}</h1>
             <h4 style="text-align: center;">Комментарий</h4>
-            
             <br>
-            <form method="post", action="#">
+            <form method="post", action="{% url 'comment_form' article_id=article.id %}">
               {% csrf_token %}
-              <div class="mb-3">
+              {{ form.as_p }}
                 <label  class="form-label">Текст комментария</label>
-                <textarea  class="form-control" name="text_report"></textarea>
-              </div>
+                <textarea class="form-control" name="text"></textarea>     
+              <br>
               <button type="submit" class="btn btn-primary">Отправить</button>
             </form>
         </div>

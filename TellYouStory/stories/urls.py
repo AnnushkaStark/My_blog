@@ -96,6 +96,19 @@ urlpatterns = [
     path(
         "report/<int:article_id>/", views.ReportPageView.as_view(), name="report_page"
     ),
-    path("report_form/<int:article_id>/", views.ReportFormView.as_view(), name="report_form"),
-    path("comment/<int:article_id>/", views.CommentPageView.as_view(), name="comment_page"),
+    path(
+        "report_form/<int:article_id>/",
+         views.ReportFormView.as_view(),
+         name="report_form"
+    ),
+    path(
+        "comment/<int:article_id>/",
+        views.CommentPageView.as_view(),
+        name="comment_page"
+    ),
+    path(
+        "comment_form/<int:article_id>/",
+        views.CommentsFormView.as_view(),
+        name="comment_form"
+    )
 ]

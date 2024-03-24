@@ -19,16 +19,22 @@ from .forms import (
     AddArticleForm,
     FeedBackUserForm,
     FeedbackPublicForm,
-    ReportForm
+    ReportForm,
+    CommentForm
 )
-from django.contrib.auth.hashers import make_password, check_password, reset_hashers
+from django.contrib.auth.hashers import make_password
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .models import User, Biography, Story, ArticleRewiews, Dislikes, Likes
-
-
-# Create your views here.
+from .models import (
+    User,
+    Biography,
+    Story,
+    ArticleRewiews,
+    Dislikes,
+    Likes,
+    Comments
+)
 
 
 class IndexPageView(TemplateView):
@@ -892,3 +898,31 @@ class CommentPageView(ListView,LoginRequiredMixin):
         return render(
             request, "article_comment.html", {"article": article}
         )
+
+
+class CommentsFormView(FormView,LoginRequiredMixin):
+    """
+    Представление формы комментария
+    """
+    def post(self, request, article_id):
+        """
+        Отправка комментария
+        """
+        article = Story.objects.get(id=article_id)
+        form = CommentForm(request.POST, request.FILES)
+        if form.is_valid():
+            text=form.text
+            comments = Comments.objects.create(
+                text=text,
+                article=article,
+                user=request.user
+            )
+            comments.save()
+            messages.success(
+                request, "Комментарий отправлен."
+            )
+            return redirect("one_story", article_id=article.id)
+        print(form)
+        print(form.errors)
+        messages.error(request, "Комментарий не прошел модерацию")
+        return redirect("comment_page", article_id =article.id)
