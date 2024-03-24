@@ -4,10 +4,10 @@ from django.urls import reverse
 from stories.models import User, Story
 
 
-class TestReportView(TestCase):
+class TestCommentPage(TestCase):
     """
-    Тестирование страницы
-    с формой жалобы на контент
+    Тестирование доступности страницы 
+    комментария
     """
     def setUp(self):
         """
@@ -34,15 +34,13 @@ class TestReportView(TestCase):
         self.article_1.save()
         self.article_id = 1
         self.url = reverse(
-            "report_page",
+            "comment_page",
             kwargs={"article_id": self.article_id}
     )
-        
-    def test_report_page(self):
+    def test_comment_page(self):
         """
         Проверка доступности
-        старницы жалобы 
-        на контент
+        старницы комментария
         """
         self.client.login(
             username="testus", password="123testpassS@"
@@ -52,5 +50,7 @@ class TestReportView(TestCase):
              id=self.article_id, is_public=True
         )
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, "report.html")
+        self.assertTemplateUsed(response, "article_comment.html")
         self.assertEqual(stories[0].title, "test_title_1")
+
+        
