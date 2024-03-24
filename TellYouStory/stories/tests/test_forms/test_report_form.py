@@ -31,3 +31,47 @@ class TestReportForm(TestCase):
         form = ReportForm(data=data)
         self.assertFalse(form.is_valid())
         self.assertEqual(form.errors["title"], ["Обязательное поле."])
+
+
+    def test_invalid_text_report(self):
+        """
+        Тест не валидная форма
+        не заполнен текст обращения
+        """
+        data = {
+            "title":"testitle",
+            "text_report":""
+        }
+        form = ReportForm(data=data)
+        self.assertFalse(form.is_valid())
+        self.assertEqual(form.errors["text_report"], ["Обязательное поле."])
+
+    def test_ban_title_report(self):
+        """
+        Тест не валидная форма
+        нецензурное слово
+        в теме письма
+        """
+        data = {
+            "title":"гонорея",
+            "text_report":"тестестест"
+        }
+        form = ReportForm(data=data)
+        self.assertFalse(form.is_valid())
+
+
+    def test_ban_text_report(self):
+        """
+        Тест не валидная форма
+        нецензурное слово
+        в теме письма
+        """
+        data = {
+            "title":"тесттест",
+            "text_report":"гонорея"
+        }
+        form = ReportForm(data=data)
+        self.assertFalse(form.is_valid())
+       
+
+
